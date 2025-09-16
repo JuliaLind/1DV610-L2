@@ -1,0 +1,24 @@
+{
+  "name": "exr",
+  "version": "1.0.0",
+  "description": "Fetches exchange rates from the Norges Bank API and provides clean, developer-friendly data structures.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": ["src"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuliaLind/1DV610-L2.git"
+  },
+  "author": "Julia Lind",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JuliaLind/1DV610-L2/issues"
+  },
+  "homepage": "https://github.com/JuliaLind/1DV610-L2#readme"
+}
