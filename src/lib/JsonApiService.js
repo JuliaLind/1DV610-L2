@@ -1,19 +1,20 @@
-export class ApiService {
+export class JsonApiService {
     #baseUrl
 
     constructor(baseUrl) {
         this.#baseUrl = baseUrl
     }
 
-    async fetch(queryString) {
+
+    async get(queryString) {
         try {
-            return await this.#getJson(`${this.#baseUrl}?${queryString}`)
+            return await this.#fetch(`${this.#baseUrl}?${queryString}`)
         } catch (error) {
             throw new Error('Error fetching data:', error)
         }
     }
 
-    async #getJson(url) {
+    async #fetch(url) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -21,6 +22,7 @@ export class ApiService {
                 'Accept': 'application/json'
             },
         })
+
         return response.json()
-    }
+    } 
 }
