@@ -1,7 +1,7 @@
 export class JsonApiService {
     #baseUrl
 
-    constructor(baseUrl) {
+    setBaseUrl(baseUrl) {
         this.#baseUrl = baseUrl
     }
 
