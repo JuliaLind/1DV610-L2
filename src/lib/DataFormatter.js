@@ -28,7 +28,7 @@ export class DataFormatter {
 
         const mergedData = this.#merger.merge()
 
-
+        return mergedData
 
         // const values = data.data.dataSets[0].series
         // const ids = data.data.structure.dimensions.series[1].values
@@ -43,4 +43,4 @@ export class DataFormatter {
 }
 
 const dataFormatter = new DataFormatter()
-dataFormatter.extractRates(data)
+console.log(dataFormatter.extractRates(data))

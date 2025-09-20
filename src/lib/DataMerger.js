@@ -20,13 +20,13 @@ export class DataMerger {
         this.#dates = dates
     }
 
-    mergeRatesAndDates(values, dates) {
+    mergeRatesAndDates(rate) {
         const merged = []
 
-        for (const indx in dates) {
+        for (const indx in this.#dates) {
             merged.push({
-                date: dates[indx],
-                value: Number(values[indx][0])
+                date: this.#dates[indx],
+                value: Number(rate.values[indx][0])
             })
         }
 
@@ -39,16 +39,39 @@ export class DataMerger {
         const ids = this.#ids
         const dates = this.#dates
 
-        for (const rateIndx in rates) {
-            const exr = rates[rateIndx]
-            exr.id = ids[rateIndx]
+        const merged = []
 
-            for (const attrIndex in exr.attributes) {
-                exr[attributes[attrIndex].id] = attributes[attrIndex].values[exr.attributes[attrIndex]]
+        for (const rateIndex in rates) {
+            const currentRate = rates[rateIndex]
+
+            const exr = {
+                id: ids[rateIndex],
+                values: []
             }
 
-            exr.observations = this.mergeRatesAndDates(Object.values(exr.observations), dates)
-            delete exr.attributes
+            let multiplier = 1
+
+            for (const attrIndex in currentRate.attributes) {
+                const attrType = attributes[attrIndex].id
+
+                if (attrType === "UNIT_MULT") {
+                    multiplier = 10 ** Number(attributes[attrIndex].values[currentRate.attributes[attrIndex]].id)
+                    break
+                }
+            }
+
+            for (const dateIndex in dates) {
+                const observation = {
+                    date: dates[dateIndex],
+                    value: (Number(currentRate.observations[dateIndex][0]) / multiplier).toFixed(4)
+                }
+
+                exr.values.push(observation)
+            }
+
+            merged.push(exr)
         }
+
+        return merged
     }
 }
