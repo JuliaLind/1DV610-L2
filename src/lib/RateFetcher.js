@@ -5,8 +5,8 @@ import { JsonFetchService } from './JsonFetchService.js'
  */
 export class RateService {
 	#fetchService
-	#searchParams = {
-		items: (count=1) => 'lastNObservations=' + count,
+	#params = {
+		items: (count) => 'lastNObservations=' + count,
 		json: () => 'format=sdmx-json',
 		from: (date) => 'startPeriod=' + date,
 		to: (date) => 'endPeriod=' + date,
@@ -29,12 +29,13 @@ export class RateService {
 	 * Fetch exchange rates by date.
 	 *
 	 * @param {string} date - The date to fetch rates for.
+	 * @param {number} count - The number of observations to fetch prior to and including the specified date (default is 1).
 	 * @returns {Promise<Object>} - The fetched exchange rates.
 	 */
-	async fetchByDate(date) {
-		const searchParams = `${this.#searchParams.to(date)}&${this.#searchParams.items(1)}&${this.#searchParams.json()}`
+	async fetchByDate(date, count=1) {
+		const queryString = `${this.#params.to(date)}&${this.#params.items(count)}&${this.#params.json()}`
 
-		return await this.#fetchService.get(searchParams)
+		return await this.#fetchService.get(queryString)
 
 	}
 
@@ -44,9 +45,9 @@ export class RateService {
 	 * @returns {Promise<Object>} - The exchange rates from the latest available date.
 	 */
 	async fetchLatest() {
-		const searchParams = `${this.#searchParams.items(1)}&${this.#searchParams.json()}`
+		const queryString = `${this.#params.items(1)}&${this.#params.json()}`
 
-		return await this.#fetchService.get(searchParams)
+		return await this.#fetchService.get(queryString)
 	}
 
 	/**
@@ -57,8 +58,8 @@ export class RateService {
 	 * @returns {Promise<Object>} - The fetched exchange rates for the period.
 	 */
 	async fetchByPeriod(startDate, endDate) {
-		const searchParams = `${this.#searchParams.from(startDate)}&${this.#searchParams.to(endDate)}&${this.#searchParams.json()}`
+		const queryString = `${this.#params.from(startDate)}&${this.#params.to(endDate)}&${this.#params.json()}`
 
-		return await this.#fetchService.get(searchParams)
+		return await this.#fetchService.get(queryString)
 	}
 }
