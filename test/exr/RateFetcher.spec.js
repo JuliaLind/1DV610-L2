@@ -56,4 +56,94 @@ describe('RateFetcher', () => {
         expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
     })
 
+    it('fetchLatest() OK', async () => {
+        const fetchService = {
+            setBaseUrl: sinon.stub(),
+            get: sinon.stub().resolves(dataSingleDay)
+        }
+
+        const exp = {
+            DKK: {
+                '2025-09-19': 1.5637
+            },
+            PLN: {
+                '2025-09-19': 2.7376
+            },
+            EUR: {
+                '2025-09-19': 11.6705
+            },
+            SEK: {
+                '2025-09-19': 1.0542
+            }
+        }
+
+        const dataFormatter = {
+            format: sinon.stub().returns(exp)
+        }
+        const sut = new RateFetcher(['DKK', 'PLN', 'EUR', 'SEK'], { fetchService, dataFormatter })
+        const res = await sut.fetchLatest()
+
+        expect(res).to.deep.equal(exp)
+
+        const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP`
+        expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
+
+        const queryString = 'lastNObservations=1&format=sdmx-json'
+        expect(fetchService.get).to.have.been.calledOnceWith(queryString)
+        expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
+    })
+
+    it('fetchByPeriod() OK', async () => {
+        const fetchService = {
+            setBaseUrl: sinon.stub(),
+            get: sinon.stub().resolves(dataPeriod)
+        }
+
+        const exp = {
+            DKK: {
+                '2025-02-20': 1.5564,
+                '2025-02-21': 1.5591,
+                '2025-02-24': 1.5597,
+                '2025-02-25': 1.5636,
+                '2025-02-26': 1.5673
+            },
+            PLN: {
+                '2025-02-20': 2.7903,
+                '2025-02-21': 2.7899,
+                '2025-02-24': 2.8075,
+                '2025-02-25': 2.8178,
+                '2025-02-26': 2.8208
+            },
+            EUR: {
+                '2025-02-20': 11.609,
+                '2025-02-21': 11.629,
+                '2025-02-24': 11.6355,
+                '2025-02-25': 11.6638,
+                '2025-02-26': 11.6895
+            },
+            SEK: {
+                '2025-02-20': 1.0397,
+                '2025-02-21': 1.0437,
+                '2025-02-24': 1.0433,
+                '2025-02-25': 1.0465,
+                '2025-02-26': 1.049
+            }
+        }
+
+        const dataFormatter = {
+            format: sinon.stub().returns(exp)
+        }
+        const sut = new RateFetcher(['DKK', 'PLN', 'EUR', 'SEK'], { fetchService, dataFormatter })
+        const res = await sut.fetchByPeriod('2025-02-20', '2025-02-26')
+
+        expect(res).to.deep.equal(exp)
+
+        const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP`
+        expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
+
+        const queryString = 'startPeriod=2025-02-20&endPeriod=2025-02-26&format=sdmx-json'
+        expect(fetchService.get).to.have.been.calledOnceWith(queryString)
+        expect(dataFormatter.format).to.have.been.calledOnceWith(dataPeriod)
+    })
+
 })
