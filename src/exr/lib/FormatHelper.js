@@ -88,7 +88,7 @@ export class FormatHelper {
    *
    * @param {number} rateIndex - index of the rate to process
    */
-  mergeAndNormalize(rateIndex) {
+  #mergeAndNormalize(rateIndex) {
     this.#currentRate = this.#rates[rateIndex]
 
     const formatted = {}
@@ -102,5 +102,13 @@ export class FormatHelper {
     return formatted
   }
 
-
+  /**
+   * Formats the data for a specific currency.
+   *
+   * @param {number} currencyIndex - index of the currency to format
+   * @returns {object} - formatted data for the currency
+   */
+  formatOneCurrency(currencyIndex) {
+    return this.#mergeAndNormalize(currencyIndex)
+  }
 }

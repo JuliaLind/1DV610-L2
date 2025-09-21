@@ -1,4 +1,4 @@
-import { JsonFetchService } from './JsonFetchService.js'
+import { JsonFetchService } from './lib/JsonFetchService.js'
 
 /**
  * Service that fetches exchange rates from Norges Bank.

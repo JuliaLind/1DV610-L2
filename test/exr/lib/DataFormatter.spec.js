@@ -1,14 +1,14 @@
 /* global before */
 
 import { expect } from 'chai'
-import { DataFormatter } from '../src/lib/DataFormatter.js'
+import { DataFormatter } from '../../../src/exr/lib/DataFormatter.js'
 import { readFile } from 'fs/promises'
 
 describe('DataFormatter', () => {
   let data
 
   before(async () => {
-    const raw = await readFile(new URL('./json/period.json', import.meta.url))
+    const raw = await readFile(new URL('../../json/period.json', import.meta.url))
     data = JSON.parse(raw)
   })
 

@@ -25,8 +25,8 @@ export class DataFormatter {
 
   /**
    * Extracts relevant data from the API response.
-   * @param {object} data - The API response data
    *
+   * @param {object} data - The API response data
    */
   #extract(data) {
     this.#reader.setData(data.data)
@@ -44,8 +44,10 @@ export class DataFormatter {
    * Rearrange the data into a more usable structure.
    */
   #rearrange() {
-    for (let rateIndex = 0; rateIndex < this.#rateCount; rateIndex++) {
-      this.#formatted[this.#helper.getCurrency(rateIndex)] = this.#helper.mergeAndNormalize(rateIndex)
+    for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
+      const currency = this.#helper.getCurrency(currencyIndex)
+
+      this.#formatted[currency] = this.#helper.formatOneCurrency(currencyIndex)
     }
   }
 
