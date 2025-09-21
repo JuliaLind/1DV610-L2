@@ -25,7 +25,7 @@ export class DataReader {
      * @returns {Array} attributes - Array of attribute objects
      */
     getAttributes () {
-        return this.#data.structure.attributes.series
+        return [...this.#data.structure.attributes.series]
     }
 
     /**
