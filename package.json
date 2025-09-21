@@ -25,13 +25,21 @@
     "url": "https://github.com/JuliaLind/1DV610-L2/issues"
   },
   "eslintConfig": {
-    "extends": "@lnu"
+    "extends": "@lnu",
+    "plugins": [
+      "chai-friendly"
+    ],
+    "rules": {
+      "no-unused-expressions": "off",
+      "chai-friendly/no-unused-expressions": "error"
+    }
   },
   "homepage": "https://github.com/JuliaLind/1DV610-L2#readme",
   "devDependencies": {
     "@lnu/eslint-config": "^1.1.10",
     "c8": "^10.1.3",
     "chai": "^6.0.1",
+    "eslint-plugin-chai-friendly": "^1.1.0",
     "mocha": "^11.7.2",
     "sinon": "^21.0.0",
     "sinon-chai": "^4.0.1"

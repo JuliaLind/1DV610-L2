@@ -1,3 +1,6 @@
+/**
+ *
+ */
 export class FormatHelper {
   #rates
   #attributes
@@ -7,23 +10,49 @@ export class FormatHelper {
   #currentRate = null
   #currentAttr = null
 
-  setRates(rates) {
+  /**
+   * Sets the rates data.
+   *
+   * @param {Array} rates - The rates data
+   */
+  setRates (rates) {
     this.#rates = rates
   }
 
-  setAttributes(attributes) {
+  /**
+   * Sets the attributes data.
+   *
+   * @param {Array} attributes - The attributes data
+   */
+  setAttributes (attributes) {
     this.#attributes = attributes
   }
 
-  setIds(ids) {
+  /**
+   * Sets the currency IDs.
+   *
+   * @param {Array} ids - The currency IDs, for example 'SEK'
+   */
+  setIds (ids) {
     this.#ids = ids
   }
 
-  setDates(dates) {
+  /**
+   * Sets the observation dates.
+   *
+   * @param {Array} dates - Array of the date strings
+   */
+  setDates (dates) {
     this.#dates = dates
   }
 
-  #getMultiplierId(multiplierIndex) {
+  /**
+   * Gets the multiplier id of the current currency rate.
+   *
+   * @param {number} multiplierIndex - The index of the multiplier
+   * @returns {string} - The multiplier id
+   */
+  #getMultiplierId (multiplierIndex) {
     return this.#currentRate.attributes[multiplierIndex]
   }
 
@@ -33,7 +62,7 @@ export class FormatHelper {
    * @param {number} multiplierIndex - The index of the multiplier id to use
    * @returns {number} - The denominator to normalize the rate value into units
    */
-  #calculateDenominator(multiplierIndex) {
+  #calculateDenominator (multiplierIndex) {
     const multiplierId = this.#getMultiplierId(multiplierIndex)
     const powerOf = Number(this.#currentAttr.values[multiplierId].id)
 
@@ -45,7 +74,7 @@ export class FormatHelper {
    *
    * @returns {boolean} - true if the current attribute is UNIT_MULT
    */
-  #isMultiplierIndex() {
+  #isMultiplierIndex () {
     return this.#currentAttr.id === 'UNIT_MULT'
   }
 
@@ -54,7 +83,7 @@ export class FormatHelper {
    *
    * @returns {number|undefined} - The multiplier value or undefined if not found
    */
-  #getMultiplier() {
+  #getMultiplier () {
     for (const attrIndex in this.#currentRate.attributes) {
       this.#currentAttr = this.#attributes[attrIndex]
 
@@ -72,7 +101,7 @@ export class FormatHelper {
    * @param {number} currencyIndex - The index of the currency
    * @returns {string} - The currency ID
    */
-  getCurrency(currencyIndex) {
+  getCurrency (currencyIndex) {
     return this.#ids[currencyIndex]
   }
 
@@ -80,8 +109,9 @@ export class FormatHelper {
    * Merges and normalizes the data for a specific rate.
    *
    * @param {number} rateIndex - index of the rate to process
+   * @returns {object} - merged and normalized data for the currency rate
    */
-  #mergeAndNormalize(rateIndex) {
+  #mergeAndNormalize (rateIndex) {
     this.#currentRate = this.#rates[rateIndex]
 
     const formatted = {}
@@ -101,7 +131,7 @@ export class FormatHelper {
    * @param {number} currencyIndex - index of the currency to format
    * @returns {object} - formatted data for the currency
    */
-  formatOneCurrency(currencyIndex) {
+  formatOneCurrency (currencyIndex) {
     return this.#mergeAndNormalize(currencyIndex)
   }
 }

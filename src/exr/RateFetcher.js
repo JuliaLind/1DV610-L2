@@ -1,4 +1,5 @@
 import { JsonFetchService } from './lib/JsonFetchService.js'
+import { DataFormatter } from './lib/DataFormatter.js'
 
 /**
  * Fetches exchange rates from Norges Bank.
@@ -34,12 +35,12 @@ export class RateFetcher {
    *
    * @param {string[]} currencies - The currencies to fetch rates for.
    * @param {JsonFetchService} fetchService - The fetch service to use.
+   * @param config
    */
   constructor (currencies, config = {
     fetchService: new JsonFetchService(),
     dataFormatter: new DataFormatter()
   }) {
-
     const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP`
 
     this.#fetchService = config.fetchService

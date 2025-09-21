@@ -1,6 +1,6 @@
 export const ids = [
-    'DKK',
-    'PLN',
-    'EUR',
-    'SEK'
+  'DKK',
+  'PLN',
+  'EUR',
+  'SEK'
 ]

@@ -21,11 +21,11 @@ describe('DataFormatter', () => {
     dataPeriod = JSON.parse(raw)
     raw = await readFile(new URL('../../json/single-day.json', import.meta.url))
     dataSingleDay = JSON.parse(raw)
-  }),
+  })
 
-    afterEach(() => {
-      sinon.restore()
-    })
+  afterEach(() => {
+    sinon.restore()
+  })
 
   describe('format', () => {
     it('data contains 4 different currencies and a period of 5 days, OK', () => {
@@ -132,8 +132,8 @@ describe('DataFormatter', () => {
         setAttributes: sinon.stub(),
         setIds: sinon.stub(),
         setDates: sinon.stub(),
-        getCurrency: sinon.stub().
-          onCall(0).returns('DKK')
+        getCurrency: sinon.stub()
+          .onCall(0).returns('DKK')
           .onCall(1).returns('PLN')
           .onCall(2).returns('EUR')
           .onCall(3).returns('SEK'),

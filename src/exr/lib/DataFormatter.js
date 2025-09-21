@@ -1,7 +1,6 @@
 import { DataReader } from './DataReader.js'
 import { FormatHelper } from './FormatHelper.js'
 
-
 /**
  * Formats the data from API into a more usable structure.
  */
@@ -12,13 +11,14 @@ export class DataFormatter {
   #rateCount = 0
   #formatted = {}
 
-
   /**
    * Creates an instance of DataFormatter.
    *
-   * @param {DataReader} reader - Instance of DataReader
+   * @param {object} config - Configuration object for dependencies
+   * @param {DataReader} config.reader - Instance of DataReader
+   * @param {FormatHelper} config.helper - Instance of FormatHelper
    */
-  constructor(config = {
+  constructor (config = {
     reader: new DataReader(),
     helper: new FormatHelper()
   }) {
@@ -31,7 +31,7 @@ export class DataFormatter {
    *
    * @param {object} data - The API response data
    */
-  #extract(data) {
+  #extract (data) {
     this.#reader.setData(data)
 
     const rates = this.#reader.getRates()
@@ -42,11 +42,10 @@ export class DataFormatter {
     this.#helper.setDates(this.#reader.getDates())
   }
 
-
   /**
    * Rearrange the data into a more usable structure.
    */
-  #rearrange() {
+  #rearrange () {
     for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
       const currency = this.#helper.getCurrency(currencyIndex)
 
@@ -57,9 +56,10 @@ export class DataFormatter {
   /**
    * Format the data from the API.
    *
-   * @param {Object} data - The data to format
+   * @param {object} data - The data to format
+   * @returns {object} - The formatted data
    */
-  format(data) {
+  format (data) {
     this.#extract(data)
     this.#rearrange()
 
