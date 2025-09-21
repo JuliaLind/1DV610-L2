@@ -18,9 +18,12 @@ export class DataFormatter {
    *
    * @param {DataReader} reader - Instance of DataReader
    */
-  constructor(reader = new DataReader(), helper = new FormatHelper()) {
-    this.#reader = reader
-    this.#helper = helper
+  constructor(config = {
+    reader: new DataReader(),
+    helper: new FormatHelper()
+  }) {
+    this.#reader = config.reader
+    this.#helper = config.helper
   }
 
   /**
