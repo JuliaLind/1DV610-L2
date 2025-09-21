@@ -1,7 +1,7 @@
 /**
- * Service for fetching JSON data from a specified API endpoint.
+ * Fetches JSON data from a specified API endpoint.
  */
-export class JsonApiService {
+export class JsonFetchService {
   #baseUrl
 
   /**

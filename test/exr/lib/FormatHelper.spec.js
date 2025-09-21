@@ -2,7 +2,6 @@
 
 import { expect } from 'chai'
 import { FormatHelper } from '../../../src/exr/lib/FormatHelper.js'
-import sinon from 'sinon'
 import { rates } from './mockdata/rates.js'
 import { attributes } from './mockdata/attributes.js'
 import { ids } from './mockdata/ids.js'

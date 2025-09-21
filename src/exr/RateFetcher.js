@@ -1,10 +1,12 @@
 import { JsonFetchService } from './lib/JsonFetchService.js'
 
 /**
- * Service that fetches exchange rates from Norges Bank.
+ * Fetches exchange rates from Norges Bank.
  */
-export class RateService {
+export class RateFetcher {
   #fetchService
+  #formatter
+
   #params = {
     /**
      *
@@ -33,11 +35,16 @@ export class RateService {
    * @param {string[]} currencies - The currencies to fetch rates for.
    * @param {JsonFetchService} fetchService - The fetch service to use.
    */
-  constructor (currencies, fetchService = new JsonFetchService()) {
+  constructor (currencies, config = {
+    fetchService: new JsonFetchService(),
+    dataFormatter: new DataFormatter()
+  }) {
+
     const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP`
 
-    this.#fetchService = fetchService
-    fetchService.setBaseUrl(baseUrl)
+    this.#fetchService = config.fetchService
+    this.#formatter = config.dataFormatter
+    this.#fetchService.setBaseUrl(baseUrl)
   }
 
   /**
@@ -50,7 +57,8 @@ export class RateService {
   async fetchByDate (date, count = 1) {
     const queryString = `${this.#params.to(date)}&${this.#params.items(count)}&${this.#params.json()}`
 
-    return await this.#fetchService.get(queryString)
+    const raw = await this.#fetchService.get(queryString)
+    return this.#formatter.format(raw)
   }
 
   /**
@@ -61,7 +69,8 @@ export class RateService {
   async fetchLatest () {
     const queryString = `${this.#params.items(1)}&${this.#params.json()}`
 
-    return await this.#fetchService.get(queryString)
+    const raw = await this.#fetchService.get(queryString)
+    return this.#formatter.format(raw)
   }
 
   /**
@@ -74,6 +83,7 @@ export class RateService {
   async fetchByPeriod (startDate, endDate) {
     const queryString = `${this.#params.from(startDate)}&${this.#params.to(endDate)}&${this.#params.json()}`
 
-    return await this.#fetchService.get(queryString)
+    const raw = await this.#fetchService.get(queryString)
+    return this.#formatter.format(raw)
   }
 }
