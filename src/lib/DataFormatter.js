@@ -53,15 +53,13 @@ export class DataFormatter {
                 }
 
                 merged[currency].push(observation)
-                console.log(observation)
             }
-            console.log(merged[currency])
         }
 
         return merged
-
     }
 }
 
 const dataFormatter = new DataFormatter()
-dataFormatter.format(data)
+const formattedData = dataFormatter.format(data)
+console.log(formattedData)
