@@ -3,6 +3,11 @@
 import { expect } from 'chai'
 import { DataReader } from '../../../src/exr/lib/DataReader.js'
 import { readFile } from 'fs/promises'
+import { attributes } from './mockdata/attributes.js'
+import { dates } from './mockdata/dates.js'
+import { ids } from './mockdata/ids.js'
+import { rates } from './mockdata/rates.js'
+
 
 describe('DataReader', () => {
     let data
@@ -16,105 +21,31 @@ describe('DataReader', () => {
         const sut = new DataReader()
         sut.setData(data)
         const res = sut.getRates()
-        const exp = [{
-                "attributes": [
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "observations": {
-                    "0": [
-                        "155.64"
-                    ],
-                    "1": [
-                        "155.91"
-                    ],
-                    "2": [
-                        "155.97"
-                    ],
-                    "3": [
-                        "156.36"
-                    ],
-                    "4": [
-                        "156.73"
-                    ]
-                }
-            }, {
-                "attributes": [
-                    1,
-                    0,
-                    1,
-                    0
-                ],
-                "observations": {
-                    "0": [
-                        "2.7903"
-                    ],
-                    "1": [
-                        "2.7899"
-                    ],
-                    "2": [
-                        "2.8075"
-                    ],
-                    "3": [
-                        "2.8178"
-                    ],
-                    "4": [
-                        "2.8208"
-                    ]
-                }
-            }, {
-                "attributes": [
-                    1,
-                    0,
-                    1,
-                    0
-                ],
-                "observations": {
-                    "0": [
-                        "11.609"
-                    ],
-                    "1": [
-                        "11.629"
-                    ],
-                    "2": [
-                        "11.6355"
-                    ],
-                    "3": [
-                        "11.6638"
-                    ],
-                    "4": [
-                        "11.6895"
-                    ]
-                }
-            }, {
-                "attributes": [
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "observations": {
-                    "0": [
-                        "103.97"
-                    ],
-                    "1": [
-                        "104.37"
-                    ],
-                    "2": [
-                        "104.33"
-                    ],
-                    "3": [
-                        "104.65"
-                    ],
-                    "4": [
-                        "104.9"
-                    ]
-                }
-            }
-        ]
+        
 
-        expect(res).to.deep.equal(exp)
+        expect(res).to.deep.equal(rates)
+    })
+
+    it('readAttributes() OK', () => {
+        const sut = new DataReader()
+        sut.setData(data)
+        const res = sut.getAttributes()
+        expect(res).to.deep.equal(attributes)
+    })
+
+    it('readIds() OK', () => {
+        const sut = new DataReader()
+        sut.setData(data)
+        const res = sut.getIds()
+
+        expect(res).to.deep.equal(ids)
+    })
+
+    it('readDates() OK', () => {
+        const sut = new DataReader()
+        sut.setData(data)
+        const res = sut.getDates()
+
+        expect(res).to.deep.equal(dates)
     })
 })
