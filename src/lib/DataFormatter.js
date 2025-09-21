@@ -1,4 +1,5 @@
 import { DataReader } from './DataReader.js'
+import { FormatHelper } from './FormatHelper.js'
 
 
 /**
@@ -6,28 +7,46 @@ import { DataReader } from './DataReader.js'
  */
 export class DataFormatter {
   #reader
+  #helper
 
-  #rates
-  #attributes
-  #ids
-  #dates
+  #rateCount = 0
+  #formatted = {}
+
 
   /**
    * Creates an instance of DataFormatter.
    *
    * @param {DataReader} reader - Instance of DataReader
    */
-  constructor (reader = new DataReader()) {
+  constructor(reader = new DataReader(), helper = new FormatHelper()) {
     this.#reader = reader
+    this.#helper = helper
   }
 
+  /**
+   * Extracts relevant data from the API response.
+   * @param {object} data - The API response data
+   *
+   */
   #extract(data) {
     this.#reader.setData(data.data)
 
-    this.#rates = this.#reader.getRates()
-    this.#attributes = this.#reader.getAttributes()
-    this.#ids = this.#reader.getIds()
-    this.#dates = this.#reader.getDates()
+    const rates = this.#reader.getRates()
+    this.#rateCount = rates.length
+    this.#helper.setRates(rates)
+    this.#helper.setAttributes(this.#reader.getAttributes())
+    this.#helper.setIds(this.#reader.getIds())
+    this.#helper.setDates(this.#reader.getDates())
+  }
+
+
+  /**
+   * Rearrange the data into a more usable structure.
+   */
+  #rearrange() {
+    for (let rateIndex = 0; rateIndex < this.#rateCount; rateIndex++) {
+      this.#formatted[this.#helper.getCurrency(rateIndex)] = this.#helper.mergeAndNormalize(rateIndex)
+    }
   }
 
   /**
@@ -35,43 +54,10 @@ export class DataFormatter {
    *
    * @param {Object} data - The data to format
    */
-  format (data) {
+  format(data) {
     this.#extract(data)
+    this.#rearrange()
 
-    const merged = {}
-
-    for (const rateIndex in this.#rates) {
-      const currentRate = this.#rates[rateIndex]
-      const currency = this.#ids[rateIndex]
-
-      merged[currency] = []
-
-      let multiplier = 1
-
-      for (const attrIndex in currentRate.attributes) {
-        const currentAttr = this.#attributes[attrIndex]
-        const attrId = currentAttr.id
-
-        if (attrId === 'UNIT_MULT') {
-          const currentRateMultiplierIndex = currentRate.attributes[attrIndex]
-          const powerOf = Number(currentAttr.values[currentRateMultiplierIndex].id)
-
-          multiplier = 10 ** powerOf
-          continue
-        }
-      }
-
-      for (const dateIndex in this.#dates) {
-        const rateValue = Number(currentRate.observations[dateIndex][0])
-        const observation = {
-          date: this.#dates[dateIndex],
-          value: Number((rateValue / multiplier).toFixed(4))
-        }
-
-        merged[currency].push(observation)
-      }
-    }
-
-    return merged
+    return this.#formatted
   }
 }

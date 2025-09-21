@@ -1,0 +1,106 @@
+export class FormatHelper {
+  #rates
+  #attributes
+  #ids
+  #dates
+
+  #currentRate = null
+  #currentAttr = null
+
+  setRates(rates) {
+    this.#rates = rates
+  }
+
+  setAttributes(attributes) {
+    this.#attributes = attributes
+  }
+
+  setIds(ids) {
+    this.#ids = ids
+  }
+
+  setDates(dates) {
+    this.#dates = dates
+  }
+
+  setCurrentRate(index) {
+    this.#currentRate = this.#rates[index]
+  }
+
+  getCurrentRate() {
+    return this.#currentRate
+  }
+
+  #getMultiplierId(multiplierIndex) {
+    return this.#currentRate.attributes[multiplierIndex]
+  }
+
+  /**
+   * Calculates the denominator to normalize the rate value into units.
+   *
+   * @param {number} multiplierIndex - The index of the multiplier id to use
+   * @returns {number} - The denominator to normalize the rate value into units
+   */
+  #calculateDenominator(multiplierIndex) {
+    const powerOf = Number(this.#currentAttr.values[this.#getMultiplierId(multiplierIndex)].id)
+
+    return 10 ** powerOf
+  }
+
+  /**
+   * Checks if the current attribute is a multiplier index.
+   *
+   * @returns {boolean} - true if the current attribute is UNIT_MULT
+   */
+  #isMultiplierIndex() {
+    return this.#currentAttr.id === 'UNIT_MULT'
+  }
+
+  /**
+   * Gets the multiplier for the current exchange rate's value.
+   *
+   * @returns {number|undefined} - The multiplier value or undefined if not found
+   */
+  #getMultiplier() {
+    for (const attrIndex in this.#currentRate.attributes) {
+      this.#currentAttr = this.#attributes[attrIndex]
+
+      if (this.#isMultiplierIndex()) {
+        return this.#calculateDenominator(attrIndex)
+      }
+    }
+
+    return undefined
+  }
+
+  /**
+   * Gets the currency ID for a specific currency.
+   *
+   * @param {number} currencyIndex - The index of the currency
+   * @returns {string} - The currency ID
+   */
+  getCurrency(currencyIndex) {
+    return this.#ids[currencyIndex]
+  }
+
+  /**
+   * Merges and normalizes the data for a specific rate.
+   *
+   * @param {number} rateIndex - index of the rate to process
+   */
+  mergeAndNormalize(rateIndex) {
+    this.#currentRate = this.#rates[rateIndex]
+
+    const formatted = {}
+    const multiplier = this.#getMultiplier()
+
+    for (const dateIndex in this.#dates) {
+      const rateValue = Number(this.#currentRate.observations[dateIndex][0])
+      formatted[this.#dates[dateIndex]] = Number((rateValue / multiplier).toFixed(4))
+    }
+
+    return formatted
+  }
+
+
+}
