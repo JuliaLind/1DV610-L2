@@ -10,22 +10,31 @@ export class RateFetcher {
 
   #params = {
     /**
+     * Gets the query parameter for number of items to fetch.
      *
-     * @param count
+     * @param {number} count - The number of observations to fetch from the end
+     * @returns {string} - The nr of items query parameter
      */
     items: (count) => 'lastNObservations=' + count,
+
     /**
+     * Gets the query parameter for JSON format.
      *
+     * @returns {string} - The JSON format query parameter
      */
     json: () => 'format=sdmx-json',
     /**
+     * Gets the query parameter for the from date.
      *
-     * @param date
+     * @param {string} date - The start date
+     * @returns {string} - The start date query parameter
      */
     from: (date) => 'startPeriod=' + date,
     /**
+     * Gets the query parameter for the to date.
      *
-     * @param date
+     * @param {string} date - The end date
+     * @returns {string} - The end date query parameter
      */
     to: (date) => 'endPeriod=' + date
   }
@@ -33,9 +42,10 @@ export class RateFetcher {
   /**
    * Creates an instance of RateService.
    *
-   * @param {string[]} currencies - The currencies to fetch rates for.
-   * @param {JsonFetchService} fetchService - The fetch service to use.
-   * @param config
+   * @param {string[]} currencies - The currencies to fetch rates for
+   * @param {object} config - Configuration object for dependencies
+   * @param {JsonFetchService} config.fetchService - Instance of JsonFetchService
+   * @param {DataFormatter} config.dataFormatter - Instance of DataFormatter
    */
   constructor (currencies, config = {
     fetchService: new JsonFetchService(),
