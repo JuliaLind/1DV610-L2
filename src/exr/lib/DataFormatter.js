@@ -29,7 +29,7 @@ export class DataFormatter {
    * @param {object} data - The API response data
    */
   #extract(data) {
-    this.#reader.setData(data.data)
+    this.#reader.setData(data)
 
     const rates = this.#reader.getRates()
     this.#rateCount = rates.length

@@ -23,14 +23,6 @@ export class FormatHelper {
     this.#dates = dates
   }
 
-  setCurrentRate(index) {
-    this.#currentRate = this.#rates[index]
-  }
-
-  getCurrentRate() {
-    return this.#currentRate
-  }
-
   #getMultiplierId(multiplierIndex) {
     return this.#currentRate.attributes[multiplierIndex]
   }
@@ -42,7 +34,8 @@ export class FormatHelper {
    * @returns {number} - The denominator to normalize the rate value into units
    */
   #calculateDenominator(multiplierIndex) {
-    const powerOf = Number(this.#currentAttr.values[this.#getMultiplierId(multiplierIndex)].id)
+    const multiplierId = this.#getMultiplierId(multiplierIndex)
+    const powerOf = Number(this.#currentAttr.values[multiplierId].id)
 
     return 10 ** powerOf
   }

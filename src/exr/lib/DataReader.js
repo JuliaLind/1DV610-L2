@@ -10,7 +10,7 @@ export class DataReader {
    * @param {object} data - The data object to read from
    */
   setData (data) {
-    this.#data = data
+    this.#data = data.data
   }
 
   /**
