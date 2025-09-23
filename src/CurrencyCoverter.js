@@ -6,7 +6,7 @@ import { RateFetcher } from './RateFetcher.js'
 export class CurrencyConverter {
   #rateFetcher
   #fromCurrency
-  #toCurrencies
+  #toCurrencies = []
   #normalizedRates = null
 
   /**
@@ -15,7 +15,7 @@ export class CurrencyConverter {
    * @param {object} dependencies - Configuration object for dependencies
    * @param {RateFetcher} dependencies.rateFetcher - Instance of RateFetcher
    */
-  constructor (dependencies = {
+  constructor(dependencies = {
     rateFetcher: new RateFetcher()
   }) {
     this.#rateFetcher = dependencies.rateFetcher
@@ -27,7 +27,7 @@ export class CurrencyConverter {
    *
    * @param {string} value - The currency code to set as the base currency.
    */
-  setFromCurrency (value) {
+  setFromCurrency(value) {
     if (value === this.#fromCurrency) {
       return
     }
@@ -42,7 +42,7 @@ export class CurrencyConverter {
    *
    * @param {string[]} values - The currency codes to set as target currencies.
    */
-  setToCurrencies (values) {
+  setToCurrencies(values) {
     if (JSON.stringify(values.sort()) === JSON.stringify(this.#toCurrencies.sort())) {
       return
     }
@@ -57,7 +57,7 @@ export class CurrencyConverter {
    * @param {number} amount - The amount to convert.
    * @returns {Promise<object>} - The conversion results.
    */
-  async convert (amount) {
+  async convert(amount) {
     this.#isReady()
     await this.#prep()
     return this.#recalc(amount)
@@ -69,7 +69,7 @@ export class CurrencyConverter {
    *
    * @throws {Error} - If the converter is not fully initialized.
    */
-  #isReady () {
+  #isReady() {
     if (!(this.#fromCurrency && this.#toCurrencies?.length > 0)) {
       throw new Error('CurrencyConverter is not fully initialized')
     }
@@ -80,7 +80,7 @@ export class CurrencyConverter {
    *
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
-  async #prep () {
+  async #prep() {
     if (this.#normalizedRates) {
       return
     }
@@ -96,10 +96,13 @@ export class CurrencyConverter {
    * @param {object} rates - The fetched exchange rates.
    * @returns {object} - The normalized exchange rates.
    */
-  #normalizeRates (rates) {
-    const fromRate = rates[this.#fromCurrency][0]
+  #normalizeRates(rates) {
+    const fromRate = Object.values(rates[this.#fromCurrency])[0]
     const normalized = {}
-    for (const [currency, [toRate]] of Object.entries(rates)) {
+    for (const [currency, toRatesObj] of Object.entries(rates)) {
+      const toRate = Object.values(toRatesObj)[0]
+      console.log(fromRate, toRate)
+
       normalized[currency] = fromRate / toRate
     }
     return normalized
@@ -111,7 +114,7 @@ export class CurrencyConverter {
    * @param {number} amount - The amount to convert.
    * @returns {object} - The conversion results.
    */
-  #recalc (amount) {
+  #recalc(amount) {
     const results = {}
     for (const currency of this.#toCurrencies) {
       results[currency] = this.#normalizedRates[currency] * amount
