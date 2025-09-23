@@ -42,7 +42,6 @@ export class RateFetcher {
   /**
    * Creates an instance of RateService.
    *
-
    * @param {object} dependencies - Configuration object for dependencies
    * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
    * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
@@ -60,9 +59,9 @@ export class RateFetcher {
    *
    * @param {string[]} currencies - The currencies to fetch rates for
    */
-  setCurrencies(currencies) {
+  setCurrencies (currencies) {
     const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP`
-    
+
     this.#fetchService.setBaseUrl(baseUrl)
   }
 
@@ -92,9 +91,6 @@ export class RateFetcher {
     const raw = await this.#fetchService.get(queryString)
     return this.#formatter.format(raw)
   }
-
-
-
 
   /**
    * Fetch exchange rates by period.

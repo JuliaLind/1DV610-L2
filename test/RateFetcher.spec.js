@@ -1,7 +1,8 @@
 /* global before */
 
 import { expect, use } from 'chai'
-import { RateFetcher } from '../src/RateFetcher.js'
+import { RateFetcher } from '../src/index.js'
+
 import { readFile } from 'fs/promises'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
