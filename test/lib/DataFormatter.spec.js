@@ -3,7 +3,7 @@
 import { expect, use } from 'chai'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
-import { DataFormatter } from '../../../src/exr/lib/DataFormatter.js'
+import { DataFormatter } from '../../src/lib/DataFormatter.js'
 import { readFile } from 'fs/promises'
 import { rates } from './mockdata/rates.js'
 import { attributes } from './mockdata/attributes.js'
@@ -17,9 +17,9 @@ describe('DataFormatter', () => {
   let dataSingleDay
 
   before(async () => {
-    let raw = await readFile(new URL('../../json/period.json', import.meta.url))
+    let raw = await readFile(new URL('../json/period.json', import.meta.url))
     dataPeriod = JSON.parse(raw)
-    raw = await readFile(new URL('../../json/single-day.json', import.meta.url))
+    raw = await readFile(new URL('../json/single-day.json', import.meta.url))
     dataSingleDay = JSON.parse(raw)
   })
 

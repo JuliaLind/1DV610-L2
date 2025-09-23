@@ -1,7 +1,7 @@
 /* global before */
 
 import { expect, use } from 'chai'
-import { RateFetcher } from '../../src/exr/RateFetcher.js'
+import { RateFetcher } from '../src/RateFetcher.js'
 import { readFile } from 'fs/promises'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
@@ -12,9 +12,9 @@ describe('RateFetcher', () => {
   let dataPeriod
   let dataSingleDay
   before(async () => {
-    let raw = await readFile(new URL('../json/period.json', import.meta.url))
+    let raw = await readFile(new URL('./json/period.json', import.meta.url))
     dataPeriod = JSON.parse(raw)
-    raw = await readFile(new URL('../json/single-day.json', import.meta.url))
+    raw = await readFile(new URL('./json/single-day.json', import.meta.url))
     dataSingleDay = JSON.parse(raw)
   })
 
@@ -42,7 +42,8 @@ describe('RateFetcher', () => {
     const dataFormatter = {
       format: sinon.stub().returns(exp)
     }
-    const sut = new RateFetcher(['DKK', 'PLN', 'EUR', 'SEK'], { fetchService, dataFormatter })
+    const sut = new RateFetcher({ fetchService, dataFormatter })
+    sut.setCurrencies(['DKK', 'PLN', 'EUR', 'SEK'])
     const res = await sut.fetchByDate('2025-09-19')
 
     expect(res).to.deep.equal(exp)
@@ -79,7 +80,9 @@ describe('RateFetcher', () => {
     const dataFormatter = {
       format: sinon.stub().returns(exp)
     }
-    const sut = new RateFetcher(['DKK', 'PLN', 'EUR', 'SEK'], { fetchService, dataFormatter })
+    const sut = new RateFetcher({ fetchService, dataFormatter })
+
+    sut.setCurrencies(['DKK', 'PLN', 'EUR', 'SEK'])
     const res = await sut.fetchLatest()
 
     expect(res).to.deep.equal(exp)
@@ -132,7 +135,9 @@ describe('RateFetcher', () => {
     const dataFormatter = {
       format: sinon.stub().returns(exp)
     }
-    const sut = new RateFetcher(['DKK', 'PLN', 'EUR', 'SEK'], { fetchService, dataFormatter })
+    const sut = new RateFetcher({ fetchService, dataFormatter })
+
+    sut.setCurrencies(['DKK', 'PLN', 'EUR', 'SEK'])
     const res = await sut.fetchByPeriod('2025-02-20', '2025-02-26')
 
     expect(res).to.deep.equal(exp)

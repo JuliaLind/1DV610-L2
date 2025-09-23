@@ -42,19 +42,27 @@ export class RateFetcher {
   /**
    * Creates an instance of RateService.
    *
-   * @param {string[]} currencies - The currencies to fetch rates for
-   * @param {object} config - Configuration object for dependencies
-   * @param {JsonFetchService} config.fetchService - Instance of JsonFetchService
-   * @param {DataFormatter} config.dataFormatter - Instance of DataFormatter
+
+   * @param {object} dependencies - Configuration object for dependencies
+   * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
+   * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
    */
-  constructor (currencies, config = {
+  constructor (dependencies = {
     fetchService: new JsonFetchService(),
     dataFormatter: new DataFormatter()
   }) {
-    const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP`
+    this.#fetchService = dependencies.fetchService
+    this.#formatter = dependencies.dataFormatter
+  }
 
-    this.#fetchService = config.fetchService
-    this.#formatter = config.dataFormatter
+  /**
+   * Sets the currencies to fetch rates for.
+   *
+   * @param {string[]} currencies - The currencies to fetch rates for
+   */
+  setCurrencies(currencies) {
+    const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP`
+    
     this.#fetchService.setBaseUrl(baseUrl)
   }
 
@@ -73,16 +81,20 @@ export class RateFetcher {
   }
 
   /**
-   * Fetch exchange rates from the latest available date.
+   * Fetch exchange rates from and prior to the latest available date.
    *
+   * @param {number} count - The number of latest observations to fetch (default is 1).
    * @returns {Promise<object>} - The exchange rates from the latest available date.
    */
-  async fetchLatest () {
-    const queryString = `${this.#params.items(1)}&${this.#params.json()}`
+  async fetchLatest (count = 1) {
+    const queryString = `${this.#params.items(count)}&${this.#params.json()}`
 
     const raw = await this.#fetchService.get(queryString)
     return this.#formatter.format(raw)
   }
+
+
+
 
   /**
    * Fetch exchange rates by period.

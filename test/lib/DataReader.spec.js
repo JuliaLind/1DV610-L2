@@ -1,7 +1,7 @@
 /* global before */
 
 import { expect } from 'chai'
-import { DataReader } from '../../../src/exr/lib/DataReader.js'
+import { DataReader } from '../../src/lib/DataReader.js'
 import { readFile } from 'fs/promises'
 import { attributes } from './mockdata/attributes.js'
 import { dates } from './mockdata/dates.js'
@@ -12,7 +12,7 @@ describe('DataReader', () => {
   let data
 
   before(async () => {
-    const raw = await readFile(new URL('../../json/period.json', import.meta.url))
+    const raw = await readFile(new URL('../json/period.json', import.meta.url))
     data = JSON.parse(raw)
   })
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { FormatHelper } from '../../../src/exr/lib/FormatHelper.js'
+import { FormatHelper } from '../../src/lib/FormatHelper.js'
 import { rates } from './mockdata/rates.js'
 import { attributes } from './mockdata/attributes.js'
 import { ids } from './mockdata/ids.js'

@@ -14,16 +14,16 @@ export class DataFormatter {
   /**
    * Creates an instance of DataFormatter.
    *
-   * @param {object} config - Configuration object for dependencies
-   * @param {DataReader} config.reader - Instance of DataReader
-   * @param {FormatHelper} config.helper - Instance of FormatHelper
+   * @param {object} dependencies - Configuration object for dependencies
+   * @param {DataReader} dependencies.reader - Instance of DataReader
+   * @param {FormatHelper} dependencies.helper - Instance of FormatHelper
    */
-  constructor (config = {
+  constructor (dependencies = {
     reader: new DataReader(),
     helper: new FormatHelper()
   }) {
-    this.#reader = config.reader
-    this.#helper = config.helper
+    this.#reader = dependencies.reader
+    this.#helper = dependencies.helper
   }
 
   /**
