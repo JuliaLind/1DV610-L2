@@ -1,5 +1,6 @@
 import { RateFetcher } from './RateFetcher.js'
 import { RateNormalizer } from './lib/RateNormalizer.js'
+import { round } from './lib/functions.js'
 
 /**
  * Manages conversion between currencies
@@ -150,20 +151,9 @@ export class CurrencyConverter {
     const rates = this.#normalizer.getNormalizedRates()
 
     for (const currency of this.#toCurrencies) {
-      results[currency] = this.#round(amount / rates[currency])
+      results[currency] = round(amount / rates[currency])
     }
 
     return results
-  }
-
-  /**
-   * Rounds a number to a specified number of decimal places.
-   *
-   * @param {number} value - The value to round.
-   * @param {number} decimals - The number of decimal places to round to.
-   * @returns {number} The rounded value.
-   */
-  #round (value, decimals = 2) {
-    return Number(value.toFixed(decimals))
   }
 }
