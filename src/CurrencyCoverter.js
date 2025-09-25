@@ -7,7 +7,7 @@ import { RateNormalizer } from './lib/RateNormalizer.js'
 export class CurrencyConverter {
   #fetcher
   #normalizer
-  #fromCurrency
+  #fromCurrency = null
   #toCurrencies = []
 
   /**
@@ -90,7 +90,7 @@ export class CurrencyConverter {
   /**
    * Clears the base and target currencies and resets cached rates.
    */
-  clearCurrencies () {
+  clear () {
     this.#fromCurrency = null
     this.#toCurrencies = []
     this.#normalizer.reset()

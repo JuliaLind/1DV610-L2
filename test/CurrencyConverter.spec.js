@@ -125,4 +125,19 @@ describe('CurrencyConverter', () => {
       expect(rateNormalizer.reset).to.not.have.been.called
     })
   })
+
+  it('clearCurrencies() OK', () => {
+    const ratefetcher = sinon.stub()
+    const rateNormalizer = {
+      reset: sinon.stub()
+    }
+    const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+    sut.setFromCurrency('DKK')
+    sut.setToCurrencies(['USD', 'EUR'])
+    sut.clear()
+
+    expect(sut.getFromCurrency()).to.be.null
+    expect(sut.getToCurrencies()).to.deep.equal([])
+    expect(rateNormalizer.reset).to.have.been.calledOnce
+  })
 })
