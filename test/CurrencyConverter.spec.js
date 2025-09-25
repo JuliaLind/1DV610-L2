@@ -143,25 +143,52 @@ describe('CurrencyConverter', () => {
     expect(rateNormalizer.reset).to.have.been.calledOnce
   })
 
-  it ('convert() throws error when fromCurrency is not set', async () => {
-    const ratefetcher = sinon.stub()
-    const rateNormalizer = {
-      reset: sinon.stub(),
-      hasCachedRates: sinon.stub().returns(false)
-    }
-    const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-    sut.setToCurrencies(['USD', 'EUR'])
-    await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
+  describe('convert()', () => {
+    it('throws error when fromCurrency is not set', async () => {
+      const ratefetcher = sinon.stub()
+      const rateNormalizer = {
+        reset: sinon.stub(),
+        hasCachedRates: sinon.stub().returns(false)
+      }
+      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+      sut.setToCurrencies(['USD', 'EUR'])
+      await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
+    })
+
+    it('throws error when toCurrencies is not set', async () => {
+      const ratefetcher = sinon.stub()
+      const rateNormalizer = {
+        reset: sinon.stub(),
+        hasCachedRates: sinon.stub().returns(false)
+      }
+      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+      sut.setFromCurrency('USD')
+      await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
+    })
+
+    it ('fetcher is not called when rates are cached', async () => {
+      const rateFetcher = {
+        setCurrencies: sinon.stub(),
+        fetchLatest: sinon.stub().resolves()
+      }
+
+      const normalizer = {
+        hasCachedRates: sinon.stub().returns(true),
+        getNormalizedRates: sinon.stub().returns({
+          PLN: 2.5968,
+          EUR: 11.0689
+        })
+      }
+
+      const sut = new CurrencyConverter({ fetcher: rateFetcher, normalizer })
+      sut.setFromCurrency('USD')
+      sut.setToCurrencies(['PLN', 'EUR'])
+      await sut.convert(100)
+
+      expect(rateFetcher.fetchLatest).to.not.have.been.called
+    })
   })
 
-  it ('convert() throws error when toCurrencies is not set', async () => {
-    const ratefetcher = sinon.stub()
-    const rateNormalizer = {
-      reset: sinon.stub(),
-      hasCachedRates: sinon.stub().returns(false)
-    }
-    const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-    sut.setFromCurrency('USD')
-    await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
-  })
+
+
 })
