@@ -1,3 +1,5 @@
+## About
+
 This package is a school project.  
 The package provides tools for fetching exchange rates and for recalculating amounts between different currencies, utilizing the public API provided by Norges Bank (Norway national bank).  
 
@@ -100,6 +102,54 @@ console.log(converted['PLN']) // 134.7786382
 
 ``` 
 
+## Testing
 
+Current code has 100% coverage, latest test report available under https://github.com/JuliaLind/1DV610-L2/actions/workflows/ci.yml .  
 
+## Contribute  
 
+1. **Fork** this repository to your GitHub account.
+2. **Clone your fork** (replace `<your-username>`):
+
+```
+git clone git@github.com:<your-username>/1DV610-L2.git
+cd 1DV610-L2
+```
+3. **Install**
+```
+npm install
+```
+
+4. **Create a branch**
+
+```
+git checkout -b feat/short-description
+```
+
+5. **Test and lint**
+
+Make sure to fix any linting errors. Please add/adjust tests for any change you make to the code.
+
+6. **Opening a Pull Request**
+
+Push your branch:
+
+```
+git push -u origin <branch-name>
+```
+  
+Open a PR against main and include:  
+  
+What problem it solves / why the change is needed.  
+  
+What changed (before/after, screenshots if relevant).  
+  
+How to test (commands, sample input/output).  
+  
+**PR checklist**  
+  
+1. Tests pass (npm test)  
+
+2. Lint passes (npm run lint)
+
+3. README/docs updated if behavior or API changed
