@@ -70,7 +70,7 @@ export class RateNormalizer {
     const normalized = {}
 
     for (const toCurrency of this.#toCurrencies) {
-      const toRate = toCurrency === 'NOK' ? 1 :Object.values(rates[toCurrency])[0]
+      const toRate = toCurrency === 'NOK' ? 1 : Object.values(rates[toCurrency])[0]
 
       normalized[toCurrency] = round(toRate / fromRate, 4)
     }

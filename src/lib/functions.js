@@ -6,5 +6,5 @@
  * @returns {number} The rounded value.
  */
 export const round = (value, decimals = 2) => {
-    return Number(value.toFixed(decimals))
+  return Number(value.toFixed(decimals))
 }

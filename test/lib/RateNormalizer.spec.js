@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import { RateNormalizer } from '../../src/lib/RateNormalizer.js'
 
-
 describe('RateNormalizer', () => {
   const rates = {
     DKK: {
@@ -36,7 +35,7 @@ describe('RateNormalizer', () => {
 
   it('hasCachedRates() returns false when no rates are set', () => {
     const sut = new RateNormalizer()
-    let res = sut.hasCachedRates()
+    const res = sut.hasCachedRates()
 
     expect(res).to.be.false
   })
@@ -46,7 +45,7 @@ describe('RateNormalizer', () => {
     sut.setFromCurrency('EUR')
     sut.setToCurrencies(['DKK', 'PLN', 'SEK'])
     sut.normalize(rates)
-    let res = sut.hasCachedRates()
+    const res = sut.hasCachedRates()
 
     expect(res).to.be.true
   })
@@ -71,10 +70,10 @@ describe('RateNormalizer', () => {
     sut.normalize(rates)
     const res = sut.getNormalizedRates()
     const exp = {
-      "DKK": 0.1340,
-      "PLN": 0.2346,
-      "SEK": 0.0903,
-      "NOK": 0.0857
+      DKK: 0.1340,
+      PLN: 0.2346,
+      SEK: 0.0903,
+      NOK: 0.0857
     }
     expect(res).to.deep.equal(exp)
   })
