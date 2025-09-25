@@ -5,8 +5,10 @@ import { CurrencyConverter } from '../src/index.js'
 
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
+import chaiAsPromised from "chai-as-promised"
 
 use(sinonChai)
+use(chaiAsPromised)
 
 describe('CurrencyConverter', () => {
   afterEach(() => {
@@ -139,5 +141,27 @@ describe('CurrencyConverter', () => {
     expect(sut.getFromCurrency()).to.be.null
     expect(sut.getToCurrencies()).to.deep.equal([])
     expect(rateNormalizer.reset).to.have.been.calledOnce
+  })
+
+  it ('convert() throws error when fromCurrency is not set', async () => {
+    const ratefetcher = sinon.stub()
+    const rateNormalizer = {
+      reset: sinon.stub(),
+      hasCachedRates: sinon.stub().returns(false)
+    }
+    const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+    sut.setToCurrencies(['USD', 'EUR'])
+    await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
+  })
+
+  it ('convert() throws error when toCurrencies is not set', async () => {
+    const ratefetcher = sinon.stub()
+    const rateNormalizer = {
+      reset: sinon.stub(),
+      hasCachedRates: sinon.stub().returns(false)
+    }
+    const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+    sut.setFromCurrency('USD')
+    await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
   })
 })
