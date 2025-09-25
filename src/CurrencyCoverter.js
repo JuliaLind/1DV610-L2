@@ -1,24 +1,28 @@
 import { RateFetcher } from './RateFetcher.js'
+import { RateNormalizer } from './lib/RateNormalizer.js'
 
 /**
  * Manages conversion between currencies
  */
 export class CurrencyConverter {
-  #rateFetcher
+  #fetcher
+  #normalizer
   #fromCurrency
   #toCurrencies = []
-  #normalizedRates = null
 
   /**
    * Creates an instance of CurrencyConverter.
    *
    * @param {object} dependencies - Configuration object for dependencies
-   * @param {RateFetcher} dependencies.rateFetcher - Instance of RateFetcher
+   * @param {RateFetcher} dependencies.fetcher - Instance of RateFetcher
+   * @param {RateNormalizer} dependencies.normalizer - Instance of RateNormalizer
    */
-  constructor(dependencies = {
-    rateFetcher: new RateFetcher()
+  constructor (dependencies = {
+    fetcher: new RateFetcher(),
+    normalizer: new RateNormalizer()
   }) {
-    this.#rateFetcher = dependencies.rateFetcher
+    this.#fetcher = dependencies.fetcher
+    this.#normalizer = dependencies.normalizer
   }
 
   /**
@@ -27,13 +31,23 @@ export class CurrencyConverter {
    *
    * @param {string} value - The currency code to set as the base currency.
    */
-  setFromCurrency(value) {
-    if (value === this.#fromCurrency) {
-      return
-    }
+  setFromCurrency (value) {
+    const current = this.#fromCurrency
 
     this.#fromCurrency = value
-    this.#normalizedRates = null
+
+    if (current && current !== value) {
+      this.#normalizer.reset()
+    }
+  }
+
+  /**
+   * Gets the current base currency.
+   *
+   * @returns {string} - The current base currency.
+   */
+  getFromCurrency () {
+    return this.#fromCurrency
   }
 
   /**
@@ -42,13 +56,44 @@ export class CurrencyConverter {
    *
    * @param {string[]} values - The currency codes to set as target currencies.
    */
-  setToCurrencies(values) {
-    if (JSON.stringify(values.sort()) === JSON.stringify(this.#toCurrencies.sort())) {
-      return
-    }
+  setToCurrencies (values) {
+    const current = this.#toCurrencies
 
     this.#toCurrencies = values
-    this.#normalizedRates = null
+
+    if (current.length > 0 && this.#areEqual(values, current)) {
+      this.#normalizer.reset()
+    }
+  }
+
+  /**
+   * Compares two arrays for equality.
+   * Equal means that they contain the same elements, regardless of order.
+   *
+   * @param {string[]} arr1 - first array
+   * @param {string[]} arr2 - second array
+   * @returns {boolean} - true if the arrays contain the same elements
+   */
+  #areEqual(arr1, arr2) {
+    return JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort())
+  }
+
+  /**
+   * Gets the current target currencies.
+   *
+   * @returns {string[]} - The current target currencies.
+   */
+  getToCurrencies () {
+    return this.#toCurrencies
+  }
+
+  /**
+   * Clears the base and target currencies and resets cached rates.
+   */
+  clearCurrencies () {
+    this.#fromCurrency = null
+    this.#toCurrencies = []
+    this.#normalizer.reset()
   }
 
   /**
@@ -57,7 +102,7 @@ export class CurrencyConverter {
    * @param {number} amount - The amount to convert.
    * @returns {Promise<object>} - The conversion results.
    */
-  async convert(amount) {
+  async convert (amount) {
     this.#isReady()
     await this.#prep()
     return this.#recalc(amount)
@@ -69,8 +114,8 @@ export class CurrencyConverter {
    *
    * @throws {Error} - If the converter is not fully initialized.
    */
-  #isReady() {
-    if (!(this.#fromCurrency && this.#toCurrencies?.length > 0)) {
+  #isReady () {
+    if (!this.#fromCurrency || this.#toCurrencies?.length === 0) {
       throw new Error('CurrencyConverter is not fully initialized')
     }
   }
@@ -80,32 +125,18 @@ export class CurrencyConverter {
    *
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
-  async #prep() {
-    if (this.#normalizedRates) {
+  async #prep () {
+    if (this.#normalizer.hasCachedRates()) {
       return
     }
 
-    this.#rateFetcher.setCurrencies([this.#fromCurrency, ...this.#toCurrencies])
-    const rates = await this.#rateFetcher.fetchLatest()
-    this.#normalizedRates = this.#normalizeRates(rates)
-  }
+    this.#isReady()
+    this.#fetcher.setCurrencies([this.#fromCurrency, ...this.#toCurrencies])
+    const rates = await this.#fetcher.fetchLatest()
 
-  /**
-   * Normalizes the fetched exchange rates.
-   *
-   * @param {object} rates - The fetched exchange rates.
-   * @returns {object} - The normalized exchange rates.
-   */
-  #normalizeRates(rates) {
-    const fromRate = Object.values(rates[this.#fromCurrency])[0]
-    const normalized = {}
-    for (const [currency, toRatesObj] of Object.entries(rates)) {
-      const toRate = Object.values(toRatesObj)[0]
-      console.log(fromRate, toRate)
-
-      normalized[currency] = fromRate / toRate
-    }
-    return normalized
+    this.#normalizer.setFromCurrency(this.#fromCurrency)
+    this.#normalizer.setToCurrencies(this.#toCurrencies)
+    this.#normalizer.normalize(rates)
   }
 
   /**
@@ -114,11 +145,25 @@ export class CurrencyConverter {
    * @param {number} amount - The amount to convert.
    * @returns {object} - The conversion results.
    */
-  #recalc(amount) {
+  #recalc (amount) {
     const results = {}
+    const rates = this.#normalizer.getNormalizedRates()
+
     for (const currency of this.#toCurrencies) {
-      results[currency] = this.#normalizedRates[currency] * amount
+      results[currency] = this.#round(amount / rates[currency])
     }
+
     return results
+  }
+
+  /**
+   * Rounds a number to a specified number of decimal places.
+   *
+   * @param {number} value - The value to round.
+   * @param {number} decimals - The number of decimal places to round to.
+   * @returns {number} The rounded value.
+   */
+  #round (value, decimals = 2) {
+    return Number(value.toFixed(decimals))
   }
 }

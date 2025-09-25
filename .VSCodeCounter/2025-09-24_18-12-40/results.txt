@@ -1,0 +1,33 @@
+Date : 2025-09-24 18:12:40
+Directory : c:\Users\JuliaLind\Desktop\school\L2\src
+Total : 7 files,  239 codes, 255 comments, 74 blanks, all 568 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |          7 |        239 |        255 |         74 |        568 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                             | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                |          7 |        239 |        255 |         74 |        568 |
+| . (Files)                                                        |          3 |        107 |        120 |         34 |        261 |
+| lib                                                              |          4 |        132 |        135 |         40 |        307 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                         | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\JuliaLind\Desktop\school\L2\src\CurrencyCoverter.js     | JavaScript |         66 |         62 |         19 |        147 |
+| c:\Users\JuliaLind\Desktop\school\L2\src\RateFetcher.js          | JavaScript |         38 |         58 |         13 |        109 |
+| c:\Users\JuliaLind\Desktop\school\L2\src\index.js                | JavaScript |          3 |          0 |          2 |          5 |
+| c:\Users\JuliaLind\Desktop\school\L2\src\lib\DataFormatter.js    | JavaScript |         35 |         24 |         10 |         69 |
+| c:\Users\JuliaLind\Desktop\school\L2\src\lib\DataReader.js       | JavaScript |         18 |         28 |          6 |         52 |
+| c:\Users\JuliaLind\Desktop\school\L2\src\lib\FormatHelper.js     | JavaScript |         56 |         63 |         19 |        138 |
+| c:\Users\JuliaLind\Desktop\school\L2\src\lib\JsonFetchService.js | JavaScript |         23 |         20 |          5 |         48 |
+| Total                                                            |            |        239 |        255 |         74 |        568 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
