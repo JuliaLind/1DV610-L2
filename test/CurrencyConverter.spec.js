@@ -81,4 +81,48 @@ describe('CurrencyConverter', () => {
       expect(rateNormalizer.reset).to.not.have.been.called
     })
   })
+
+  describe('setToCurrencies()', () => {
+    it('new toCurrencies are different from current', () => {
+      const ratefetcher = sinon.stub()
+      const rateNormalizer = {
+        reset: sinon.stub()
+      }
+      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+
+      sut.setToCurrencies(['USD', 'EUR'])
+      sut.setToCurrencies(['USD', 'PLN'])
+
+      expect(sut.getToCurrencies()).to.deep.equal(['USD', 'PLN'])
+      expect(rateNormalizer.reset).to.have.been.calledOnce
+    })
+
+    it('new toCurrencies are same as current', () => {
+      const ratefetcher = sinon.stub()
+      const rateNormalizer = {
+        reset: sinon.stub()
+      }
+      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+
+      sut.setToCurrencies(['USD', 'EUR'])
+      sut.setToCurrencies(['USD', 'EUR'])
+
+      expect(sut.getToCurrencies()).to.deep.equal(['USD', 'EUR'])
+      expect(rateNormalizer.reset).to.not.have.been.called
+    })
+
+    it('new toCurrencies are same as current, but different order', () => {
+      const ratefetcher = sinon.stub()
+      const rateNormalizer = {
+        reset: sinon.stub()
+      }
+      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+
+      sut.setToCurrencies(['USD', 'EUR'])
+      sut.setToCurrencies(['EUR', 'USD'])
+
+      expect(sut.getToCurrencies()).to.deep.equal(['EUR', 'USD'])
+      expect(rateNormalizer.reset).to.not.have.been.called
+    })
+  })
 })

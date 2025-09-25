@@ -61,7 +61,7 @@ export class CurrencyConverter {
 
     this.#toCurrencies = values
 
-    if (current.length > 0 && this.#areEqual(values, current)) {
+    if (current.length > 0 && !this.#areEqual(values, current)) {
       this.#normalizer.reset()
     }
   }
@@ -75,7 +75,7 @@ export class CurrencyConverter {
    * @returns {boolean} - true if the arrays contain the same elements
    */
   #areEqual(arr1, arr2) {
-    return JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort())
+    return JSON.stringify([...arr1].sort()) === JSON.stringify([...arr2].sort())
   }
 
   /**
