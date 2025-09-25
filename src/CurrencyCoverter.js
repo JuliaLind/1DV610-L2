@@ -74,7 +74,7 @@ export class CurrencyConverter {
    * @param {string[]} arr2 - second array
    * @returns {boolean} - true if the arrays contain the same elements
    */
-  #areEqual(arr1, arr2) {
+  #areEqual (arr1, arr2) {
     return JSON.stringify([...arr1].sort()) === JSON.stringify([...arr2].sort())
   }
 

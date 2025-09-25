@@ -34,19 +34,19 @@ describe('FormatHelper', () => {
   it('formatOneCurrency() not OK, multiplier is missing in attributes', () => {
     const sut = new FormatHelper()
     const badAttributes = [
-  {
-    id: 'DECIMALS'
-  },
-  {
-    id: 'CALCULATED',
-  },
-  {
-    id: 'CHANGED_ID_UNIT_MULT',
-  },
-  {
-    id: 'COLLECTION'
-  }
-]
+      {
+        id: 'DECIMALS'
+      },
+      {
+        id: 'CALCULATED'
+      },
+      {
+        id: 'CHANGED_ID_UNIT_MULT'
+      },
+      {
+        id: 'COLLECTION'
+      }
+    ]
     sut.setRates(rates)
     sut.setAttributes(badAttributes)
     sut.setIds(ids)
