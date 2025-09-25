@@ -166,7 +166,7 @@ describe('CurrencyConverter', () => {
       await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
     })
 
-    it ('fetcher is not called when rates are cached', async () => {
+    it('fetcher is not called when rates are cached', async () => {
       const rateFetcher = {
         setCurrencies: sinon.stub(),
         fetchLatest: sinon.stub().resolves()
@@ -188,7 +188,4 @@ describe('CurrencyConverter', () => {
       expect(rateFetcher.fetchLatest).to.not.have.been.called
     })
   })
-
-
-
 })

@@ -30,4 +30,28 @@ describe('FormatHelper', () => {
     }
     expect(res).to.deep.equal(exp)
   })
+
+  it('formatOneCurrency() not OK, multiplier is missing in attributes', () => {
+    const sut = new FormatHelper()
+    const badAttributes = [
+  {
+    id: 'DECIMALS'
+  },
+  {
+    id: 'CALCULATED',
+  },
+  {
+    id: 'CHANGED_ID_UNIT_MULT',
+  },
+  {
+    id: 'COLLECTION'
+  }
+]
+    sut.setRates(rates)
+    sut.setAttributes(badAttributes)
+    sut.setIds(ids)
+    sut.setDates(dates)
+
+    expect(() => sut.formatOneCurrency(2)).to.throw('UNIT_MULT attribute missing')
+  })
 })
