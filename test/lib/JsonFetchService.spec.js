@@ -7,6 +7,15 @@ use(sinonChai)
 
 
 describe('JsonFetchService', () => {
+    let fetchStub
+    before(() => {
+        fetchStub = sinon.stub(globalThis, 'fetch')
+    })
+
+    after(() => {
+        fetchStub.restore()
+    })
+
     it('get OK', async () => {
         const sut = new JsonFetchService()
 
@@ -16,7 +25,7 @@ describe('JsonFetchService', () => {
             id: 'someid',
         }
 
-        sinon.stub(globalThis, 'fetch').resolves({
+        fetchStub.resolves({
             json: () => Promise.resolve(fakeData)
         })
 
@@ -24,12 +33,26 @@ describe('JsonFetchService', () => {
         const res = await sut.get(queryString)
         expect(res).to.deep.equal(fakeData)
 
-        expect(globalThis.fetch).to.have.been.calledOnceWith(`${fakeUrl}?${queryString}`, {
+        expect(fetchStub).to.have.been.calledOnceWith(`${fakeUrl}?${queryString}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
             }
         })
+    })
+
+    it('get Not OK', async () => {
+        const sut = new JsonFetchService()
+
+        const fakeUrl = 'myfakeurl'
+        const queryString = 'param1=value1&param2=value2'
+        const exception = new Error('some error')
+        fetchStub.rejects(exception)
+
+        sut.setBaseUrl(fakeUrl)
+        expect(sut.get(queryString)).to.be.rejectedWith(exception.message)
+
+
     })
 })
