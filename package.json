@@ -1,5 +1,5 @@
 {
-  "name": "exr",
+  "name": "@jl225vf/exr",
   "version": "1.0.0",
   "description": "Fetches exchange rates from the Norges Bank API and provides clean, developer-friendly data structures.",
   "type": "module",
