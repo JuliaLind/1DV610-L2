@@ -1,6 +1,6 @@
 import { RateFetcher } from './RateFetcher.js'
 import { RateNormalizer } from './lib/RateNormalizer.js'
-import { round } from './lib/functions.js'
+import { round, arraysAreEqual } from './lib/functions.js'
 
 /**
  * Manages conversion between currencies
@@ -62,21 +62,9 @@ export class CurrencyConverter {
 
     this.#toCurrencies = values
 
-    if (current.length > 0 && !this.#areEqual(values, current)) {
+    if (current.length > 0 && !arraysAreEqual(values, current)) {
       this.#normalizer.reset()
     }
-  }
-
-  /**
-   * Compares two arrays for equality.
-   * Equal means that they contain the same elements, regardless of order.
-   *
-   * @param {string[]} arr1 - first array
-   * @param {string[]} arr2 - second array
-   * @returns {boolean} - true if the arrays contain the same elements
-   */
-  #areEqual (arr1, arr2) {
-    return JSON.stringify([...arr1].sort()) === JSON.stringify([...arr2].sort())
   }
 
   /**

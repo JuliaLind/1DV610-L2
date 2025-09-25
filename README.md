@@ -11,7 +11,7 @@ npm install @jl225vf/exr
 ```
 
 
-This module provides two classes CurrencyConverter and RateFetcher.  
+This module provides the classes CurrencyConverter, RateFetcher and QuoteConverter.  
 
 To use the RateFetcher pass an array with currencies you wish to fetch rates for to the method setCurrencies().  The RateFetcher provids the following methods:
 - fetchByDate() with optional count parameter that determines the number of observations prior to and including the specified date.  If the date is not a bank date, the rates will be fetched from the nearest bankdate perceeding the specified date.  
@@ -99,6 +99,43 @@ const coverted = await converter.convert(350)
 
 console.log(converted['EUR']) // 31.61561201
 console.log(converted['PLN']) // 134.7786382
+
+``` 
+
+The QuoteConverter converts a period of stock quotes from NOK to selected currencies.  
+To use the QuoteConverter set the currencies you wish to convert using setCurrencies() method and then pass the quotes object to the convert() method. Quotes must be an object where keys are dates in the format "YYYY-MM-DD" and values are the quotes in NOK.  
+
+Example 4:
+
+```
+import { QuoteConverter } from "@jl225vf/exr"
+
+const converter = new QuoteCoverter()
+
+converter.setCurrencies(['EUR', 'PLN'])
+
+const quotes = {
+    "2025-01-10": 332.4,
+    "2025-01-09": 334.8,
+    "2025-01-08": 332,
+    "2025-01-07": 334.8,
+    "2025-01-06": 331,
+    "2025-01-03": 332,
+    "2025-01-02": 334.4
+    }
+
+const coverted = await converter.convert(quotes)
+
+console.log(converted) // {
+                       //   '2025-01-10': { NOK: 332.4, EUR: 28.27, PLN: 120.61 },
+                       //   '2025-01-09': { NOK: 334.8, EUR: 28.47, PLN: 121.63 },
+                       //   '2025-01-08': { NOK: 332, EUR: 28.28, PLN: 120.96 },
+                       //   '2025-01-07': { NOK: 334.8, EUR: 28.52, PLN: 121.45 },
+                       //   '2025-01-06': { NOK: 331, EUR: 28.27, PLN: 120.19 },
+                       //   '2025-01-03': { NOK: 332, EUR: 28.34, PLN: 121.1 },
+                       //   '2025-01-02': { NOK: 334.4, EUR: 28.54, PLN: 122.01 }
+                       // }
+
 
 ``` 
 
