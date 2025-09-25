@@ -84,15 +84,17 @@ export class FormatHelper {
    * @returns {number|undefined} - The multiplier value or undefined if not found
    */
   #getMultiplier () {
+    let denominator = 1
+
     for (const attrIndex in this.#currentRate.attributes) {
       this.#currentAttr = this.#attributes[attrIndex]
 
       if (this.#isMultiplierIndex()) {
-        return this.#calculateDenominator(attrIndex)
+        denominator = this.#calculateDenominator(attrIndex)
       }
     }
 
-    return undefined
+    return denominator
   }
 
   /**
