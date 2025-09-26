@@ -34,15 +34,6 @@ export class QuoteConverter {
   }
 
   /**
-   * Gets the current target currencies.
-   *
-   * @returns {string[]} - The current target currencies.
-   */
-  getCurrencies () {
-    return this.#currencies
-  }
-
-  /**
    * Converts stock quotes from NOK to the target currencies.
    *
    * @param {object} quotes - The quotes to convert.
