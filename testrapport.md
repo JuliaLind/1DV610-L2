@@ -1,4 +1,6 @@
-# Test report
+# Testrapport
+
+Alla publika metoder är testade med enhetstester.
 
 All public metods are tested with unittests using mocha/chai testing frameword combined with sinon for mocking, and have 100% coverage calculated by C8.  
 
