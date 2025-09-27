@@ -6,7 +6,9 @@
  * @returns {number} The rounded value.
  */
 export const round = (value, decimals = 2) => {
-  return Number(value.toFixed(decimals))
+  const adjValue = value + Number.EPSILON // add a small value to avoid floating point issues
+
+  return Number(adjValue.toFixed(decimals))
 }
 
 /**

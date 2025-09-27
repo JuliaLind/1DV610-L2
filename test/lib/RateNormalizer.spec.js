@@ -17,7 +17,7 @@ describe('RateNormalizer', () => {
     }
   }
 
-  it('set/get fromCurrency OK', () => {
+  it('setFromCurrency(), getFromCurrency() OK', () => {
     const sut = new RateNormalizer()
     sut.setFromCurrency('EUR')
     const res = sut.getFromCurrency()
@@ -25,7 +25,7 @@ describe('RateNormalizer', () => {
     expect(res).to.equal(exp)
   })
 
-  it('set/get toCurrencies OK', () => {
+  it('setToCurrencies(), getToCurrencies() OK', () => {
     const sut = new RateNormalizer()
     sut.setToCurrencies(['DKK', 'PLN', 'USD'])
     const res = sut.getToCurrencies()
@@ -63,7 +63,7 @@ describe('RateNormalizer', () => {
     expect(res).to.be.false
   })
 
-  it('normalize OK', () => {
+  it('normalize() OK', () => {
     const sut = new RateNormalizer()
     sut.setFromCurrency('EUR')
     sut.setToCurrencies(['DKK', 'PLN', 'SEK', 'NOK'])

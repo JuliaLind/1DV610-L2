@@ -27,7 +27,7 @@ describe('DataFormatter', () => {
     sinon.restore()
   })
 
-  describe('format', () => {
+  describe('format()', () => {
     it('data contains 4 different currencies and a period of 5 days, OK', () => {
       const sut = new DataFormatter()
       const res = sut.format(dataPeriod)

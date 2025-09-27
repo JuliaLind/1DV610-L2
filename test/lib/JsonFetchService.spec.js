@@ -17,7 +17,7 @@ describe('JsonFetchService', () => {
     fetchStub.restore()
   })
 
-  it('get OK', async () => {
+  it('get() OK', async () => {
     const sut = new JsonFetchService()
 
     const fakeUrl = 'myfakeurl'
@@ -48,7 +48,7 @@ describe('JsonFetchService', () => {
     })
   })
 
-  it('get Not OK', async () => {
+  it('get() Not OK', async () => {
     const sut = new JsonFetchService()
 
     const fakeUrl = 'myfakeurl'
