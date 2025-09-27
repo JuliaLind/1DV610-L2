@@ -48,10 +48,11 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 ### Tabellreflektion för funktioner/metoder
 
 <table>
-<tr><th>Namn</th><th>Förklaring</th><th>Reflektion och regler från Clean Code</th></tr>
+<tr><th>Metodnamn</th><th>Länk eller kod</th><th>Antal rader (ej ws)</th><th>Reflektion</th></tr>
 
 <tr>
 <td>CurrencyConverter.#prep()</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -60,10 +61,12 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 <td>CurrencyConverter.#recalc()</td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 
 <tr>
 <td>FormatHelper.#getMultiplier()</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -72,10 +75,12 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 <td>FormatHelper.#mergeAndNormalize()</td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 
 <tr>
 <td>RateNormalizer.normalize(rates)</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -86,5 +91,5 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 
 ## Reflektion över egen kodkvalitet  
 
-Jag hade hunnit läsa relevanta kapitel i boken innan jag satte igång så jag har aktivt arbetat med kodkvaliten från start gällande namngivning och antal argument till metoder. Däremot var vissa metoder längre från start, och jag har brytit ut dessa till mindre allteftersom. När samma metod behövt användas i fler än en klass har jag gjort den till en fristående funktion.  
+Jag hade hunnit läsa relevanta kapitel i boken innan jag satte igång så jag har aktivt arbetat med kodkvaliten från start gällande namngivning och antal argument till metoder. Däremot var vissa metoder längre från start, och jag har brytit ut dessa till mindre allteftersom. När samma metod behövt användas i fler än en klass har jag gjort den till en fristående funktion. Den regel som jag upplevde som svårast att hålla var att hålla delar i en metod på samma nivå. 
 
