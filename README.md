@@ -122,7 +122,7 @@ const quotes = {
     "2025-01-06": 331,
     "2025-01-03": 332,
     "2025-01-02": 334.4
-    }
+}
 
 const coverted = await converter.convert(quotes)
 
