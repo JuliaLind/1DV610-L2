@@ -9,10 +9,9 @@ describe('functions', () => {
         { input: [1.0049, 3], expected: 1.005 }
     ]
 
-    it ('round() OK', () => {
-      values.forEach(({ input, expected }) => {
+    values.forEach(({ input, expected }) => {
+      it(`round(${input.join(', ')}) should return ${expected}`, () => {
         expect(round(...input)).to.equal(expected)
       })
     })
-
 })
