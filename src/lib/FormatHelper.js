@@ -1,5 +1,5 @@
 /**
- *
+ * Class helps to format and normalize the data from the Norway BankAPI.
  */
 export class FormatHelper {
   #rates

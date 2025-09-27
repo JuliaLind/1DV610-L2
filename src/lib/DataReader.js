@@ -1,5 +1,5 @@
 /**
- *
+ * Class reads data from the Norway BankAPI response.
  */
 export class DataReader {
   #data
