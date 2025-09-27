@@ -30,6 +30,4 @@ describe('functions', () => {
             expect(arraysAreEqual(['PLN', 'EUR'], ['EUR', 'USD'])).to.be.false
         })
     })
-
-
 })
