@@ -49,6 +49,7 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 
 <table>
 <tr><th>Namn</th><th>Förklaring</th><th>Reflektion och regler från Clean Code</th></tr>
+
 <tr>
 <td>CurrencyConverter.#prep()</td>
 <td></td>
@@ -68,7 +69,13 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 </tr>
 
 <tr>
-<td>FormatHelper.#mergeAndNormalize(rateIndex)</td>
+<td>FormatHelper.#mergeAndNormalize()</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>RateNormalizer.normalize(rates)</td>
 <td></td>
 <td></td>
 </tr>
