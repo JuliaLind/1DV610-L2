@@ -9,6 +9,7 @@ export class QuoteConverter {
   #fetcher
   #currencies = []
   #rates = {}
+  #quotes = {}
 
   /**
    * Creates an instance of QuoteConverter.
@@ -40,8 +41,18 @@ export class QuoteConverter {
    */
   async convert (quotes) {
     this.#isReady()
-    await this.#prep(quotes)
-    return this.#calcMany(quotes)
+    this.#setQuotes(quotes)
+    await this.#prep()
+    return this.#calcMany()
+  }
+
+  /**
+   * Sets the quotes to convert.
+   *
+   * @param {object} quotes - The quotes to convert.
+   */
+  #setQuotes (quotes) {
+    this.#quotes = quotes
   }
 
   /**
@@ -61,10 +72,10 @@ export class QuoteConverter {
    *
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
-  async #prep (quotes) {
+  async #prep () {
     this.#isReady()
     this.#fetcher.setCurrencies(this.#currencies)
-    const { from, to } = this.#extractPeriod(Object.keys(quotes))
+    const { from, to } = this.#getPeriod()
     this.#rates = await this.#fetcher.fetchByPeriod(from, to)
   }
 
@@ -73,23 +84,24 @@ export class QuoteConverter {
    *
    * @returns {object} - The period covered by the quotes.
    */
-  #extractPeriod (quotes) {
+  #getPeriod () {
+    const dates = Object.keys(this.#quotes)
+
     return {
-      from: quotes[quotes.length - 1],
-      to: quotes[0]
+      from: dates[dates.length - 1],
+      to: dates[0]
     }
   }
 
   /**
    * Recalculates the conversion results for the specified amount.
    *
-   * @param {number} amount - The amount to convert.
-   * @param quotes
    * @returns {object} - The conversion results.
    */
-  #calcMany (quotes) {
+  #calcMany () {
     const final = {}
-    Object.entries(quotes).forEach(([date, nokValue]) => {
+
+    Object.entries(this.#quotes).forEach(([date, nokValue]) => {
       const quote = { date, NOK: nokValue }
       final[date] = this.#calcOne(quote)
     })
@@ -101,6 +113,7 @@ export class QuoteConverter {
    * Recalculates the conversion results for a single quote.
    *
    * @param {object} quote - The quote to convert.
+   * @returns {object} - The conversion results for the quote.
    */
   #calcOne (quote) {
     const calculated = {
