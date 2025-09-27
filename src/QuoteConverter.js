@@ -7,7 +7,6 @@ import { round } from './lib/functions.js'
  */
 export class QuoteConverter {
   #fetcher
-  #quotes = []
   #currencies = []
   #rates = {}
 
