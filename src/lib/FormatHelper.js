@@ -108,12 +108,9 @@ export class FormatHelper {
   /**
    * Merges and normalizes the data for a specific rate.
    *
-   * @param {number} rateIndex - index of the rate to process
    * @returns {object} - merged and normalized data for the currency rate
    */
-  #mergeAndNormalize (rateIndex) {
-    this.#currentRate = this.#rates[rateIndex]
-
+  #mergeAndNormalize () {
     const formatted = {}
     const multiplier = this.#getMultiplier()
 
@@ -126,12 +123,23 @@ export class FormatHelper {
   }
 
   /**
+   * Sets the current rate.
+   *
+   * @param {number} rateIndex - The index of the rate to set as current
+   */
+  #setCurrentRate (rateIndex) {
+    this.#currentRate = this.#rates[rateIndex]
+  }
+
+
+  /**
    * Formats the data for a specific currency.
    *
    * @param {number} currencyIndex - index of the currency to format
-   * @returns {object} - formatted data for the currency
    */
   formatOneCurrency (currencyIndex) {
-    return this.#mergeAndNormalize(currencyIndex)
+    this.#setCurrentRate(currencyIndex)
+
+    return this.#mergeAndNormalize()
   }
 }
