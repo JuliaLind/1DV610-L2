@@ -6,7 +6,7 @@ import { round } from './functions.js'
 export class RateNormalizer {
   #fromCurrency
   #toCurrencies
-  #normalizedRates = null
+  #normalizedRates = {}
 
   /**
    * Sets the base currency for normalization.
@@ -30,7 +30,7 @@ export class RateNormalizer {
    * Resets the cached normalized rates.
    */
   reset () {
-    this.#normalizedRates = null
+    this.#normalizedRates = {}
   }
 
   /**
@@ -39,7 +39,7 @@ export class RateNormalizer {
    * @returns {boolean} - True if normalized rates are cached, false otherwise.
    */
   hasCachedRates () {
-    return this.#normalizedRates !== null
+    return Object.keys(this.#normalizedRates).length > 0
   }
 
   /**
@@ -57,7 +57,7 @@ export class RateNormalizer {
    * @returns {string[]} - The current target currencies.
    */
   getToCurrencies () {
-    return this.#toCurrencies
+    return [...this.#toCurrencies]
   }
 
   /**
@@ -83,6 +83,6 @@ export class RateNormalizer {
    * @returns {object} - The normalized exchange rates.
    */
   getNormalizedRates () {
-    return this.#normalizedRates
+    return { ...this.#normalizedRates }
   }
 }

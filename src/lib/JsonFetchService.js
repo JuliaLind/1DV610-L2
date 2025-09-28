@@ -49,6 +49,12 @@ export class JsonFetchService {
     return jsonResponse
   }
 
+  /**
+   * Checks the status of the API response for errors.
+   *
+   * @param {object} response - The API response object.
+   * @throws {Error} - If the response contains errors.
+   */
   #checkStatus (response) {
     if (!response.errors) {
       return

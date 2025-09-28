@@ -131,11 +131,11 @@ export class FormatHelper {
     this.#currentRate = this.#rates[rateIndex]
   }
 
-
   /**
    * Formats the data for a specific currency.
    *
    * @param {number} currencyIndex - index of the currency to format
+   * @returns {object} - The formatted currency data
    */
   formatOneCurrency (currencyIndex) {
     this.#setCurrentRate(currencyIndex)
