@@ -48,7 +48,7 @@ describe('JsonFetchService', () => {
     })
   })
 
-  it('get() Not OK', async () => {
+  it('get() with fetch error, Not OK', async () => {
     const sut = new JsonFetchService()
 
     const fakeUrl = 'myfakeurl'
@@ -58,5 +58,24 @@ describe('JsonFetchService', () => {
 
     sut.setBaseUrl(fakeUrl)
     expect(sut.get(queryString)).to.be.rejectedWith(exception.message)
+  })
+
+  it('get() with 404 response, Not OK', async () => {
+    const sut = new JsonFetchService()
+
+    const fakeUrl = 'myfakeurl'
+    const queryString = 'param1=value1&param2=value2'
+
+    fetchStub.resolves(JSON.stringify({
+      errors: [
+        {
+          code: 404,
+          message: 'No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)'
+        }
+      ]
+    }))
+
+    sut.setBaseUrl(fakeUrl)
+    expect(sut.get(queryString)).to.be.rejectedWith('No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)')
   })
 })

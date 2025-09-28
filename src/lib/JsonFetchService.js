@@ -42,6 +42,18 @@ export class JsonFetchService {
       }
     })
 
-    return response.json()
+    const jsonResponse = await response.json()
+
+    this.#checkStatus(jsonResponse)
+
+    return jsonResponse
+  }
+
+  #checkStatus (response) {
+    if (!response.errors) {
+      return
+    }
+
+    throw new Error(response.errors.map(e => e.message).join(', '))
   }
 }
