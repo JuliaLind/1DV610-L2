@@ -42,26 +42,56 @@ Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser a
 
 ### Kapitelreflektion kap 2
 
-1. Namn på variabel, funktion eller klass ska vara beskrivande och besvara varför den finns, vad den gör och hur den används. Om ett namn kräver en förtydligande kommentar så är det inte ett bra namn
-2. Vid namngivning ska man undvika förkortningar som kan missuppfattas, att förkorta hypotenusa till hp ska exemeplvis leda till ihopblandning med Hewlett Packard. Man ska också undvika andra typer av namngivningar som kan leda till missförstånd, t ex att döpa en variabel till accountList om det inte faktiskt är en List.
-3. Man ska undvika att använda namn som skiljer sig åt väldigt lite, t ex updateAccount() och updateAccounts().
-4. Man ska undvika att inkludera typer i variabelnamn, t ex 
-accountList  eftersom det gör det svårare att ändra typ efteråt (i fallet med accounts till annan typ av collection) utan att behöva ändra namnet. En annan anledning till att inte inkludera typer är när det inte tillför något, tex använda nameString istället för name eftersom ett namn normalt sett är av typen string.
-5. Undvika att avvända tecken som kan misstas för andra tecken, t ex ett fristående litet l som kan misstas för en etta eller stort O som kan misstas för en nolla.
-6. Man ska undvika att endast ha compilern i åtanke vid namngivning, t ex att "felstava" klass för att class är ett reserverat ord.
-7. Undvika att använda vad bokförfattaren refererar till som "noise words" för att kunna använda samma namn för en andra variabel. t ex book och abook. Om två variabler behöver ha olika namn så ska namnen ha distinkt skillnad, t ex ska man inte döpa två variabler till money respektive moneyAmount eftersom det blir svårt för nästa utvecklare att förstå skillnaden mellan dessa.
-8. Variabelnamn ska vara enkla att uttala.
-9. Variabelnamn ska vara enkla att söka på, i den bemärkelsen att om jag gör en sökning på namnet i VSCode så ska bara den variabeln markeras på alla ställen, inte delar av andra ord. En-bokstavs variabler såsom "i" bör endast användas inom lokala block som for-i loopar. Namnet på en variabel bör vara proportionerligt med dess scope.
-10. Man ska undvika enkodning i variabelnamn. T ex ska man inte prefixa medlemsvariabler (dvs attribut) med m_ eftersom klasser bör vara tillräckligt korta för att det ska framgå ändå. Man ska inte prefixa interface med I, tex IShapeFactory, utan den bör heta endast ShapeFactory. 
-11. Klasser och objekt bör heta substantiv som Customer, Book, Account. Metodet bör vara verb och fraser som innehåller verb som purchaseBook(), edit(). Getters och setters bör heta get/set + namn på attributet den avser, tex getName(), setAge(). Metoder som returnerar boolean bör börja med is, t ex isActive().
-12. När konstruktorn overloadas (ej relevant för javascript, men tex för java) bör man istället använda en statisk metod med namn som förklarar argumenten - t ex ```Complex.FromRealNumber(23.0)```
-istället för ```new Complex(23.0)```
-13. Man ska inte använda "interna" uttryck och skämt som namn, t ex ska inte kill() ersättas med whack()
-14. vara konsekvent med namn, t ex ska man inte använda fetch för en klass och get för en annan klass om båda metoderna gör motsvarande saker, eller använda både controller och manager eftersom det blir otydligt vad skillnaden mellan de två är.
-15. Samma ord ska inte användas för två olika koncept - t ex om add har använts för att skapa ett nytt värde genom att lägga ihop två befintliga så ska man inte använda add för att lägga till ett värde i en befintlig lista, utan då bör man i det senare fallet hellre använda append eller insert. Man ska tänka att det är den som skriver koden som har ansvar för att uttrycka sig tydligt, inte läsarens ansvar för att tolka tvetydligheter.
-16. Kod som ligger närmare problemdomänet bör namnges med uttryck från problemdomänet, medan kod som ligger längre ifrån problem domänet bör ha namn relaterade till lösningsdomänet "Solution Domain" - t ex AccountVisitor, JobQueue.
-17. Korta variabelnamn är att föredra framför långa, så länge som det är enkelt att förstå vad den avser. Man ska undvika onödiga prefixar. T ex så funkar namnen accountAddress och customerAddress för instanser av klassen Address, men passar inte som namn på klasser. En klass bör heta Address och om man exempelvis behöver ha separata klasser för  MAC address och webaddress är mer specifika namn som MAC och URI att föredra. Om kontext behövs för att tydliggöra att variabler tillhör samma grupp bör dessa grupperas ihop inom en klass.
+Redan innan jag läste boken så har jag känt att detta med namngivning är en av sakerna jag är mindre bra på. Dels tycker jag att det är svårt att komma på konsisa namn som samtidigt är beskrivande och dels att använda uttryck som är vedertagna.  
+
+Som exempel tar bokens författare upp att kill() är bättre att använda än whack(), men jag skulle kanske inte ha kommit på kill() heller utan använt stop() eller stopAndDelete(). Jag antar att sådant kommer med erfarenhet och när man granskat kod skriven av andra mer/använder utomstående moduler i sin kod. 
+
+En annan regel som jag är medveten om att jag brytit mot massvis av gånger är att vara konsekvent med namngivning, t ex att använda både controller och manager eftersom det blir otydligt vad skillnaden mellan de två är (bryter bl a mot regeln "one rule per concept"). Jag har även kommit på mig själv med att ibland skriva del, upd och ibland delete, update, ibland inom samma klass - detta är något jag aktivt försöker tänka på, men det händer ofta att jag kommer på den kortare varianten först när mycket av koden redan är skriven och det blir för omständligt att uppdatera samtliga ställen i koden (+ alla tillhörande tester).  
+
+Jag har också varit rätt dålig på att inte använda samma ord för två olika koncept (exemplet i boken gäller 'add' och att man inte ska använda  det både för en funktion som skapar ett nytt värde genom att lägga ihop två befintliga värden, och samtidigt använda för en annan funktion som lägger till nytt element i en befintlig lista - utan att då är det bätre att använda 'append' eller 'insert' för det senare). Detta kommer förstås också från ovana i kombination med dålig fantasi.
+  
+I läroboken tycker författaren att man ska undvika att ha typ i variabeln - dels för att det är onödigt, och dels för att det gör det svårare att ändra typen på värdet i efterhand utan att behöva ändra variabelnamnet för att det inte ska bli missvisande för läsaren. Jag håller med om detta till stor del, men har dock hamnat i situation (oftast lokala block) där jag behövt ha typ i namnet, exempelvis:  
+  
+```
+const phoneNrAsString = catalogue.getPhoneNr('Anders')
+const phoneNrAsArr = phoneNrAsString.split('')
+```  
+  
+Det enda sättet att undvika detta, som jag kan komma på, är att sammanfoga båda raderna till en one-liner
+  
+```  
+const phoneNr = (catalogue..getPhoneNr('Anders')).split('')  
+```   
+  
+
+Men ju fler operationer som sammanfogas till samma rad desto svårare kan det bli att följa vad som händer i koden. Jag har tidigare lärt mig att man bör undvika one-liners för läsbarheten och hellre skriva ut koden i flera steg. Författaren ger dock inga tips på hur man kan lösa denna typ av situation. Just detta exempel bryter även mot regeln med namngivning endast för att tillfredsställa compilern - dvs att informationen om typ inte tillför läsaren något utan är endast tillagd för att skilja orden åt. Eller är det regeln kring noise words som gäller även här? 
+
+I boken står det att man ska undvika att använda s k noise words för att skilja på två snarlika ord - om två saker behöver olika namn så ska namnen vara tillräckligt olika för att enkelt kunna skiljas åt - just detta tycker jag nog är en av de svårare reglerna att följa med namngivning. Framförallt när det kommer till funktioner/metoder - om man har en stor metod och dela upp den i små för att minska komplexiteten, tycker jag att det ofta kan bli svårt att namnge subfunktionerna och därtill utan att bryta regeln om konsekvent namngivning. Denna utmaning stötte jag senast på i just denna uppgift med JsonFetchService som har fått en publik fetch() och en privat #fetch(). Den publika fetch har ett try/catch block där try-blocket innehåller anrop till den privata #fetch. Den privata #fetch gör själva anropet till APIet samt kontrollerar och returnerar svaret utan att fånga fel. Jag kan inte komma något namn som skulle passa bättre till något av dessa metoder.  
+
+Bokens författare nämner även att man ska undvika att använda tecken som kan misstas för andra tecken, t ex ett fristående litet l som kan misstas för en etta eller stort O som kan misstas för en nolla. Det är inte något som jag tänkt på tidigare, men låter fullt rimligt så det är något jag aktivt har börjat tänka på nu. Nu tror jag iofs att dessa tecken normalt sett är del i ett ord så att man förstår ur sammanhanget om det är en siffra eller en bokstav, men jag kan tänka mig att i slumpvist genererade användarnamn/lösenord kan dessa tecken skapa problem för användare.  
+
+Författaren nämner att enbokstavs-variabler endast bör användas i lokala block - det håller jag med om. Från tidigare utbildning har jag faktiskt lärt mig att undvika enbokstavs-variabelnamn även i loopar - t ex att 
+
+```for i=0; i < books.length; i++```  
+
+skulle likväl kunna vara:
+
+```for bookIndex=0; bookIndex < books.length; bookIndex++``` 
+
+Att detta ökar läsbarheten blir extra tydligt om man har nästlade loopar (vilket man förstås bör undvika, men min erfarenhet är att det inte alltid som det går att plocka ut inner-loopen till egen metod utan att den då måste få en massa inparametrar).  
+
+Författaren nämner att man inte ska prefixa variabler och tar upp som exempel att IShareFactory bör bara heta Shaefactory. Jag håller med i det exemplet, men kan också komma på ett fall där jag personligen tycker att prefixning är nödvändig - och det är när man skapar vyer i SQL kod. Min erfarenhet är att man från och till vill se om en tabell är en vanlig table eller view och det är till stor hjälp att det framgår att det är en vy av tabellens namn med hjälp av v_ prefixet, så att man inte behöver leta i koden hur tabellen har skapats.  
+
+Något som boken nämner som var helt nytt för mig var regeln vid overloading av konstruktorn i Java och att man bör använda statiskt metod för det som har ett namn som förklarar funktionsrgumenten, t ex ```Complex.FromRealNumber(23.0)```
+istället för ```new Complex(23.0)``` . Detta var helt nytt för mig då det inte är så vi lärt oss att jobba i Java-kursen förra terminen, men låter å andra sidan rimligt ur läsbarhets perspektiv.  
+
+En annan sak som jag inte tänkt på tidigare som författaren nämner är att variabelnamn behöver innehålla why (varför denn finns), what (vad den gör) och how (hur den används). Jag förstår bokens exempel och vad som menas, men känner ändå inte att jag kan säga att jag behärskar detta fullt ut i praktiken. Om vi tar exemplet med stopAndDelete() igen så är ju why - för att stoppa och radera, what är - stoppar och raderar och how är att det ska anropas om man vill göra båda. Men hur ska man tänka med motsvarande kill()? Stoppar den bara eller stoppar och raderar - det kanske är självklart för en van programmerate men inte helt tydligt för en nybörjare?
  
+
+
+
+
+
 
 
 
