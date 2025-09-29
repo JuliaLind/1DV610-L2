@@ -17,7 +17,7 @@ describe('JsonFetchService', () => {
     fetchStub.restore()
   })
 
-  it('get() OK', async () => {
+  it('fetch() OK', async () => {
     const sut = new JsonFetchService()
 
     const fakeUrl = 'myfakeurl'
@@ -36,7 +36,7 @@ describe('JsonFetchService', () => {
     })
 
     sut.setBaseUrl(fakeUrl)
-    const res = await sut.get(queryString)
+    const res = await sut.fetch(queryString)
     expect(res).to.deep.equal(fakeData)
 
     expect(fetchStub).to.have.been.calledOnceWith(`${fakeUrl}?${queryString}`, {
@@ -48,7 +48,7 @@ describe('JsonFetchService', () => {
     })
   })
 
-  it('get() with fetch error, Not OK', async () => {
+  it('fetch() with fetch error, Not OK', async () => {
     const sut = new JsonFetchService()
 
     const fakeUrl = 'myfakeurl'
@@ -57,10 +57,10 @@ describe('JsonFetchService', () => {
     fetchStub.rejects(exception)
 
     sut.setBaseUrl(fakeUrl)
-    expect(sut.get(queryString)).to.be.rejectedWith(exception.message)
+    expect(sut.fetch(queryString)).to.be.rejectedWith(exception.message)
   })
 
-  it('get() with 404 response, Not OK', async () => {
+  it('fetch() with 404 response, Not OK', async () => {
     const sut = new JsonFetchService()
 
     const fakeUrl = 'myfakeurl'
@@ -83,6 +83,6 @@ describe('JsonFetchService', () => {
     })
 
     sut.setBaseUrl(fakeUrl)
-    expect(sut.get(queryString)).to.be.rejectedWith('No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)')
+    expect(sut.fetch(queryString)).to.be.rejectedWith('No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)')
   })
 })

@@ -19,7 +19,7 @@ export class JsonFetchService {
    * @param {string} queryString - The query string to include in the request.
    * @returns {Promise<object>} - The JSON response from the API.
    */
-  async get (queryString) {
+  async fetch (queryString) {
     try {
       return await this.#fetch(`${this.#baseUrl}?${queryString}`)
     } catch (error) {
