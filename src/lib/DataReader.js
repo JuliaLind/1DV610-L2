@@ -1,8 +1,18 @@
+import { DeepCloner } from './DeepCloner.js'
+
 /**
  * Class reads data from the Norway BankAPI response.
  */
 export class DataReader {
   #data
+  #cloner
+
+  constructor (dependencies = {
+    cloner: new DeepCloner()
+  }) {
+    this.#data = {}
+    this.#cloner = dependencies.cloner
+  }
 
   /**
    * Set the data to read from.
@@ -19,7 +29,11 @@ export class DataReader {
    * @returns {Array} rates - Array of rate objects
    */
   getRates () {
-    return Object.values(this.#data.dataSets[0].series)
+    const clonedRates = []
+    for (const rate of Object.values(this.#data.dataSets[0].series)) {
+      clonedRates.push(this.#cloner.clone(rate))
+    }
+    return clonedRates
   }
 
   /**
@@ -28,7 +42,7 @@ export class DataReader {
    * @returns {Array} attributes - Array of attribute objects
    */
   getAttributes () {
-    return [...this.#data.structure.attributes.series]
+    return this.#cloner.clone(this.#data.structure.attributes.series)
   }
 
   /**
@@ -37,7 +51,13 @@ export class DataReader {
    * @returns {Array} dates - Array of date strings
    */
   getDates () {
-    return this.#data.structure.dimensions.observation[0].values.map(obj => obj.id)
+    const dates = []
+
+    for (const obj of this.#data.structure.dimensions.observation[0].values) {
+      dates.push(obj.id)
+    }
+
+    return dates
   }
 
   /**
