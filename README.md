@@ -11,7 +11,11 @@ npm install @jl225vf/exr
 ```
 
 
-This module provides the classes CurrencyConverter, RateFetcher and QuoteConverter.  
+This module provides the classes CurrencyConverter, RateFetcher and QuoteConverter.  Additionally the package also procides the two utility classes: 
+- DeepCloner class that makes a deep clone of any object including deep cloning of any nested elements. Note that custom classes are converted to plain objects.
+- TypeChecker that checks if a value is of certain type
+
+---------------------
 
 To use the RateFetcher pass an array with currencies you wish to fetch rates for to the method setCurrencies().  The RateFetcher provids the following methods:
 - fetchByDate() with optional count parameter that determines the number of observations prior to and including the specified date.  If the date is not a bank date, the rates will be fetched from the nearest bankdate perceeding the specified date.  
@@ -138,6 +142,24 @@ console.log(converted) // {
 
 
 ``` 
+
+Example 5:
+```
+import { Cloner } from "@jl225vf/exr"
+
+const cloner = new Cloner()
+
+const original = {
+    someNr: 5,
+    someObj: {
+        someOtherNr: 4,
+        anArr: [5, 6, 8]
+    },
+    name: 'Original'
+}
+
+const copy = cloner.deepClone(original)
+```
 
 ## Testing
 

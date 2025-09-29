@@ -8,7 +8,6 @@ describe('TypeChecker', () => {
 
   primitives.forEach((value) => {
     it(`isPrimitive() OK for primitive value: ${value}`, () => {
-
       expect(sut.isPrimitive(value)).to.equal(true)
     })
   })
@@ -34,7 +33,6 @@ describe('TypeChecker', () => {
     })
   })
 
-
   it('isDate() OK', () => {
     expect(sut.isDate(new Date())).to.equal(true)
   })
@@ -46,7 +44,7 @@ describe('TypeChecker', () => {
     })
   })
 
-  const arrays = [[], [1, 2, 3], new Array()]
+  const arrays = [[], [1, 2, 3], new Array()] // eslint-disable-line no-array-constructor
   arrays.forEach((value) => {
     it(`isArray() OK for array value: ${value}`, () => {
       expect(sut.isArray(value)).to.equal(true)
@@ -101,5 +99,4 @@ describe('TypeChecker', () => {
       expect(sut.isMap(value)).to.equal(false)
     })
   })
-
 })

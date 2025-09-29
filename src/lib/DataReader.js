@@ -7,6 +7,12 @@ export class DataReader {
   #data
   #cloner
 
+  /**
+   * Creates an instance of DataReader.
+   *
+   * @param {object} dependencies - Configuration object for dependencies
+   * @param {DeepCloner} dependencies.cloner - Instance of DeepCloner
+   */
   constructor (dependencies = {
     cloner: new DeepCloner()
   }) {

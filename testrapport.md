@@ -1,22 +1,23 @@
 # Testrapport
 
-Alla publika metoder är testade med enhetstester.
+Alla publika metoder är testade med enhetstester med hjälp av ramverk mocha/chai samt sinon modulen för mockning.
 
-All public metods are tested with unittests using mocha/chai testing frameword combined with sinon for mocking, and have 100% coverage calculated by C8.  
+Koden har 100%-if teckning, beräknat med hjälp av C8.  
 
-After cloning repo, from the root directory run:  
+Efter att du klonat ner repot, installera beroenden (testramverk + eslint):  
 
 ```npm install```
 
-then
+Kör därefter testerna med:
 
 ```npm run test```
 
-## Test specification + coverage report
+## Test specifikation och kodtäckningsrapport
 
 ![test specification part 1](img/test-spec1.png)
 
-![test specification part 2 + coverage report](img/test-spec2.png)
+![test specification part 2](img/test-spec2.png)
+![test specification part 3 + coverage report](img/test-spec3.png)
 
 
-The testsuits can be found in the ./test and .test/lib directories
+Testsviterna finns i ./test respektive .test/lib katalogerna

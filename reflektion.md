@@ -74,8 +74,27 @@ istället för ```new Complex(23.0)```
 
 <tr>
 <td>CurrencyConverter.#prep()</td>
-<td></td>
-<td></td>
+<td><pre><code>
+/**
+* Prepares the converter by fetching and normalizing rates.
+*
+* @returns {Promise<void>} - A promise that resolves when preparation is complete.
+*/
+async #prep () {
+    if (this.#normalizer.hasCachedRates()) {
+        return
+    }
+
+    this.#isReady()
+    this.#fetcher.setCurrencies([this.#fromCurrency, ...this.#toCurrencies])
+    const rates = await this.#fetcher.fetchLatest()
+
+    this.#normalizer.setFromCurrency(this.#fromCurrency)
+    this.#normalizer.setToCurrencies(this.#toCurrencies)
+    this.#normalizer.normalize(rates)
+}
+</code></pre></td>
+<td>11</td>
 <td></td>
 </tr>
 
@@ -113,5 +132,5 @@ istället för ```new Complex(23.0)```
 
 ## Reflektion över egen kodkvalitet  
 
-Jag hade hunnit läsa relevanta kapitel i boken innan jag satte igång så jag har aktivt arbetat med kodkvaliten från start gällande namngivning och antal argument till metoder. Däremot var vissa metoder längre från start, och jag har brytit ut dessa till mindre allteftersom. När samma metod behövt användas i fler än en klass har jag gjort den till en fristående funktion. Den regel som jag upplevde som svårast att hålla var att hålla delar i en metod på samma nivå. 
+Jag hade hunnit läsa relevanta kapitel i boken innan jag satte igång så jag har aktivt arbetat med kodkvaliten från start gällande namngivning och antal argument till metoder. Däremot var vissa metoder längre från start, och jag har brytit ut dessa till mindre allteftersom. När samma metod behövt användas i fler än en klass har jag gjort den till en fristående funktion - alternativet hade varit att göra egen klass, men eftersom den inte behöver tillgång till/ändra state så kändes klass onödigt komplext för ändamålet. Den regel som jag upplevde som svårast att hålla var att hålla delar i en metod på samma nivå. 
 
