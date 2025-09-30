@@ -106,12 +106,6 @@ Något som boken nämner som var helt nytt för mig var regeln vid overloading a
 istället för ```new Complex(23.0)``` . Detta var helt nytt för mig då det inte är så vi lärt oss att jobba i Java-kursen förra terminen, men låter å andra sidan rimligt ur läsbarhets perspektiv.  
 
 En annan sak som jag inte tänkt på tidigare som författaren nämner är att variabelnamn behöver innehålla why (varför den finns), what (vad den gör) och how (hur den används). Jag förstår bokens exempel och vad som menas, men känner ändå inte att jag kan säga att jag behärskar detta fullt ut i praktiken. Om vi tar exemplet med stopAndDelete() igen så är ju why - för att stoppa och radera, what är - stoppar och raderar och how är att det ska anropas om man vill göra båda. Men hur ska man tänka med motsvarande kill()? Stoppar den bara eller stoppar och raderar - det kanske är självklart för en van programmerate men inte helt tydligt för en nybörjare?
- 
-
-
-
-
-
 
 
 
@@ -149,10 +143,42 @@ async #prep () {
 </tr>
 
 <tr>
-<td>CurrencyConverter.#recalc()</td>
-<td></td>
-<td></td>
-<td></td>
+<td>DeepCloner.clone()</td>
+<td>
+<pre>
+<code>
+  /**
+   * Deep clones any object or array and its nested elements.
+   * Custom classes are converted to plain objects.
+   *
+   * @param {any} any - The value to clone.
+   * @returns {any} - The cloned value.
+   */
+  clone (any) {
+    if (this.#typeChecker.isPrimitive(any) || this.#typeChecker.isFunction(any)) {
+      return any
+    }
+
+    if (this.#typeChecker.isDate(any)) {
+      return this.#cloneDate(any)
+    }
+
+    if (this.#typeChecker.isSet(any)) {
+      return this.#cloneSet(any)
+    }
+
+    if (any instanceof Map) {
+      return this.#cloneMap(any)
+    }
+
+    return this.#typeChecker.isArray(any) ? this.#cloneArr(any) : this.#cloneObj(any)
+  }
+
+</code>
+</pre>
+</td>
+<td>14</td>
+<td>Metoden följer regeln om att bara göra en sak. Den gör en deep clone av värdet som skickas in. Det är en annan klass, TypeChecker som ansvarar för att kontrollera typen av värde. Separata privata/undermetoder hanterar olika typer av kloningar beroende på datatyp. Alla undermetoderna följer också regeln om att vara på samma nivå, vilket gör metoden enkel att göra trots att metoden i sig har en hög komplexitet (manuellt uppskattad till 7 (10 brukar räknas som högt)</td>
 </tr>
 
 <tr>
@@ -170,15 +196,30 @@ async #prep () {
 </tr>
 
 <tr>
-<td>RateNormalizer.normalize(rates)</td>
-<td></td>
-<td></td>
-<td></td>
+<td>DataFormatter.#rearrange()</td>
+<td>
+<pre><code>
+  /**
+   * Rearrange the data into a more usable structure.
+   */
+  #rearrange () {
+    for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
+      const currency = this.#helper.getCurrency(currencyIndex)
+
+      this.#formatted[currency] = this.#helper.formatOneCurrency(currencyIndex)
+    }
+  }
+</code></pre>
+</td>
+<td>6</td>
+<td>Jusst denna metod är kanske inte så lång, men den bryter ändå mot regeln om att dett block endast bör innehålla en rad med kod. Egentligen skulle allt inom for-blocket kunna plockas ut till en separat privat metod som tar currencyIndex som argument och uppdaterar #formatted-attributet</td>
 </tr>
 
 </table>
 
 ### Kapitelreflektion kap 3
+
+Författaren menar att regel nummer ett är att funktioner ska vara små, vilket jag förstås håller med om. Jag har i tidigare kurser jobbat med ett verktyg som heter Scrutinizer som bla räknar komplexitet för varje klass och metod - varje innästling, dvs if/for/while osv lägger till +1 på komplexiteten - därför är jag van sedan tidigare att försöka bryta ut "innästlingar" till egna funktioner. Det som var nytt för mig att att innehåller i ett block egentligen bara bör vara en rad - vilket förstås lpter väldigt rimligt. Att sammanfatta ett block till ett beskrivande namn gör ju koden mycket mer läsbar. Det som jag tycker gör denna regel lite svår att följa ibland är att man kan behöva definiera en variabel utanför, som man sedan skickar in i den funktionen, och då blir det per automatik två rader. 
 
 ## Reflektion över egen kodkvalitet  
 

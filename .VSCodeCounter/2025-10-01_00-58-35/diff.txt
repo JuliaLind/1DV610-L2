@@ -1,0 +1,71 @@
+Date : 2025-10-01 00:58:35
+Directory : /home/juli22/school/codequal/L2/src
+Total : 22 files,  98 codes, 96 comments, 27 blanks, all 221 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |         22 |         98 |         96 |         27 |        221 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                             | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                |         22 |         98 |         96 |         27 |        221 |
+| . (Files)                                                        |          4 |        175 |        170 |         49 |        394 |
+| ..                                                               |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../..                                                            |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../..                                                         |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../..                                                      |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../..                                                   |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../..                                                |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt                                            |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c                                          |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users                                    |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj                              |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData                      |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local                |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs       |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c: |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind/Desktop |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind/Desktop/school |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind/Desktop/school/L2 |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind/Desktop/school/L2/src |         10 |       -359 |       -371 |       -109 |       -839 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind/Desktop/school/L2/src (Files) |          4 |       -173 |       -170 |        -49 |       -392 |
+| ../../../../../../mnt/c/Users/lindj/AppData/Local/Programs/Microsoft VS Code/c:/Users/JuliaLind/Desktop/school/L2/src/lib |          6 |       -186 |       -201 |        -60 |       -447 |
+| lib                                                              |          8 |        282 |        297 |         87 |        666 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                         | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/juli22/school/codequal/L2/src/CurrencyCoverter.js          | JavaScript |         70 |         58 |         20 |        148 |
+| /home/juli22/school/codequal/L2/src/QuoteConverter.js            | JavaScript |         61 |         54 |         14 |        129 |
+| /home/juli22/school/codequal/L2/src/RateFetcher.js               | JavaScript |         38 |         58 |         13 |        109 |
+| /home/juli22/school/codequal/L2/src/index.js                     | JavaScript |          6 |          0 |          2 |          8 |
+| /home/juli22/school/codequal/L2/src/lib/DataFormatter.js         | JavaScript |         35 |         24 |         10 |         69 |
+| /home/juli22/school/codequal/L2/src/lib/DataReader.js            | JavaScript |         34 |         34 |         10 |         78 |
+| /home/juli22/school/codequal/L2/src/lib/DeepCloner.js            | JavaScript |         57 |         45 |         16 |        118 |
+| /home/juli22/school/codequal/L2/src/lib/FormatHelper.js          | JavaScript |         59 |         67 |         20 |        146 |
+| /home/juli22/school/codequal/L2/src/lib/JsonFetchService.js      | JavaScript |         31 |         26 |          9 |         66 |
+| /home/juli22/school/codequal/L2/src/lib/RateNormalizer.js        | JavaScript |         36 |         41 |         12 |         89 |
+| /home/juli22/school/codequal/L2/src/lib/TypeChecker.js           | JavaScript |         23 |         45 |          7 |         75 |
+| /home/juli22/school/codequal/L2/src/lib/functions.js             | JavaScript |          7 |         15 |          3 |         25 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/CurrencyCoverter.js     | JavaScript |        -70 |        -58 |        -20 |       -148 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/QuoteConverter.js       | JavaScript |        -61 |        -54 |        -14 |       -129 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/RateFetcher.js          | JavaScript |        -38 |        -58 |        -13 |       -109 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/index.js                | JavaScript |         -4 |          0 |         -2 |         -6 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/lib/DataFormatter.js    | JavaScript |        -35 |        -24 |        -10 |        -69 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/lib/DataReader.js       | JavaScript |        -18 |        -28 |         -6 |        -52 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/lib/FormatHelper.js     | JavaScript |        -59 |        -67 |        -20 |       -146 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/lib/JsonFetchService.js | JavaScript |        -31 |        -26 |         -9 |        -66 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/lib/RateNormalizer.js   | JavaScript |        -36 |        -41 |        -12 |        -89 |
+| c:/Users/JuliaLind/Desktop/school/L2/src/lib/functions.js        | JavaScript |         -7 |        -15 |         -3 |        -25 |
+| Total                                                            |            |         98 |         96 |         27 |        221 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
