@@ -8,36 +8,56 @@ Tanken är att endast de klasser som exporteras från src/index.js ska användas
 
 <table>
 <tr><th>Namn</th><th>Förklaring</th><th>Reflektion och regler från Clean Code</th></tr>
+<tr>
+<td>RateFetcher</td>
+<td>Klass som ansvarar för att hämta valutakurser från extern API.</td>
+<td>RateFetcher är ett substantiv, vilket följer regeln om att klasser ska döpas till substantiv. RateFetcher följer också regeln om att namnen ska avslöja syftet (intention-revealing). Varför finns klassen? För att hämta valutakurser. Vad gör klassen? Hämtar valutakurser. Namnet besvarar inte riktigt hur, men det framgår istället av metodnamnen. Det jag eventuellt hade kunnat göra är att ändra till ExrFetcher eftersom Exr är en vedertagen förkortning för exchange rates, men i sammanhanget tycker jag att Rate ändå blir tillräckligt tydligt vad det rör sig om. Dessutom avråder bokens författare från att använda förkortningar som endast är kända i vissa kretsar.</td>
+</tr>
 
 <tr>
 <td>RateFetcher.setCurrencies(currencies)</td>
 <td>En setter metod som assignar lista med valutor, t ex ['USD', 'EUR'] till det interna RateFetcher.#currencies attributet</td>
-<td></td>
+<td>Följer regeln på sida 25 om att mutators (dvs metoder som ändrar på attribut) ska heta set + namnet på attributet de ändrar.</td>
 </tr>
 
 <tr>
-<td>RateFetcher.fetchByDate(date, count)</td>
-<td>Metod som hämtar valutakurser från ett specifikt datum. Count parametern avser antal observationer. Default är 1 som innebär valutakurser från det specade datumet eller senaste bankdagen före om datumet inte är en bankdag. Om count är t ex 3 så hämtas valutakurser från de 3 bankdagarna närmast föregående och inkl det specade datumet.</td>
-<td></td>
+<td>RateFetcher.fetchByDate(date, count=1)</td>
+<td>Metod som hämtar valutakurser från ett specifikt datum. Om datumet inte är en bankdag så hämtas kurserna från senaste bankdagen. Count parametern avser antal observationer, dvs bankdagar för och inkluderat det specade datumet. Default är 1 som innebär valutakurser från det specade datumet eller senaste bankdagen före om datumet inte är en bankdag. Om count är t ex 3 så hämtas valutakurser från de 3 bankdagarna närmast föregående och inkl det specade datumet.</td>
+<td>fetchByDate börjar med ett verb, vilket följer regeln om att metodnamn ska börja med verb. Jag tycker nog även att namnen följer regeln om att syftet tydligt ska framgå, men man skulle kunna göra både metodnamn och argumentnamn ännu tydligare - t ex kunde fetchByDate istället varit fetchBeforeOrOn för att användaren inte ska behöva fundera över om denne kommer att få ett nullvärde om man skickar in en icke-bankdag. Och count kunde istället ha varit observations eller days, dvs RateFetcher.fetchBeforeOrOn(date, days = 1).</td>
 </tr>
 
 <tr>
-<td>RateFetcher.fetchLatest(count)</td>
+<td>TypeChecker.isPrimitive(value)</td>
+<td>Metod som kontrollerar om ett värde är primitivt</td>
+<td>Följer regeln om att metoder som returnerar boolean (predicates) ska börja med is. Metodnamnet i kombination med namnet på argumentet förklarar tydligt syftet med metoden</td></tr>
+
+<tr>
+<td>RateFetcher.fetchByPeriod(startDate, endDate)</td>
+<td>Metod som hämtar valutakurser under en period (från och med startDate, tom endDate).</td>
+<td>Denna metod följer regeln what, why and how. What - hämtar valutakurser under en period; why - metoden finns för att hämta valutakurser mellan två datum; how - för att hämta valutakurser från period behöver användaren skicka in ett startdatum och ett slutdatum. Därtill är startDate och endDate mer beskrivande än om argumenten skulle hetat date1 och date2.</td></tr>
+
+<tr>
 <td>
-Metod som hämtar valutakurser från senaste bankdagen. Count parametern avser antal observationer, default är 1 vilket innebär valutakurser från den senaste bankdagen. Om count tex är 3 så innebär det att valutakurser hämtas från den tre senaste bankdagarma.
+CurrencyConverter.convert(amount)<br>
+QuoteConverter.convert(quotes)
 </td>
-<td></td>
+<td>
+CurrencyConverter är en klass som ansvarar för att konvertera belopp från en valuta till en annan. metoden convert konverterar ett belopp från vald från-valuta till de valda till-valutorna genom att använda den senaste valutakursen.<br>
+QuoteConverter ansvarar för att konvertera valutakurser från NOK till valda valutor.
+</td>
+<td>I grund och botten gör convert metoden hos båda klasserna motsvarande handling - den översätter belopp från en valuta till en eller flera andra. På så sätt följer detta regeln om konsekvent namngivning (one word per concept). Det som kanske inte framgår så tydligt av namnet är just att CurrencyConverter använder senast kända valutakursen, medan QuoteConverter konverterar aktiepriserna på respektive prisets datum, vilket bryter mot regeln om att namn ska förmedla syftet (intention-revealing) - jag har dock ingen idé om hur man skulle ha döpt de annorlunda utan att det blir för långt - och boken förespråkar korta namn framför långa.</td>
 </tr>
 
-<tr><td>RateFetcher.fetchByPeriod(startDate, endDate)</td><td></td><td></td></tr>
-<tr><td>CurrencyConverter.setFromCurrency(value)</td><td></td><td></td></tr>
-<tr><td>CurrencyConverter.getFromCurrency()</td><td></td><td></td></tr>
-<tr><td>CurrencyConverter.setToCurrencies(values)</td><td></td><td></td></tr>
-<tr><td>CurrencyConverter.getToCurrencies()</td><td></td><td></td></tr>
-<tr><td>CurrencyConverter.clear()</td><td></td><td></td></tr>
-<tr><td>CurrencyConverter.convert(amount)</td><td></td><td></td></tr>
-<tr><td>QuoteConverter.setCurrencies(values)</td><td></td><td></td></tr>
-<tr><td>QuoteConverter.convert(quotes)</td><td></td><td></td></tr>
+<tr><td>CurrencyConverter.clear()</td>
+<td>Denna metod rensar CurrencyConverterns state från tidigare satta värden.</td>
+<td>Denna metod svarar tydligt på why, what och how. Möjligtvis hade den kunnat döpas om till reset() för ett mer vedertaget uttryck men clear används också ofta och funkar därför bra i sammanhanget. Däremot skulle reset underlätta att i framtiden kanske ha förinställda defaultvärden istället för tomma attribut, utan att metodnamnet riskerar att bli missvisande.</td></tr>
+
+<tr>
+<td>QuoteConverter.#calcMany()<br>
+QuoteConverter.#calcOne()</td>
+<td>#calcMany() konverterar alla valutakurserna från NOK till valda valutor. #calcOne() gör motsvarande för endast en valuta.</td>
+<td>Nu är inte dessa metoder publika, men jag tyckte ändå att det var bra exempel att ta med. Här råkade jag bryta mot regeln med konsekvent namngivning - egentligen borde dessa ha hetat convertOne och convertMany. Däremot så följer dessa metoder regeln om att inte ha lika namn som skiljer sig väldigt lite - dvs att istället för att döpa de till convertQuote och convertQuotes (som jag kanske skulle ha gjort om jag inte hade läst kapitel 2) så blir det väldigt enkelt att se skillnad här på One och Many. Det som hade kunnat göras ännu tydligare här är att ändra Many till All eftersom det ju är alla aktiepriser som skickats med som konverteras i den metoden.</td></tr>
+
 </table>
 
 ### Kapitelreflektion kap 2
@@ -85,7 +105,7 @@ Författaren nämner att man inte ska prefixa variabler och tar upp som exempel 
 Något som boken nämner som var helt nytt för mig var regeln vid overloading av konstruktorn i Java och att man bör använda statiskt metod för det som har ett namn som förklarar funktionsrgumenten, t ex ```Complex.FromRealNumber(23.0)```
 istället för ```new Complex(23.0)``` . Detta var helt nytt för mig då det inte är så vi lärt oss att jobba i Java-kursen förra terminen, men låter å andra sidan rimligt ur läsbarhets perspektiv.  
 
-En annan sak som jag inte tänkt på tidigare som författaren nämner är att variabelnamn behöver innehålla why (varför denn finns), what (vad den gör) och how (hur den används). Jag förstår bokens exempel och vad som menas, men känner ändå inte att jag kan säga att jag behärskar detta fullt ut i praktiken. Om vi tar exemplet med stopAndDelete() igen så är ju why - för att stoppa och radera, what är - stoppar och raderar och how är att det ska anropas om man vill göra båda. Men hur ska man tänka med motsvarande kill()? Stoppar den bara eller stoppar och raderar - det kanske är självklart för en van programmerate men inte helt tydligt för en nybörjare?
+En annan sak som jag inte tänkt på tidigare som författaren nämner är att variabelnamn behöver innehålla why (varför den finns), what (vad den gör) och how (hur den används). Jag förstår bokens exempel och vad som menas, men känner ändå inte att jag kan säga att jag behärskar detta fullt ut i praktiken. Om vi tar exemplet med stopAndDelete() igen så är ju why - för att stoppa och radera, what är - stoppar och raderar och how är att det ska anropas om man vill göra båda. Men hur ska man tänka med motsvarande kill()? Stoppar den bara eller stoppar och raderar - det kanske är självklart för en van programmerate men inte helt tydligt för en nybörjare?
  
 
 
@@ -162,5 +182,5 @@ async #prep () {
 
 ## Reflektion över egen kodkvalitet  
 
-Jag hade hunnit läsa relevanta kapitel i boken innan jag satte igång så jag har aktivt arbetat med kodkvaliten från start gällande namngivning och antal argument till metoder. Däremot var vissa metoder längre från start, och jag har brytit ut dessa till mindre allteftersom. När samma metod behövt användas i fler än en klass har jag gjort den till en fristående funktion - alternativet hade varit att göra egen klass, men eftersom den inte behöver tillgång till/ändra state så kändes klass onödigt komplext för ändamålet. Den regel som jag upplevde som svårast att hålla var att hålla delar i en metod på samma nivå. 
+Jag hade hunnit läsa relevanta kapitel i boken innan jag satte igång så jag har aktivt arbetat med kodkvaliten från start gällande namngivning och antal argument till metoder. Ändå upptäckte jag, i samband med att jag skrev reflektionstabellen, att jag brutit mot flera av reglerna. De flesta misstag förekom inom lokala block och privata metoder och gällde regeln med konsekvent namngivning - jag upptäckte att motsvarande variabler i olika block kunde heta calculated / final / results när det mest lämpliga namnet egentligen hade varit "converted". Men när det gäller publikt interface och metoder tycker jag nog ändå att jag följt namngivningsreglerna ganska bra - vilket är det viktigast då namn som används i det privata scopet är enkelt att ändra i efterhand. 
 
