@@ -72,6 +72,11 @@ export class DataReader {
    * @returns {Array} ids - Array of rate ids, fo example: ['USD', 'EUR']
    */
   getIds () {
-    return this.#data.structure.dimensions.series[1].values.map(obj => obj.id)
+    const ids = []
+
+    for (const obj of this.#data.structure.dimensions.series[0].values) {
+      ids.push(obj.id)
+    }
+    return ids
   }
 }
