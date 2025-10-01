@@ -39,7 +39,7 @@ export class DeepCloner {
       return this.#cloneSet(any)
     }
 
-    if (any instanceof Map) {
+    if (this.#typeChecker.isMap(any)) {
       return this.#cloneMap(any)
     }
 
