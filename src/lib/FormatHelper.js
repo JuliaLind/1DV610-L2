@@ -116,6 +116,7 @@ export class FormatHelper {
 
     for (const dateIndex in this.#dates) {
       const rateValue = Number(this.#currentRate.observations[dateIndex][0])
+
       formatted[this.#dates[dateIndex]] = Number((rateValue / multiplier).toFixed(4))
     }
 
