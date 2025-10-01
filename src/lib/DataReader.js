@@ -69,14 +69,29 @@ export class DataReader {
   /**
    * Get the ids from the data.
    *
-   * @returns {Array} ids - Array of rate ids, fo example: ['USD', 'EUR']
+   * @returns {Array} ids - Array of currency ids, fo example: ['USD', 'EUR']
    */
   getIds () {
     const ids = []
 
-    for (const obj of this.#data.structure.dimensions.series[0].values) {
-      ids.push(obj.id)
+    for (const currency of this.#getCurrencies()) {
+      ids.push(currency.id)
     }
     return ids
+  }
+
+  /**
+   * Get the currencies from the data.
+   *
+   * @returns {Array} currencies - Array of currency objects from BASE_CUR dimension
+   */
+  #getCurrencies () {
+    for (const dim of this.#data.structure.dimensions.series) {
+      if (dim.id === 'BASE_CUR') {
+        return dim.values
+      }
+    }
+
+    throw new Error('No BASE_CUR dimension found in data')
   }
 }

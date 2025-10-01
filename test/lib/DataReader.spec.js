@@ -16,7 +16,7 @@ describe('DataReader', () => {
     data = JSON.parse(raw)
   })
 
-  it('readRates() OK', () => {
+  it('getRates() OK', () => {
     const sut = new DataReader()
     sut.setData(data)
     const res = sut.getRates()
@@ -24,14 +24,14 @@ describe('DataReader', () => {
     expect(res).to.deep.equal(rates)
   })
 
-  it('readAttributes() OK', () => {
+  it('getAttributes() OK', () => {
     const sut = new DataReader()
     sut.setData(data)
     const res = sut.getAttributes()
     expect(res).to.deep.equal(attributes)
   })
 
-  it('readIds() OK', () => {
+  it('getIds() OK', () => {
     const sut = new DataReader()
     sut.setData(data)
     const res = sut.getIds()
@@ -39,7 +39,7 @@ describe('DataReader', () => {
     expect(res).to.deep.equal(ids)
   })
 
-  it('readDates() OK', () => {
+  it('getDates() OK', () => {
     const sut = new DataReader()
     sut.setData(data)
     const res = sut.getDates()
