@@ -71,52 +71,26 @@ QuoteConverter.#calcOne()</td>
 
 ### Kapitelreflektion kap 2
 
-Redan innan jag läste boken så har jag känt att detta med namngivning är en av sakerna jag är mindre bra på. Dels tycker jag att det är svårt att komma på konsisa namn som samtidigt är beskrivande och dels att använda uttryck som är vedertagna.  
+Redan innan jag läste boken har jag varit medveten om att namngivning är något jag ofta kämpar med. Jag tycker det är svårt både att hitta korta och koncisa namn som ändå är tillräckligt beskrivande, och att välja ord som känns etablerade.  
 
-Som exempel tar bokens författare upp att kill() är bättre att använda än whack(), men jag skulle kanske inte ha kommit på kill() heller utan använt stop() eller stopAndDelete(). Jag antar att sådant kommer med erfarenhet och när man granskat kod skriven av andra mer/använder utomstående moduler i sin kod. 
 
-En annan regel som jag är medveten om att jag brytit mot massvis av gånger är att vara konsekvent med namngivning, t ex att använda både controller och manager eftersom det blir otydligt vad skillnaden mellan de två är (bryter bl a mot regeln "one rule per concept"). Jag har även kommit på mig själv med att ibland skriva del, upd och ibland delete, update, ibland inom samma klass - detta är något jag aktivt försöker tänka på, men det händer ofta att jag kommer på den kortare varianten först när mycket av koden redan är skriven och det blir för omständligt att uppdatera samtliga ställen i koden (+ alla tillhörande tester).  
+En sak som tas upp i boken är att namn ska avslöja intention  - de ska svara på varför något finns, vad det gör och hur det används. Jag inser att jag ibland hamnar i situationer där namnet säger vad men inte riktigt varför, eller där det är oklart om namnet faktiskt täcker allt som händer i metoden. Som exempel tar bokens författare upp att kill() är bättre att använda än whack(), men jag hade själv kanske valt stop() eller till och med stopAndDelete(), vilket ju inte alls låter lika proffsigt. Jag antar att sådant kommer med erfarenhet och när man granskat kod skriven av andra mer/använder utomstående moduler i sin kod.  
 
-Jag har också varit rätt dålig på att inte använda samma ord för två olika koncept (exemplet i boken gäller 'add' och att man inte ska använda  det både för en funktion som skapar ett nytt värde genom att lägga ihop två befintliga värden, och samtidigt använda för en annan funktion som lägger till nytt element i en befintlig lista - utan att då är det bätre att använda 'append' eller 'insert' för det senare). Detta kommer förstås också från ovana i kombination med dålig fantasi.
+Kapitlet tar också upp regeln om att hålla sig till ett ord per koncept. Där känner jag igen mig väldigt väl – jag har ofta blandat ord som controller och manager, vilket gör att koden kan bli svår att följa för en annan person som behöver fundera på om det finns någon skillnad på de två och vad skillnaden i så fall är. Jag har också en tendens att blanda korta och långa varianter, till exempel upd och update, ibland till och med i samma klass. När jag upptäcker det är det ofta redan sent i processen och jag tvekar inför att ändra allt eftersom det även påverkar tester och andra beroenden.  
   
-I läroboken tycker författaren att man ska undvika att ha typ i variabeln - dels för att det är onödigt, och dels för att det gör det svårare att ändra typen på värdet i efterhand utan att behöva ändra variabelnamnet för att det inte ska bli missvisande för läsaren. Jag håller med om detta till stor del, men har dock hamnat i situation (oftast lokala block) där jag behövt ha typ i namnet, exempelvis:  
+En annan regel som jag också ha en tendens att bryta mot är att inte använda samma ord för två olika koncept. Det handlar nog mycket om ovana i kombination med brist på fantasi. En lärare jag haft tidigare tipsade om att googla på variabelnamn när jag är osäker, men det har man ju inte riktigt tid att göra för varje variabel :)  
   
-```
-const phoneNrAsString = catalogue.getPhoneNr('Anders')
-const phoneNrAsArr = phoneNrAsString.split('')
-```  
-  
-Det enda sättet att undvika detta, som jag kan komma på, är att sammanfoga båda raderna till en one-liner
-  
-```  
-const phoneNr = (catalogue..getPhoneNr('Anders')).split('')  
-```   
-  
+Diskussionen om att undvika typ i variabelnamn fick mig också att tänka efter. Jag håller med författaren i grunden, men jag har stött på situationer där jag inte kommit runt det. Om jag till exempel hämtar ett telefonnummer som sträng och sedan vill dela upp det i en array blir det lätt att skriva phoneNrAsString och phoneNrAsArr, för att göra skillnad på de. Samtidigt inser jag att detta egentligen inte tillför läsaren något, utan bara gör kompilatorn nöjd. Jag hade kunnat undvika det genom att skriva koden som en one-liner, men då blir läsbarheten lidande. Det är just i sådana situationer som kapitlets resonemang om noise words blir knepigt i praktiken – man vill undvika överflödiga ord, men behöver samtidigt hitta sätt att särskilja namn.  Författaren ger inga tips på hur man kan lösa denna typ av situation.  
 
-Men ju fler operationer som sammanfogas till samma rad desto svårare kan det bli att följa vad som händer i koden. Jag har tidigare lärt mig att man bör undvika one-liners för läsbarheten och hellre skriva ut koden i flera steg. Författaren ger dock inga tips på hur man kan lösa denna typ av situation. Just detta exempel bryter även mot regeln med namngivning endast för att tillfredsställa compilern - dvs att informationen om typ inte tillför läsaren något utan är endast tillagd för att skilja orden åt. Eller är det regeln kring noise words som gäller även här? 
+När det gäller noise words känner jag överlag att det är en av de svåraste reglerna att följa, särskilt när man delar upp en stor metod i mindre. Då måste man hitta namn som inte bara är konsekventa, utan också tillräckligt olika för att inte blandas ihop. Jag stötte på det nyligen med en klass där jag behövde både en publik fetch() och en privat #fetch(). Den ena innehöll felhantering, den andra själva anropet till API:et. Jag funderade länge men hittade inget bättre namn. Ett tag döpte jag den ena av metoderna till get eftersom det var en get request, men ändrade det sedan också till fetch eftersom det annars skulle bryta mot regeln om att vara konsekvent med terminologin.   
 
-I boken står det att man ska undvika att använda s k noise words för att skilja på två snarlika ord - om två saker behöver olika namn så ska namnen vara tillräckligt olika för att enkelt kunna skiljas åt - just detta tycker jag nog är en av de svårare reglerna att följa med namngivning. Framförallt när det kommer till funktioner/metoder - om man har en stor metod och dela upp den i små för att minska komplexiteten, tycker jag att det ofta kan bli svårt att namnge subfunktionerna och därtill utan att bryta regeln om konsekvent namngivning. Denna utmaning stötte jag senast på i just denna uppgift med JsonFetchService som har fått en publik fetch() och en privat #fetch(). Den publika fetch har ett try/catch block där try-blocket innehåller anrop till den privata #fetch. Den privata #fetch gör själva anropet till APIet samt kontrollerar och returnerar svaret utan att fånga fel. Jag kan inte komma något namn som skulle passa bättre till något av dessa metoder.  
+Bokens författare nämner även att man ska undvika att använda tecken som kan misstas för andra tecken, t ex ett fristående litet l som kan misstas för en etta eller stort O som kan misstas för en nolla. Det är inte något som jag tänkt på tidigare, men låter fullt rimligt så det är något jag aktivt har börjat tänka på nu. Nu tror jag iofs att dessa tecken normalt sett är del i ett ord så att man förstår ur sammanhanget om det är en siffra eller en bokstav, men jag kan tänka mig att i slumpvist genererade användarnamn/lösenord kan dessa tecken skapa problem för användare.   
 
-Bokens författare nämner även att man ska undvika att använda tecken som kan misstas för andra tecken, t ex ett fristående litet l som kan misstas för en etta eller stort O som kan misstas för en nolla. Det är inte något som jag tänkt på tidigare, men låter fullt rimligt så det är något jag aktivt har börjat tänka på nu. Nu tror jag iofs att dessa tecken normalt sett är del i ett ord så att man förstår ur sammanhanget om det är en siffra eller en bokstav, men jag kan tänka mig att i slumpvist genererade användarnamn/lösenord kan dessa tecken skapa problem för användare.  
+Ett område där jag inte helt håller med författaren är prefixer. Exemplet med IShapeFactory håller jag med om – det känns onödigt. Men när jag skriver SQL använder jag däremot prefix v_ för vyer. För mig blir det en praktisk markering som gör det lättare att snabbt se skillnad på en tabell och en vy, utan att behöva gräva i definitionerna. Här känner jag att jag vill väga in mina egna erfarenheter snarare än att följa regeln blint.  
 
-Författaren nämner att enbokstavs-variabler endast bör användas i lokala block - det håller jag med om. Från tidigare utbildning har jag faktiskt lärt mig att undvika enbokstavs-variabelnamn även i loopar - t ex att 
+Nytt för mig var också resonemanget om konstruktors-overloading i Java och att det är bättre att använda statiska fabriksmetoder med beskrivande namn. Det var inte så vi lärde oss i kursen, men när jag läste kapitlets exempel kändes det logiskt – det är mer självförklarande för den som läser koden.  
 
-```for i=0; i < books.length; i++```  
-
-skulle likväl kunna vara:
-
-```for bookIndex=0; bookIndex < books.length; bookIndex++``` 
-
-Att detta ökar läsbarheten blir extra tydligt om man har nästlade loopar (vilket man förstås bör undvika, men min erfarenhet är att det inte alltid som det går att plocka ut inner-loopen till egen metod utan att den då måste få en massa inparametrar).  
-
-Författaren nämner att man inte ska prefixa variabler och tar upp som exempel att IShareFactory bör bara heta Shapefactory. Jag håller med i det exemplet, men kan också komma på ett fall där jag personligen tycker att prefixning är nödvändig - och det är när man skapar vyer i SQL kod. Min erfarenhet är att man från och till vill se om en tabell är en vanlig table eller view och det är till stor hjälp att det framgår att det är en vy av tabellens namn med hjälp av v_ prefixet, så att man inte behöver leta i koden hur tabellen har skapats.  
-
-Något som boken nämner som var helt nytt för mig var regeln vid overloading av konstruktorn i Java och att man bör använda statiskt metod för det som har ett namn som förklarar funktionsrgumenten, t ex ```Complex.FromRealNumber(23.0)```
-istället för ```new Complex(23.0)``` . Detta var helt nytt för mig då det inte är så vi lärt oss att jobba i Java-kursen förra terminen, men låter å andra sidan rimligt ur läsbarhets perspektiv.  
-
-En annan sak som jag inte tänkt på tidigare som författaren nämner är att variabelnamn behöver innehålla why (varför den finns), what (vad den gör) och how (hur den används). Jag förstår bokens exempel och vad som menas, men känner ändå inte att jag kan säga att jag behärskar detta fullt ut i praktiken. Om vi tar exemplet med stopAndDelete() igen så är ju why - för att stoppa och radera, what är - stoppar och raderar och how är att det ska anropas om man vill göra båda. Men hur ska man tänka med motsvarande kill()? Stoppar den bara eller stoppar och raderar - det kanske är självklart för en van programmerate men inte helt tydligt för en nybörjare?
-
-
+Avslutningsvis fastnade jag för tanken att variabelnamn ska innehålla why, what och how. Jag förstår poängen, men märker också att det är svårt att applicera. Till exempel med stopAndDelete(): där är det tydligt vad och varför, men inte lika lätt att se hur. Och med ett kortare namn som kill() blir det ännu svårare för någon oerfaren att veta om det bara stoppar eller även raderar. Det gör mig medveten om att bra namngivning inte bara är en teknisk fråga, utan också en fråga om erfarenhet och gemensam förståelse och vokabulär inom teamet.  
 
 ## Funktioner
 
