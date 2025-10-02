@@ -1,24 +1,8 @@
-<style>
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  th, td {
-    border: 2px solid black;
-    padding: 6px;
-    text-align: left;
-    vertical-align: top;
-  }
-</style>
-
-
 # Reflektion  
 
 ## Namngivning 
 
-Tanken är att endast de klasser som exporteras från src/index.js ska användas av andra - RateFetcher, CurrencyConverter, och QuoteConverter.
-
-### Tabellreflektion för namngivning
+### Tabellreflektion för namngivning 
 
 <table>
 <tr><th></th><th>Namn</th><th>Förklaring</th><th>Reflektion och regler från Clean Code</th></tr>
