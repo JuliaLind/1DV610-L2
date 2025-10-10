@@ -132,7 +132,7 @@ describe('DataFormatter', () => {
         setAttributes: sinon.stub(),
         setIds: sinon.stub(),
         setDates: sinon.stub(),
-        getCurrency: sinon.stub()
+        getCurrencyId: sinon.stub()
           .onCall(0).returns('DKK')
           .onCall(1).returns('PLN')
           .onCall(2).returns('EUR')
@@ -159,7 +159,7 @@ describe('DataFormatter', () => {
       expect(helper.setAttributes).to.have.been.calledOnceWith(attributes)
       expect(helper.setIds).to.have.been.calledOnceWith(ids)
       expect(helper.setDates).to.have.been.calledOnceWith(dates)
-      expect(helper.getCurrency.callCount).to.equal(4)
+      expect(helper.getCurrencyId.callCount).to.equal(4)
       expect(helper.formatOneCurrency.callCount).to.equal(4)
       expect(res).to.deep.equal({
         DKK: {

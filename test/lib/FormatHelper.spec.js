@@ -6,10 +6,10 @@ import { ids } from './mockdata/ids.js'
 import { dates } from './mockdata/dates.js'
 
 describe('FormatHelper', () => {
-  it('getCurrency() OK', () => {
+  it('getCurrencyId() OK', () => {
     const sut = new FormatHelper()
     sut.setIds(['DKK', 'PLN', 'EUR', 'SEK'])
-    const res = sut.getCurrency(2)
+    const res = sut.getCurrencyId(2)
     const exp = 'EUR'
     expect(res).to.equal(exp)
   })

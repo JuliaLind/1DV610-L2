@@ -21,7 +21,7 @@ export class JsonFetchService {
    */
   async fetch (queryString) {
     try {
-      return await this.#fetch(`${this.#baseUrl}?${queryString}`)
+      return await this.#fetchJson(`${this.#baseUrl}?${queryString}`)
     } catch (error) {
       throw new Error('Error fetching data:', error)
     }
@@ -33,7 +33,7 @@ export class JsonFetchService {
    * @param {string} url - The API endpoint URL.
    * @returns {Promise<object>} - The JSON response from the API.
    */
-  async #fetch (url) {
+  async #fetchJson (url) {
     const response = await fetch(url, {
       method: 'GET',
       headers: {

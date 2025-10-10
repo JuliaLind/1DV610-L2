@@ -128,7 +128,7 @@ describe('CurrencyConverter', () => {
     })
   })
 
-  it('clearCurrencies() OK', () => {
+  it('reset() OK', () => {
     const ratefetcher = sinon.stub()
     const rateNormalizer = {
       reset: sinon.stub()
@@ -136,7 +136,7 @@ describe('CurrencyConverter', () => {
     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
     sut.setBaseCurrency('DKK')
     sut.setTargetCurrencies(['USD', 'EUR'])
-    sut.clear()
+    sut.reset()
 
     expect(sut.getBaseCurrency()).to.be.null
     expect(sut.getTargetCurrencies()).to.deep.equal([])

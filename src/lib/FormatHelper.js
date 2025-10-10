@@ -7,8 +7,9 @@ export class FormatHelper {
   #ids
   #dates
 
-  #currentRate = null
+  #currentCurrency = null
   #currentAttr = null
+  #denominator = null
 
   /**
    * Sets the rates data.
@@ -53,7 +54,7 @@ export class FormatHelper {
    * @returns {string} - The multiplier id
    */
   #getMultiplierId (multiplierIndex) {
-    return this.#currentRate.attributes[multiplierIndex]
+    return this.#currentCurrency.attributes[multiplierIndex]
   }
 
   /**
@@ -79,20 +80,24 @@ export class FormatHelper {
   }
 
   /**
-   * Gets the multiplier for the current exchange rate's value.
+   * Sets the denominator for the current currency's value.
    *
-   * @returns {number|undefined} - The multiplier value or undefined if not found
    */
-  #getMultiplier () {
-    for (const attrIndex in this.#currentRate.attributes) {
-      this.#currentAttr = this.#attributes[attrIndex]
+  #setDenominator () {
+    for (const attrIndex in this.#currentCurrency.attributes) {
+      this.#currentAttr = this.#getCurrentAttr(attrIndex)
 
       if (this.#isMultiplierIndex()) {
-        return this.#calculateDenominator(attrIndex)
+        this.#denominator = this.#calculateDenominator(attrIndex)
+        return
       }
     }
 
     throw new Error('UNIT_MULT attribute missing')
+  }
+
+  #getCurrentAttr (index) {
+    return this.#attributes[index]
   }
 
   /**
@@ -101,26 +106,35 @@ export class FormatHelper {
    * @param {number} currencyIndex - The index of the currency
    * @returns {string} - The currency ID
    */
-  getCurrency (currencyIndex) {
+  getCurrencyId (currencyIndex) {
     return this.#ids[currencyIndex]
   }
 
   /**
-   * Merges and normalizes the data for a specific rate.
+   * Merges and normalizes all observations for a specific rate.
    *
-   * @returns {object} - merged and normalized data for the currency rate
+   * @returns {object} - merged and normalized observations for the currency rate
    */
-  #mergeAndNormalize () {
-    const formatted = {}
-    const multiplier = this.#getMultiplier()
+  #normalize () {
+    this.#setDenominator()
+
+    const normalized = {}
 
     for (const dateIndex in this.#dates) {
-      const rateValue = Number(this.#currentRate.observations[dateIndex][0])
-
-      formatted[this.#dates[dateIndex]] = Number((rateValue / multiplier).toFixed(4))
+      normalized[this.#getObservationDate(dateIndex)] = this.#getObservationValue(dateIndex)
     }
 
-    return formatted
+    return normalized
+  }
+  
+  #getObservationValue (dateIndex) {
+    const observationValue = Number(this.#currentCurrency.observations[dateIndex][0])
+
+    return Number((observationValue / this.#denominator).toFixed(4))
+  }
+
+  #getObservationDate (dateIndex) {
+    return this.#dates[dateIndex]
   }
 
   /**
@@ -128,8 +142,8 @@ export class FormatHelper {
    *
    * @param {number} rateIndex - The index of the rate to set as current
    */
-  #setCurrentRate (rateIndex) {
-    this.#currentRate = this.#rates[rateIndex]
+  #setCurrentCurrency (currencyIndex) {
+    this.#currentCurrency = this.#rates[currencyIndex]
   }
 
   /**
@@ -139,8 +153,8 @@ export class FormatHelper {
    * @returns {object} - The formatted currency data
    */
   formatOneCurrency (currencyIndex) {
-    this.#setCurrentRate(currencyIndex)
+    this.#setCurrentCurrency(currencyIndex)
 
-    return this.#mergeAndNormalize()
+    return this.#normalize()
   }
 }

@@ -47,7 +47,7 @@ export class DataFormatter {
    */
   #rearrange () {
     for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
-      const currency = this.#helper.getCurrency(currencyIndex)
+      const currency = this.#helper.getCurrencyId(currencyIndex)
 
       this.#formatted[currency] = this.#helper.formatOneCurrency(currencyIndex)
     }
