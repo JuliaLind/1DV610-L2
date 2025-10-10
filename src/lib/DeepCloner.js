@@ -43,7 +43,11 @@ export class DeepCloner {
       return this.#cloneMap(any)
     }
 
-    return this.#typeChecker.isArray(any) ? this.#cloneArr(any) : this.#cloneObj(any)
+    if (this.#typeChecker.isArray(any)) {
+      return this.#cloneArr(any)
+    }
+
+    return this.#cloneObj(any)
   }
 
   /**

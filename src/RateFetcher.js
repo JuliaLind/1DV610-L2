@@ -69,11 +69,11 @@ export class RateFetcher {
    * Fetch exchange rates by date.
    *
    * @param {string} date - The date to fetch rates for.
-   * @param {number} count - The number of observations to fetch prior to and including the specified date (default is 1).
+   * @param {number} observations - The number of observations to fetch prior to and including the specified date (default is 1).
    * @returns {Promise<object>} - The fetched exchange rates.
    */
-  async fetchByDate (date, count = 1) {
-    const queryString = `${this.#params.to(date)}&${this.#params.items(count)}&${this.#params.json()}`
+  async fetchByDate (date, observations = 1) {
+    const queryString = `${this.#params.to(date)}&${this.#params.items(observations)}&${this.#params.json()}`
 
     const raw = await this.#fetchService.get(queryString)
     return this.#formatter.format(raw)
@@ -82,11 +82,11 @@ export class RateFetcher {
   /**
    * Fetch exchange rates from and prior to the latest available date.
    *
-   * @param {number} count - The number of latest observations to fetch (default is 1).
+   * @param {number} observations - The number of latest observations to fetch (default is 1).
    * @returns {Promise<object>} - The exchange rates from the latest available date.
    */
-  async fetchLatest (count = 1) {
-    const queryString = `${this.#params.items(count)}&${this.#params.json()}`
+  async fetchLatest (observations = 1) {
+    const queryString = `${this.#params.items(observations)}&${this.#params.json()}`
 
     const raw = await this.#fetchService.get(queryString)
     return this.#formatter.format(raw)

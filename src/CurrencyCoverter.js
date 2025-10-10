@@ -137,11 +137,18 @@ export class CurrencyConverter {
   /**
    * Fetches rates from the API.
    */
-  async #getRatesFromApi () {
+  async #getRatesFromApi() {
     this.#alertIfNotReady()
     this.#assignCurrencies()
-    const rates = await this.#fetcher.fetchLatest()
+    this.#fetchAndNormalize()
+  }
 
+  /**
+ * Fetches and normalizes exchange rates
+ * from the external API.
+ */
+  async #fetchAndNormalize() {
+    const rates = await this.#fetcher.fetchLatest()
     this.#normalizer.normalize(rates)
   }
 
@@ -161,13 +168,16 @@ export class CurrencyConverter {
    * @returns {object} - The conversion results.
    */
   #convert(amount) {
-    const conversionResults = {}
     const rates = this.#normalizer.getNormalizedRates()
 
-    for (const currency of this.#targetCurrencies) {
-      conversionResults[currency] = round(amount / rates[currency])
-    }
+    return this.#convertToEachTarget(amount, rates)
+  }
 
-    return conversionResults
+  #convertToEachTarget(amount, rates) {
+    const converted = {}
+    for (const currency of this.#targetCurrencies) {
+      converted[currency] = round(amount / rates[currency])
+    }
+    return converted
   }
 }

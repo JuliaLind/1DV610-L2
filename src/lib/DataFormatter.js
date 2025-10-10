@@ -45,12 +45,16 @@ export class DataFormatter {
   /**
    * Rearrange the data into a more usable structure.
    */
-  #normalize () {
+  #normalizeAll () {
     for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
-      const currency = this.#helper.getCurrencyId(currencyIndex)
-
-      this.#formatted[currency] = this.#helper.formatOneCurrency(currencyIndex)
+      this.#normalizeOne(currencyIndex)
     }
+  }
+
+  #normalizeOne (currencyIndex) {
+    const currency = this.#helper.getCurrencyId(currencyIndex)
+
+    this.#formatted[currency] = this.#helper.formatOneCurrency(currencyIndex)
   }
 
   /**
@@ -61,7 +65,7 @@ export class DataFormatter {
    */
   format (data) {
     this.#extract(data)
-    this.#normalize()
+    this.#normalizeAll()
 
     return this.#formatted
   }
