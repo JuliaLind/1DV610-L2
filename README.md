@@ -84,7 +84,7 @@ console.log(rates) // {
 
 
   
-The CurrencyConverter can be used to covert an amount from any currency to one or more other currencies using the latest available exchange rate.  To use the CurrencyConverter you must first set the fromCurrency using setFromCurrency() method and the target currencies by passing an array with target currencies to the setToCurrencies() method. Then pass the amount you wish to convert to the convert() method. To reset the CurrencyConverter use the clear() method.
+The CurrencyConverter can be used to covert an amount from any currency to one or more other currencies using the latest available exchange rate.  To use the CurrencyConverter you must first set the fromCurrency using setBaseCurrency() method and the target currencies by passing an array with target currencies to the setTargetCurrencies() method. Then pass the amount you wish to convert to the convert() method. To reset the CurrencyConverter use the clear() method.
   
 
 Example 3:  
@@ -96,8 +96,8 @@ import { CurrencyConverter } from "@jl225vf/exr"
 
 const converter = new CurrencyCoverter()
 
-converter.setFromCurrency('SEK')
-converter.setToCurrencies(['EUR', 'PLN'])
+converter.setBaseCurrency('SEK')
+converter.setTargetCurrencies(['EUR', 'PLN'])
 
 const coverted = await converter.convert(350)
 
@@ -107,7 +107,7 @@ console.log(converted['PLN']) // 134.7786382
 ``` 
 
 The QuoteConverter converts a period of stock quotes from NOK to selected currencies.  
-To use the QuoteConverter set the currencies you wish to convert using setCurrencies() method and then pass the quotes object to the convert() method. Quotes must be an object where keys are dates in the format "YYYY-MM-DD" and values are the quotes in NOK.  
+To use the QuoteConverter set the currencies you wish to convert using setTargetCurrencies() method and then pass the quotes object to the convert() method. Quotes must be an object where keys are dates in the format "YYYY-MM-DD" and values are the quotes in NOK.  
 
 Example 4:
 
@@ -116,7 +116,7 @@ import { QuoteConverter } from "@jl225vf/exr"
 
 const converter = new QuoteCoverter()
 
-converter.setCurrencies(['EUR', 'PLN'])
+converter.setTargetCurrencies(['EUR', 'PLN'])
 
 const quotes = {
     "2025-01-10": 332.4,

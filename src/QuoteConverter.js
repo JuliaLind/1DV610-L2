@@ -3,11 +3,11 @@ import { round } from './lib/functions.js'
 
 /**
  * Converts stock quotes from NOK to
- * other currencies using exchange rates from Norges Bank.
+ * other targetCurrencies using exchange rates from Norges Bank.
  */
 export class QuoteConverter {
   #fetcher
-  #currencies = []
+  #targetCurrencies = []
   #rates = {}
   #quotes = {}
 
@@ -24,17 +24,17 @@ export class QuoteConverter {
   }
 
   /**
-   * Sets the target currencies for conversion.
-   * If the currencies are changed, cached rates are cleared.
+   * Sets the target targetCurrencies for conversion.
+   * If the targetCurrencies are changed, cached rates are cleared.
    *
-   * @param {string[]} values - The currency codes to set as target currencies.
+   * @param {string[]} values - The currency codes to set as target targetCurrencies.
    */
-  setCurrencies (values) {
-    this.#currencies = values
+  setTargetCurrencies (values) {
+    this.#targetCurrencies = values
   }
 
   /**
-   * Converts stock quotes from NOK to the target currencies.
+   * Converts stock quotes from NOK to the target targetCurrencies.
    *
    * @param {object} quotes - The quotes to convert.
    * @returns {Promise<object>} - The conversion results.
@@ -62,7 +62,7 @@ export class QuoteConverter {
    * @throws {Error} - If the converter is not fully initialized.
    */
   #isReady () {
-    if (this.#currencies?.length === 0) {
+    if (this.#targetCurrencies?.length === 0) {
       throw new Error('QuoteConverter is not fully initialized')
     }
   }
@@ -74,7 +74,7 @@ export class QuoteConverter {
    */
   async #prep () {
     this.#isReady()
-    this.#fetcher.setCurrencies(this.#currencies)
+    this.#fetcher.setCurrencies(this.#targetCurrencies)
     const { from, to } = this.#getPeriod()
     this.#rates = await this.#fetcher.fetchByPeriod(from, to)
   }
@@ -119,7 +119,7 @@ export class QuoteConverter {
     const calculated = {
       NOK: quote.NOK
     }
-    for (const currency of this.#currencies) {
+    for (const currency of this.#targetCurrencies) {
       const rate = this.#rates[currency][quote.date]
       calculated[currency] = round(quote.NOK / rate)
     }
