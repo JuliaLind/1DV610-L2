@@ -81,9 +81,9 @@ export class CurrencyConverter {
   }
 
   /**
-   * Clears the base and target currencies and resets cached rates.
+   * Resets the base and target currencies and the cached rates.
    */
-  clear() {
+  reset() {
     this.#baseCurrency = null
     this.#targetCurrencies = []
     this.#normalizer.reset()
