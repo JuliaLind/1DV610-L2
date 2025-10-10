@@ -74,6 +74,7 @@ export class RateNormalizer {
 
       normalized[toCurrency] = round(toRate / fromRate, 4)
     }
+
     this.#normalizedRates = normalized
   }
 

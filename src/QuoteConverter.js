@@ -40,7 +40,6 @@ export class QuoteConverter {
    * @returns {Promise<object>} - The conversion results.
    */
   async convert (quotes) {
-    this.#isReady()
     this.#setQuotes(quotes)
     await this.#prep()
 
@@ -62,7 +61,7 @@ export class QuoteConverter {
    *
    * @throws {Error} - If the converter is not fully initialized.
    */
-  #isReady () {
+  #alertIfNotReady () {
     if (this.#targetCurrencies?.length === 0) {
       throw new Error('QuoteConverter is not fully initialized')
     }
@@ -74,9 +73,14 @@ export class QuoteConverter {
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
   async #prep () {
-    this.#isReady()
+    this.#alertIfNotReady()
+    await this.#fetchRates()
+  }
+
+  async #fetchRates () {
     this.#fetcher.setCurrencies(this.#targetCurrencies)
     const { from, to } = this.#getPeriod()
+
     this.#rates = await this.#fetcher.fetchByPeriod(from, to)
   }
 

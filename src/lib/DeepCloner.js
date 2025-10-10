@@ -64,9 +64,11 @@ export class DeepCloner {
    */
   #cloneSet (set) {
     const clone = new Set()
+
     for (const item of set) {
       clone.add(this.clone(item))
     }
+
     return clone
   }
 
@@ -78,9 +80,11 @@ export class DeepCloner {
    */
   #cloneMap (map) {
     const clone = new Map()
+
     for (const [key, value] of map) {
       clone.set(key, this.clone(value))
     }
+
     return clone
   }
 
@@ -112,6 +116,7 @@ export class DeepCloner {
     for (const key in obj) {
       clone[key] = this.clone(obj[key])
     }
+
     return clone
   }
 }

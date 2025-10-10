@@ -45,7 +45,7 @@ export class DataFormatter {
   /**
    * Rearrange the data into a more usable structure.
    */
-  #rearrange () {
+  #normalize () {
     for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
       const currency = this.#helper.getCurrencyId(currencyIndex)
 
@@ -61,7 +61,7 @@ export class DataFormatter {
    */
   format (data) {
     this.#extract(data)
-    this.#rearrange()
+    this.#normalize()
 
     return this.#formatted
   }

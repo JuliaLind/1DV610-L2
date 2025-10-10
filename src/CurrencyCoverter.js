@@ -33,7 +33,7 @@ export class CurrencyConverter {
    * @param {string} value - The currency code to set as the base currency.
    */
   setBaseCurrency(value) {
-    if (this.#isBaseCurrencyChanged(value)) {
+    if (this.#isBaseChanged(value)) {
       this.#normalizer.reset()
     }
 
@@ -56,18 +56,18 @@ export class CurrencyConverter {
    * @param {string[]} values - The currency codes to set as target currencies.
    */
   setTargetCurrencies(values) {
-     if (this.#isTargetCurrenciesChanged(values)) {
+    if (this.#isTargetChanged(values)) {
       this.#normalizer.reset()
     }
 
     this.#targetCurrencies = values
   }
 
-  #isTargetCurrenciesChanged(newValues) {
-    return this.#targetCurrencies.length > 0 && !arraysAreEqual(newValues, this.#targetCurrencies)
+  #isTargetChanged(newValue) {
+    return this.#targetCurrencies.length > 0 && !arraysAreEqual(newValue, this.#targetCurrencies)
   }
 
-  #isBaseCurrencyChanged(newValue) {
+  #isBaseChanged(newValue) {
     return this.#baseCurrency && this.#baseCurrency !== newValue
   }
 
