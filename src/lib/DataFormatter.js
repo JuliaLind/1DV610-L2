@@ -51,6 +51,11 @@ export class DataFormatter {
     }
   }
 
+  /**
+   * Normalize data for one currency.
+   *
+   * @param {number} currencyIndex - The index of the currency to normalize.
+   */
   #normalizeOne (currencyIndex) {
     const currency = this.#helper.getCurrencyId(currencyIndex)
 

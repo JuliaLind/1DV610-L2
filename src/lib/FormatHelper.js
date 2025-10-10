@@ -81,11 +81,10 @@ export class FormatHelper {
 
   /**
    * Sets the denominator for the current currency's value.
-   *
    */
   #setDenominator () {
     for (const attrIndex in this.#currentCurrency.attributes) {
-      this.#currentAttr = this.#getCurrentAttr(attrIndex)
+      this.#currentAttr = this.#getAttrByIndex(attrIndex)
 
       if (this.#isMultiplierIndex()) {
         this.#denominator = this.#calculateDenominator(attrIndex)
@@ -96,7 +95,13 @@ export class FormatHelper {
     throw new Error('UNIT_MULT attribute missing')
   }
 
-  #getCurrentAttr (index) {
+  /**
+   * Gets the current attribute.
+   *
+   * @param {number} index - The index of the attribute to get.
+   * @returns {object} - The current attribute.
+   */
+  #getAttrByIndex (index) {
     return this.#attributes[index]
   }
 
@@ -126,13 +131,26 @@ export class FormatHelper {
 
     return normalized
   }
-  
+
+  /**
+   * Gets the normalized observation value of the current currency
+   * for a specific date, based on dateIndex.
+   *
+   * @param {number} dateIndex - The index of the date to get the observation value for.
+   * @returns {number} - The normalized observation value.
+   */
   #getObservationValue (dateIndex) {
     const observationValue = Number(this.#currentCurrency.observations[dateIndex][0])
 
     return Number((observationValue / this.#denominator).toFixed(4))
   }
 
+  /**
+   * Gets the observation date for a specific index.
+   *
+   * @param {number} dateIndex - The index of the date to get.
+   * @returns {string} - The observation date.
+   */
   #getObservationDate (dateIndex) {
     return this.#dates[dateIndex]
   }
@@ -140,7 +158,7 @@ export class FormatHelper {
   /**
    * Sets the current rate.
    *
-   * @param {number} rateIndex - The index of the rate to set as current
+   * @param {number} currencyIndex - The index of the currency to set as current
    */
   #setCurrentCurrency (currencyIndex) {
     this.#currentCurrency = this.#rates[currencyIndex]

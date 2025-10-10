@@ -77,6 +77,9 @@ export class QuoteConverter {
     await this.#fetchRates()
   }
 
+  /**
+   * Fetches exchange rates for the target currencies.
+   */
   async #fetchRates () {
     this.#fetcher.setCurrencies(this.#targetCurrencies)
     const { from, to } = this.#getPeriod()
