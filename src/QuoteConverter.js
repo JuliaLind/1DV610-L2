@@ -43,7 +43,8 @@ export class QuoteConverter {
     this.#isReady()
     this.#setQuotes(quotes)
     await this.#prep()
-    return this.#calcMany()
+
+    return this.#convertAll()
   }
 
   /**
@@ -94,28 +95,28 @@ export class QuoteConverter {
   }
 
   /**
-   * Recalculates the conversion results for the specified amount.
+   * Converts all quotes to the target currencies.
    *
    * @returns {object} - The conversion results.
    */
-  #calcMany () {
+  #convertAll () {
     const final = {}
 
     Object.entries(this.#quotes).forEach(([date, nokValue]) => {
       const quote = { date, NOK: nokValue }
-      final[date] = this.#calcOne(quote)
+      final[date] = this.#convertOne(quote)
     })
 
     return final
   }
 
   /**
-   * Recalculates the conversion results for a single quote.
+   * Converts a single quote to the target currencies.
    *
    * @param {object} quote - The quote to convert.
    * @returns {object} - The conversion results for the quote.
    */
-  #calcOne (quote) {
+  #convertOne (quote) {
     const calculated = {
       NOK: quote.NOK
     }
