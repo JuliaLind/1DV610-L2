@@ -175,9 +175,11 @@ export class CurrencyConverter {
 
   #convertToEachTarget(amount, rates) {
     const converted = {}
+
     for (const currency of this.#targetCurrencies) {
       converted[currency] = round(amount / rates[currency])
     }
+
     return converted
   }
 }
