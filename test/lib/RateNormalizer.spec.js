@@ -17,18 +17,18 @@ describe('RateNormalizer', () => {
     }
   }
 
-  it('setFromCurrency(), getFromCurrency() OK', () => {
+  it('setBaseCurrency(), getBaseCurrency() OK', () => {
     const sut = new RateNormalizer()
-    sut.setFromCurrency('EUR')
-    const res = sut.getFromCurrency()
+    sut.setBaseCurrency('EUR')
+    const res = sut.getBaseCurrency()
     const exp = 'EUR'
     expect(res).to.equal(exp)
   })
 
-  it('setToCurrencies(), getToCurrencies() OK', () => {
+  it('setTargetCurrencies(), getTargetCurrencies() OK', () => {
     const sut = new RateNormalizer()
-    sut.setToCurrencies(['DKK', 'PLN', 'USD'])
-    const res = sut.getToCurrencies()
+    sut.setTargetCurrencies(['DKK', 'PLN', 'USD'])
+    const res = sut.getTargetCurrencies()
     const exp = ['DKK', 'PLN', 'USD']
     expect(res).to.deep.equal(exp)
   })
@@ -42,8 +42,8 @@ describe('RateNormalizer', () => {
 
   it('hasCachedRates() returns true when rates are set', () => {
     const sut = new RateNormalizer()
-    sut.setFromCurrency('EUR')
-    sut.setToCurrencies(['DKK', 'PLN', 'SEK'])
+    sut.setBaseCurrency('EUR')
+    sut.setTargetCurrencies(['DKK', 'PLN', 'SEK'])
     sut.normalize(rates)
     const res = sut.hasCachedRates()
 
@@ -52,8 +52,8 @@ describe('RateNormalizer', () => {
 
   it('reset() clears cached rates', () => {
     const sut = new RateNormalizer()
-    sut.setFromCurrency('EUR')
-    sut.setToCurrencies(['DKK', 'PLN', 'SEK'])
+    sut.setBaseCurrency('EUR')
+    sut.setTargetCurrencies(['DKK', 'PLN', 'SEK'])
     sut.normalize(rates)
     let res = sut.hasCachedRates()
 
@@ -65,8 +65,8 @@ describe('RateNormalizer', () => {
 
   it('normalize() OK', () => {
     const sut = new RateNormalizer()
-    sut.setFromCurrency('EUR')
-    sut.setToCurrencies(['DKK', 'PLN', 'SEK', 'NOK'])
+    sut.setBaseCurrency('EUR')
+    sut.setTargetCurrencies(['DKK', 'PLN', 'SEK', 'NOK'])
     sut.normalize(rates)
     const res = sut.getNormalizedRates()
     const exp = {

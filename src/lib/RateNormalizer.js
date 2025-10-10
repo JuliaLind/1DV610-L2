@@ -4,8 +4,8 @@ import { round } from './functions.js'
  * Class to normalize exchange rates based on a selected base currency.
  */
 export class RateNormalizer {
-  #fromCurrency
-  #toCurrencies
+  #baseCurrency
+  #targetCurrencies
   #normalizedRates = {}
 
   /**
@@ -13,8 +13,8 @@ export class RateNormalizer {
    *
    * @param {string} value - The currency code to set as the base currency.
    */
-  setFromCurrency (value) {
-    this.#fromCurrency = value
+  setBaseCurrency (value) {
+    this.#baseCurrency = value
   }
 
   /**
@@ -22,8 +22,8 @@ export class RateNormalizer {
    *
    * @returns {string} - The current base currency.
    */
-  getFromCurrency () {
-    return this.#fromCurrency
+  getBaseCurrency () {
+    return this.#baseCurrency
   }
 
   /**
@@ -47,8 +47,8 @@ export class RateNormalizer {
    *
    * @param {string[]} values - The currency codes to set as target currencies.
    */
-  setToCurrencies (values) {
-    this.#toCurrencies = values
+  setTargetCurrencies (values) {
+    this.#targetCurrencies = values
   }
 
   /**
@@ -56,8 +56,8 @@ export class RateNormalizer {
    *
    * @returns {string[]} - The current target currencies.
    */
-  getToCurrencies () {
-    return [...this.#toCurrencies]
+  getTargetCurrencies () {
+    return [...this.#targetCurrencies]
   }
 
   /**
@@ -66,10 +66,10 @@ export class RateNormalizer {
    * @param {object} rates - The fetched exchange rates.
    */
   normalize (rates) {
-    const fromRate = Object.values(rates[this.#fromCurrency])[0]
+    const fromRate = Object.values(rates[this.#baseCurrency])[0]
     const normalized = {}
 
-    for (const toCurrency of this.#toCurrencies) {
+    for (const toCurrency of this.#targetCurrencies) {
       const toRate = toCurrency === 'NOK' ? 1 : Object.values(rates[toCurrency])[0]
 
       normalized[toCurrency] = round(toRate / fromRate, 4)

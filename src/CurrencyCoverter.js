@@ -8,8 +8,8 @@ import { round, arraysAreEqual } from './lib/functions.js'
 export class CurrencyConverter {
   #fetcher
   #normalizer
-  #fromCurrency = null
-  #toCurrencies = []
+  #baseCurrency = null
+  #targetCurrencies = []
 
   /**
    * Creates an instance of CurrencyConverter.
@@ -32,10 +32,10 @@ export class CurrencyConverter {
    *
    * @param {string} value - The currency code to set as the base currency.
    */
-  setFromCurrency (value) {
-    const current = this.#fromCurrency
+  setBaseCurrency (value) {
+    const current = this.#baseCurrency
 
-    this.#fromCurrency = value
+    this.#baseCurrency = value
 
     if (current && current !== value) {
       this.#normalizer.reset()
@@ -47,8 +47,8 @@ export class CurrencyConverter {
    *
    * @returns {string} - The current base currency.
    */
-  getFromCurrency () {
-    return this.#fromCurrency
+  getBaseCurrency () {
+    return this.#baseCurrency
   }
 
   /**
@@ -57,10 +57,10 @@ export class CurrencyConverter {
    *
    * @param {string[]} values - The currency codes to set as target currencies.
    */
-  setToCurrencies (values) {
-    const current = this.#toCurrencies
+  setTargetCurrencies (values) {
+    const current = this.#targetCurrencies
 
-    this.#toCurrencies = values
+    this.#targetCurrencies = values
 
     if (current.length > 0 && !arraysAreEqual(values, current)) {
       this.#normalizer.reset()
@@ -72,16 +72,16 @@ export class CurrencyConverter {
    *
    * @returns {string[]} - The current target currencies.
    */
-  getToCurrencies () {
-    return this.#toCurrencies
+  getTargetCurrencies () {
+    return this.#targetCurrencies
   }
 
   /**
    * Clears the base and target currencies and resets cached rates.
    */
   clear () {
-    this.#fromCurrency = null
-    this.#toCurrencies = []
+    this.#baseCurrency = null
+    this.#targetCurrencies = []
     this.#normalizer.reset()
   }
 
@@ -104,7 +104,7 @@ export class CurrencyConverter {
    * @throws {Error} - If the converter is not fully initialized.
    */
   #isReady () {
-    if (!this.#fromCurrency || this.#toCurrencies?.length === 0) {
+    if (!this.#baseCurrency || this.#targetCurrencies?.length === 0) {
       throw new Error('CurrencyConverter is not fully initialized')
     }
   }
@@ -120,11 +120,11 @@ export class CurrencyConverter {
     }
 
     this.#isReady()
-    this.#fetcher.setCurrencies([this.#fromCurrency, ...this.#toCurrencies])
+    this.#fetcher.setCurrencies([this.#baseCurrency, ...this.#targetCurrencies])
     const rates = await this.#fetcher.fetchLatest()
 
-    this.#normalizer.setFromCurrency(this.#fromCurrency)
-    this.#normalizer.setToCurrencies(this.#toCurrencies)
+    this.#normalizer.setBaseCurrency(this.#baseCurrency)
+    this.#normalizer.setTargetCurrencies(this.#targetCurrencies)
     this.#normalizer.normalize(rates)
   }
 
@@ -138,7 +138,7 @@ export class CurrencyConverter {
     const results = {}
     const rates = this.#normalizer.getNormalizedRates()
 
-    for (const currency of this.#toCurrencies) {
+    for (const currency of this.#targetCurrencies) {
       results[currency] = round(amount / rates[currency])
     }
 
