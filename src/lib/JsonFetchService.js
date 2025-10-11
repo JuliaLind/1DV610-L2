@@ -21,7 +21,7 @@ export class JsonFetchService {
    */
   async fetch (queryString) {
     try {
-      return await this.#fetchJson(`${this.#baseUrl}?${queryString}`)
+      return await this.#fetchJson(`${this.#baseUrl}${queryString}`)
     } catch (error) {
       throw new Error('Error fetching data:', error)
     }

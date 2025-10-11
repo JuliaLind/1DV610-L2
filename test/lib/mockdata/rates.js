@@ -1,8 +1,5 @@
 export const rates = [{
   attributes: [
-    0,
-    0,
-    0,
     0
   ],
   observations: {
@@ -24,10 +21,7 @@ export const rates = [{
   }
 }, {
   attributes: [
-    1,
-    0,
-    1,
-    0
+    1
   ],
   observations: {
     0: [
@@ -48,10 +42,7 @@ export const rates = [{
   }
 }, {
   attributes: [
-    1,
-    0,
-    1,
-    0
+    1
   ],
   observations: {
     0: [
@@ -72,9 +63,6 @@ export const rates = [{
   }
 }, {
   attributes: [
-    0,
-    0,
-    0,
     0
   ],
   observations: {

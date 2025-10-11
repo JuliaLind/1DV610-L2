@@ -60,7 +60,7 @@ export class RateFetcher {
    * @param {string[]} currencies - The currencies to fetch rates for
    */
   setCurrencies (currencies) {
-    const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP`
+    const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP?attributes=UNIT_MULT`
 
     this.#fetchService.setBaseUrl(baseUrl)
   }

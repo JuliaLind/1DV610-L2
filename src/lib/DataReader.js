@@ -87,12 +87,6 @@ export class DataReader {
    * @returns {Array} currencies - Array of currency objects from BASE_CUR dimension
    */
   #getCurrencies () {
-    for (const dim of this.#data.structure.dimensions.series) {
-      if (dim.id === 'BASE_CUR') {
-        return dim.values
-      }
-    }
-
-    throw new Error('No BASE_CUR dimension found in data')
+    return this.#data.structure.dimensions.series.find(dim => dim.id === 'BASE_CUR').values
   }
 }

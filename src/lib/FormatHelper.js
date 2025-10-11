@@ -47,62 +47,17 @@ export class FormatHelper {
     this.#dates = dates
   }
 
+
   /**
-   * Gets the multiplier id of the current currency rate.
+   * Calculates the denominator for the current currency's value.
    *
-   * @param {number} multiplierIndex - The index of the multiplier
-   * @returns {string} - The multiplier id
+   * @returns {number} - The calculated denominator
    */
-  #getMultiplierId (multiplierIndex) {
-    return this.#currentCurrency.attributes[multiplierIndex]
-  }
+  #calculateDenominator () {
+    const multiplierIndex = this.#currentCurrency.attributes[0]
+    const powerOf = Number(this.#currentAttr.values[multiplierIndex].id)
 
-  /**
-   * Calculates the denominator to normalize the rate value into units.
-   *
-   * @param {number} multiplierIndex - The index of the multiplier id to use
-   * @returns {number} - The denominator to normalize the rate value into units
-   */
-  #calculateDenominator (multiplierIndex) {
-    const multiplierId = this.#getMultiplierId(multiplierIndex)
-    const powerOf = Number(this.#currentAttr.values[multiplierId].id)
-
-    return 10 ** powerOf
-  }
-
-  /**
-   * Checks if the current attribute is a multiplier index.
-   *
-   * @returns {boolean} - true if the current attribute is UNIT_MULT
-   */
-  #isMultiplierIndex () {
-    return this.#currentAttr.id === 'UNIT_MULT'
-  }
-
-  /**
-   * Sets the denominator for the current currency's value.
-   */
-  #setDenominator () {
-    for (const attrIndex in this.#currentCurrency.attributes) {
-      this.#currentAttr = this.#getAttrByIndex(attrIndex)
-
-      if (this.#isMultiplierIndex()) {
-        this.#denominator = this.#calculateDenominator(attrIndex)
-        return
-      }
-    }
-
-    throw new Error('UNIT_MULT attribute missing')
-  }
-
-  /**
-   * Gets the current attribute.
-   *
-   * @param {number} index - The index of the attribute to get.
-   * @returns {object} - The current attribute.
-   */
-  #getAttrByIndex (index) {
-    return this.#attributes[index]
+    this.#denominator = 10 ** powerOf
   }
 
   /**
@@ -121,12 +76,11 @@ export class FormatHelper {
    * @returns {object} - merged and normalized observations for the currency rate
    */
   #normalize () {
-    this.#setDenominator()
-
+    const denominator = this.#calculateDenominator()
     const normalized = {}
 
     for (const dateIndex in this.#dates) {
-      normalized[this.#getObservationDate(dateIndex)] = this.#getObservationValue(dateIndex)
+      normalized[this.#getObservationDate(dateIndex)] = this.#getObservationValue(dateIndex, denominator)
     }
 
     return normalized
@@ -139,10 +93,10 @@ export class FormatHelper {
    * @param {number} dateIndex - The index of the date to get the observation value for.
    * @returns {number} - The normalized observation value.
    */
-  #getObservationValue (dateIndex) {
+  #getObservationValue (dateIndex, denominator) {
     const observationValue = Number(this.#currentCurrency.observations[dateIndex][0])
 
-    return Number((observationValue / this.#denominator).toFixed(4))
+    return Number((observationValue / denominator).toFixed(4))
   }
 
   /**

@@ -49,7 +49,7 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
 
-    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP'
+    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT'
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'endPeriod=2025-09-19&lastNObservations=1&format=sdmx-json'
@@ -88,7 +88,7 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
 
-    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP'
+    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT'
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'lastNObservations=1&format=sdmx-json'
@@ -143,7 +143,7 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
 
-    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP'
+    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT'
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'startPeriod=2025-02-20&endPeriod=2025-02-26&format=sdmx-json'
