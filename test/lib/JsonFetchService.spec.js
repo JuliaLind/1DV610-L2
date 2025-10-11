@@ -39,7 +39,7 @@ describe('JsonFetchService', () => {
     const res = await sut.fetch(queryString)
     expect(res).to.deep.equal(fakeData)
 
-    expect(fetchStub).to.have.been.calledOnceWith(`${fakeUrl}?${queryString}`, {
+    expect(fetchStub).to.have.been.calledOnceWith(`${fakeUrl}${queryString}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

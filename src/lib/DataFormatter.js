@@ -37,7 +37,7 @@ export class DataFormatter {
     const rates = this.#reader.getRates()
     this.#rateCount = rates.length
     this.#helper.setRates(rates)
-    this.#helper.setAttributes(this.#reader.getAttributes())
+    this.#helper.setMultipliers(this.#reader.getMultipliers())
     this.#helper.setIds(this.#reader.getIds())
     this.#helper.setDates(this.#reader.getDates())
   }

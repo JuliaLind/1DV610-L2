@@ -53,6 +53,16 @@ export class DataReader {
   }
 
   /**
+   * Get the unit multipliers from the data.
+   *
+   * @returns {Array} multipliers - Array of unit multipliers
+   */
+  getMultipliers () {
+    const multipliers = this.getAttributes().find(attr => attr.id === 'UNIT_MULT').values
+    return this.#cloner.clone(multipliers)
+  }
+
+  /**
    * Get the dates from the data.
    *
    * @returns {Array} dates - Array of date strings

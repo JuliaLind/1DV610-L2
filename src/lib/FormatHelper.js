@@ -3,12 +3,13 @@
  */
 export class FormatHelper {
   #rates
-  #attributes
+  // #attributes
   #ids
   #dates
+  #multipliers
 
   #currentCurrency = null
-  #currentAttr = null
+
   #denominator = null
 
   /**
@@ -21,12 +22,12 @@ export class FormatHelper {
   }
 
   /**
-   * Sets the attributes data.
+   * Sets the multipliers data.
    *
-   * @param {Array} attributes - The attributes data
+   * @param {object[]} multipliers - The multipliers data
    */
-  setAttributes (attributes) {
-    this.#attributes = attributes
+  setMultipliers (multipliers) {
+    this.#multipliers = multipliers
   }
 
   /**
@@ -49,16 +50,18 @@ export class FormatHelper {
 
 
   /**
-   * Calculates the denominator for the current currency's value.
+   * Calculates the denominator to normalize the rate value into units.
    *
-   * @returns {number} - The calculated denominator
+   * @returns {number} - The denominator to normalize the rate value into units
    */
-  #calculateDenominator () {
+  #setDenominator () {
     const multiplierIndex = this.#currentCurrency.attributes[0]
-    const powerOf = Number(this.#currentAttr.values[multiplierIndex].id)
+
+    const powerOf = Number(this.#multipliers[multiplierIndex].id)
 
     this.#denominator = 10 ** powerOf
   }
+
 
   /**
    * Gets the currency ID for a specific currency.
@@ -76,11 +79,12 @@ export class FormatHelper {
    * @returns {object} - merged and normalized observations for the currency rate
    */
   #normalize () {
-    const denominator = this.#calculateDenominator()
+    this.#setDenominator()
+
     const normalized = {}
 
     for (const dateIndex in this.#dates) {
-      normalized[this.#getObservationDate(dateIndex)] = this.#getObservationValue(dateIndex, denominator)
+      normalized[this.#getObservationDate(dateIndex)] = this.#getObservationValue(dateIndex)
     }
 
     return normalized
@@ -93,10 +97,10 @@ export class FormatHelper {
    * @param {number} dateIndex - The index of the date to get the observation value for.
    * @returns {number} - The normalized observation value.
    */
-  #getObservationValue (dateIndex, denominator) {
+  #getObservationValue (dateIndex) {
     const observationValue = Number(this.#currentCurrency.observations[dateIndex][0])
 
-    return Number((observationValue / denominator).toFixed(4))
+    return Number((observationValue / this.#denominator).toFixed(4))
   }
 
   /**

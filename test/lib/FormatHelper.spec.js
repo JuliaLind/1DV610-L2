@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { FormatHelper } from '../../src/lib/FormatHelper.js'
 import { rates } from './mockdata/rates.js'
-import { attributes } from './mockdata/attributes.js'
+import { multipliers } from './mockdata/multipliers.js'
 import { ids } from './mockdata/ids.js'
 import { dates } from './mockdata/dates.js'
 
@@ -17,7 +17,7 @@ describe('FormatHelper', () => {
   it('formatOneCurrency() OK', () => {
     const sut = new FormatHelper()
     sut.setRates(rates)
-    sut.setAttributes(attributes)
+    sut.setMultipliers(multipliers)
     sut.setIds(ids)
     sut.setDates(dates)
     const res = sut.formatOneCurrency(2)

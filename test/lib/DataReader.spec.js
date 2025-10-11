@@ -4,6 +4,7 @@ import { expect } from 'chai'
 import { DataReader } from '../../src/lib/DataReader.js'
 import { readFile } from 'fs/promises'
 import { attributes } from './mockdata/attributes.js'
+import { multipliers } from './mockdata/multipliers.js'
 import { dates } from './mockdata/dates.js'
 import { ids } from './mockdata/ids.js'
 import { rates } from './mockdata/rates.js'
@@ -45,5 +46,13 @@ describe('DataReader', () => {
     const res = sut.getDates()
 
     expect(res).to.deep.equal(dates)
+  })
+
+  it('getMultipliers() OK', () => {
+    const sut = new DataReader()
+    sut.setData(data)
+    const res = sut.getMultipliers()
+
+    expect(res).to.deep.equal(multipliers)
   })
 })

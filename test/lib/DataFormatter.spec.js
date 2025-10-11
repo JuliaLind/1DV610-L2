@@ -6,7 +6,7 @@ import sinonChai from 'sinon-chai'
 import { DataFormatter } from '../../src/lib/DataFormatter.js'
 import { readFile } from 'fs/promises'
 import { rates } from './mockdata/rates.js'
-import { attributes } from './mockdata/attributes.js'
+import { multipliers } from './mockdata/multipliers.js'
 import { ids } from './mockdata/ids.js'
 import { dates } from './mockdata/dates.js'
 
@@ -122,14 +122,14 @@ describe('DataFormatter', () => {
       const reader = {
         setData: sinon.stub(),
         getRates: sinon.stub().returns(rates),
-        getAttributes: sinon.stub().returns(attributes),
+        getMultipliers: sinon.stub().returns(multipliers),
         getIds: sinon.stub().returns(ids),
         getDates: sinon.stub().returns(dates)
       }
 
       const helper = {
         setRates: sinon.stub(),
-        setAttributes: sinon.stub(),
+        setMultipliers: sinon.stub(),
         setIds: sinon.stub(),
         setDates: sinon.stub(),
         getCurrencyId: sinon.stub()
@@ -152,11 +152,11 @@ describe('DataFormatter', () => {
 
       expect(reader.setData).to.have.been.calledOnceWith(dataPeriod)
       expect(reader.getRates).to.have.been.calledOnce
-      expect(reader.getAttributes).to.have.been.calledOnce
+      expect(reader.getMultipliers).to.have.been.calledOnce
       expect(reader.getIds).to.have.been.calledOnce
       expect(reader.getDates).to.have.been.calledOnce
       expect(helper.setRates).to.have.been.calledOnceWith(rates)
-      expect(helper.setAttributes).to.have.been.calledOnceWith(attributes)
+      expect(helper.setMultipliers).to.have.been.calledOnceWith(multipliers)
       expect(helper.setIds).to.have.been.calledOnceWith(ids)
       expect(helper.setDates).to.have.been.calledOnceWith(dates)
       expect(helper.getCurrencyId.callCount).to.equal(4)
