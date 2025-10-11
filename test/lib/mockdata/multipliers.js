@@ -8,4 +8,3 @@ export const multipliers = [
     name: 'Units'
   }
 ]
-

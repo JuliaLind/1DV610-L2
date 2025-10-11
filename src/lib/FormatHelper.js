@@ -46,11 +46,8 @@ export class FormatHelper {
     this.#dates = dates
   }
 
-
   /**
    * Calculates the denominator to normalize the rate value into units.
-   *
-   * @returns {number} - The denominator to normalize the rate value into units
    */
   #setDenominator () {
     const multiplierIndex = this.#currentCurrency.attributes[0]
@@ -59,7 +56,6 @@ export class FormatHelper {
 
     this.#denominator = 10 ** powerOf
   }
-
 
   /**
    * Gets the currency ID for a specific currency.
