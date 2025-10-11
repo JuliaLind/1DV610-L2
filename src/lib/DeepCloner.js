@@ -44,7 +44,7 @@ export class DeepCloner {
     }
 
     if (this.#typeChecker.isArray(any)) {
-      return this.#cloneArr(any)
+      return this.#cloneArray(any)
     }
 
     return this.#cloneObj(any)
@@ -98,7 +98,7 @@ export class DeepCloner {
    * @param {any[]} arr - The array to clone.
    * @returns {any[]} - The cloned array.
    */
-  #cloneArr (arr) {
+  #cloneArray (arr) {
     const clone = []
 
     for (const item of arr) {

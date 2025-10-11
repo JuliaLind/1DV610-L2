@@ -3,13 +3,11 @@
  */
 export class FormatHelper {
   #rates
-  // #attributes
   #ids
   #dates
   #multipliers
 
   #currentCurrency = null
-
   #denominator = null
 
   /**
