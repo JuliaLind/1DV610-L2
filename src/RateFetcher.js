@@ -46,7 +46,7 @@ export class RateFetcher {
    * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
    * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
    */
-  constructor (dependencies = {
+  constructor(dependencies = {
     fetchService: new JsonFetchService(),
     dataFormatter: new DataFormatter()
   }) {
@@ -59,7 +59,7 @@ export class RateFetcher {
    *
    * @param {string[]} currencies - The currencies to fetch rates for
    */
-  setCurrencies (currencies) {
+  setCurrencies(currencies) {
     const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP?attributes=UNIT_MULT`
 
     this.#fetchService.setBaseUrl(baseUrl)
@@ -72,7 +72,7 @@ export class RateFetcher {
    * @param {number} observations - The number of observations to fetch prior to and including the specified date (default is 1).
    * @returns {Promise<object>} - The fetched exchange rates.
    */
-  async fetchByDate (date, observations = 1) {
+  async fetchByDate(date, observations = 1) {
     const queryString = `${this.#params.to(date)}&${this.#params.items(observations)}&${this.#params.json()}`
     const raw = await this.#fetchService.get(queryString)
 
@@ -85,7 +85,7 @@ export class RateFetcher {
    * @param {number} observations - The number of latest observations to fetch (default is 1).
    * @returns {Promise<object>} - The exchange rates from the latest available date.
    */
-  async fetchLatest (observations = 1) {
+  async fetchLatest(observations = 1) {
     const queryString = `${this.#params.items(observations)}&${this.#params.json()}`
     const raw = await this.#fetchService.get(queryString)
 
@@ -99,10 +99,18 @@ export class RateFetcher {
    * @param {string} endDate - The end date of the period.
    * @returns {Promise<object>} - The fetched exchange rates for the period.
    */
-  async fetchByPeriod (startDate, endDate) {
+  async fetchByPeriod(startDate, endDate) {
     const queryString = `${this.#params.from(startDate)}&${this.#params.to(endDate)}&${this.#params.json()}`
     const raw = await this.#fetchService.get(queryString)
 
     return this.#formatter.format(raw)
+  }
+
+  async getAvailableCurrencies(config = {
+    fetcher: new BaseDataFetcher(),
+  }) {
+    const { fetcher } = config
+
+    return await fetcher.getCurrencies()
   }
 }
