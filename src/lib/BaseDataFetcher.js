@@ -13,14 +13,18 @@ export class BaseDataFetcher {
   #cloner
   #reader
 
-  constructor(config = {
-    fetchService: new JsonFetchService(),
-    cloner: new DeepCloner(),
-    reader: new DataReader()
-  }) {
-    this.#fetchService = config.fetchService
-    this.#cloner = config.cloner
-    this.#reader = config.reader
+  /**
+   * Creates an instance of BaseDataFetcher.
+   *
+   * @param {object} dependencies - Configuration object for dependencies
+   * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
+   * @param {DeepCloner} dependencies.cloner - Instance of DeepCloner
+   * @param {DataReader} dependencies.reader - Instance of DataReader
+   */
+  constructor(dependencies) {
+    this.#fetchService = dependencies?.fetchService || new JsonFetchService()
+    this.#cloner = dependencies?.cloner || new DeepCloner()
+    this.#reader = dependencies?.reader || new DataReader()
   }
 
 
@@ -46,23 +50,22 @@ export class BaseDataFetcher {
 
     const raw = await this.#fetchService.fetch(this.#CURRENCY_URL)
     this.#reader.setData(raw)
-    this.#currencies = this.#extractCurrencies(raw, this.#cloner)
+    this.#currencies = this.#extractCurrencies()
   }
 
   /**
    * Extracts available currencies from the API response.
    *
-   * @param {object} data - The API response data
    * @returns {object[]} - An array of available currencies
    */
-  #extractCurrencies (data) {
+  #extractCurrencies () {
     const currencies = this.#reader.extractCurrencies('BASE_CUR')
     const quoteCur = this.#reader.extractCurrencies('QUOTE_CUR')[0]
 
-    currencies.push(quoteCur) // Add NOK as it's not included in the API response
+    currencies.push(quoteCur)
 
     currencies.sort((currency1, currency2) => currency1.id.localeCompare(currency2.id))
-    console.log(currencies)
+
 
     return currencies
   }

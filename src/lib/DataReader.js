@@ -13,11 +13,9 @@ export class DataReader {
    * @param {object} dependencies - Configuration object for dependencies
    * @param {DeepCloner} dependencies.cloner - Instance of DeepCloner
    */
-  constructor (dependencies = {
-    cloner: new DeepCloner()
-  }) {
+  constructor (dependencies) {
     this.#data = {}
-    this.#cloner = dependencies.cloner
+    this.#cloner = dependencies?.cloner || new DeepCloner()
   }
 
   /**

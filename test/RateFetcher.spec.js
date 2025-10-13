@@ -7,16 +7,22 @@ import { readFile } from 'fs/promises'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 
+import { currencies } from './lib/mockdata/currencies.js'
+
+
 use(sinonChai)
 
 describe('RateFetcher', () => {
   let dataPeriod
   let dataSingleDay
+  let currencyData
   before(async () => {
     let raw = await readFile(new URL('./json/period.json', import.meta.url))
     dataPeriod = JSON.parse(raw)
     raw = await readFile(new URL('./json/single-day.json', import.meta.url))
     dataSingleDay = JSON.parse(raw)
+    raw = await readFile(new URL('./json/currencies.json', import.meta.url))
+    currencyData = JSON.parse(raw)
   })
 
   it('fetchByDate() OK', async () => {
@@ -150,4 +156,27 @@ describe('RateFetcher', () => {
     expect(fetchService.get).to.have.been.calledOnceWith(queryString)
     expect(dataFormatter.format).to.have.been.calledOnceWith(dataPeriod)
   })
+
+  it('getAvailableCurrencies() OK', async () => {
+    const baseDataFetcher = {
+      getCurrencies: sinon.stub().resolves([...currencies])
+    }
+
+    const sut = new RateFetcher({ baseDataFetcher })
+    const res = await sut.getAvailableCurrencies()
+    expect(res).to.deep.equal(currencies)
+    expect(baseDataFetcher.getCurrencies).to.have.been.calledOnce
+  })
+
+  it ('getAvailableCurrencies() integration test', async () => {
+    const fetchService = {
+      setBaseUrl: sinon.stub(),
+      fetch: sinon.stub().resolves(currencyData)
+    }
+    const sut = new RateFetcher({ fetchService })
+    const res = await sut.getAvailableCurrencies()
+
+    expect(res).to.deep.equal(currencies)
+  })
+
 })

@@ -18,12 +18,9 @@ export class DataFormatter {
    * @param {DataReader} dependencies.reader - Instance of DataReader
    * @param {FormatHelper} dependencies.helper - Instance of FormatHelper
    */
-  constructor (dependencies = {
-    reader: new DataReader(),
-    helper: new FormatHelper()
-  }) {
-    this.#reader = dependencies.reader
-    this.#helper = dependencies.helper
+  constructor (dependencies) {
+    this.#reader = dependencies?.reader || new DataReader()
+    this.#helper = dependencies?.helper || new FormatHelper()
   }
 
   /**

@@ -17,10 +17,8 @@ export class QuoteConverter {
    * @param {object} dependencies - Configuration object for dependencies
    * @param {RateFetcher} dependencies.fetcher - Instance of RateFetcher
    */
-  constructor (dependencies = {
-    fetcher: new RateFetcher()
-  }) {
-    this.#fetcher = dependencies.fetcher
+  constructor (dependencies) {
+    this.#fetcher = dependencies?.fetcher || new RateFetcher()
   }
 
   /**

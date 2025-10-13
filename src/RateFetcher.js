@@ -1,5 +1,6 @@
 import { JsonFetchService } from './lib/JsonFetchService.js'
 import { DataFormatter } from './lib/DataFormatter.js'
+import { BaseDataFetcher } from './lib/BaseDataFetcher.js'
 
 /**
  * Fetches exchange rates from Norges Bank.
@@ -47,14 +48,10 @@ export class RateFetcher {
    * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
    * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
    */
-  constructor(dependencies = {
-    fetchService: new JsonFetchService(),
-    dataFormatter: new DataFormatter(),
-    baseDataFetcher: new BaseDataFetcher()
-  }) {
-    this.#fetchService = dependencies.fetchService
-    this.#formatter = dependencies.dataFormatter
-    this.#baseDataFetcher = dependencies.baseDataFetcher
+  constructor(dependencies) {
+    this.#fetchService = dependencies?.fetchService || new JsonFetchService()
+    this.#formatter = dependencies?.dataFormatter || new DataFormatter()
+    this.#baseDataFetcher = dependencies?.baseDataFetcher || new BaseDataFetcher()
   }
 
   /**
@@ -116,6 +113,8 @@ export class RateFetcher {
    * @returns {Promise<object[]>} - The available currencies.
    */
   async getAvailableCurrencies() {
-    return await this.#baseDataFetcher.getCurrencies()
+    const currencies = await this.#baseDataFetcher.getCurrencies()
+
+    return currencies
   }
 }

@@ -11,12 +11,8 @@ export class DeepCloner {
    *
    * @param {object} dependencies - Configuration object for dependencies
    */
-  constructor (
-    dependencies = {
-      typeChecker: new TypeChecker()
-    }
-  ) {
-    this.#typeChecker = dependencies.typeChecker
+  constructor (dependencies) {
+    this.#typeChecker = dependencies?.typeChecker || new TypeChecker()
   }
 
   /**

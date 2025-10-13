@@ -18,12 +18,9 @@ export class CurrencyConverter {
    * @param {RateFetcher} dependencies.fetcher - Instance of RateFetcher
    * @param {RateNormalizer} dependencies.normalizer - Instance of RateNormalizer
    */
-  constructor (dependencies = {
-    fetcher: new RateFetcher(),
-    normalizer: new RateNormalizer()
-  }) {
-    this.#fetcher = dependencies.fetcher
-    this.#normalizer = dependencies.normalizer
+  constructor (dependencies) {
+    this.#fetcher = dependencies?.fetcher || new RateFetcher()
+    this.#normalizer = dependencies?.normalizer || new RateNormalizer()
   }
 
   /**

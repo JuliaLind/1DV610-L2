@@ -9,7 +9,6 @@ import { DataReader } from '../../src/lib/DataReader.js'
 
 import { currencies } from './mockdata/currencies.js'
 
-
 use(sinonChai)
 
 describe('BaseDataFetcher', () => {
@@ -19,6 +18,7 @@ describe('BaseDataFetcher', () => {
 
   let cloner = new DeepCloner()
   let reader = new DataReader()
+  let currenciesCopy
 
   before(async () => {
     data = await readFile(new URL('../json/currencies.json', import.meta.url))
@@ -33,7 +33,7 @@ describe('BaseDataFetcher', () => {
     sinon.stub(fetchService, 'fetch')
     sinon.stub(cloner, 'clone')
     sinon.stub(reader, 'setData')
-    sinon.stub(reader, 'extractCurrencies').returns(currencies)
+    sinon.stub(reader, 'extractCurrencies').returns([...currencies])
   })
 
   afterEach(() => {
@@ -41,9 +41,10 @@ describe('BaseDataFetcher', () => {
   })
 
   beforeEach(() => {
+    currenciesCopy = [...currencies]
     fetchService.fetch.resolves(data)
-    cloner.clone.returns(currencies)
-    reader.extractCurrencies.returns(currencies)
+    cloner.clone.returns(currenciesCopy)
+    reader.extractCurrencies.returns(currenciesCopy)
   })
 
   describe('getCurrencies', () => {
@@ -51,10 +52,12 @@ describe('BaseDataFetcher', () => {
       const response = await sut.getCurrencies()
       const baseUrl = 'https://data.norges-bank.no/api/data/EXR/?'
       const currencyUrl = 'apisrc=qb&format=sdmx-json&detail=nodata&attributes=FALSE'
-      expect(response).to.deep.equal(currencies)
+      const currenciesCloned = [...currencies]
+
+      expect(response).to.deep.equal(currenciesCopy)
       expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
       expect(fetchService.fetch).to.have.been.calledOnceWith(currencyUrl)
-      expect(cloner.clone).to.have.been.calledOnceWith(currencies)
+      expect(cloner.clone).to.have.been.calledOnceWith(currenciesCopy)
       expect(reader.setData).to.have.been.calledOnceWith(data)
       expect(reader.extractCurrencies).to.have.been.calledWith('BASE_CUR')
       expect(reader.extractCurrencies).to.have.been.calledWith('QUOTE_CUR')
