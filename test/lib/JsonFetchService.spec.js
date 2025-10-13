@@ -9,6 +9,7 @@ use(sinonChai)
 
 describe('JsonFetchService', () => {
   let fetchStub
+
   before(() => {
     fetchStub = sinon.stub(globalThis, 'fetch')
   })

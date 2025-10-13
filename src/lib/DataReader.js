@@ -85,9 +85,15 @@ export class DataReader {
   getIds () {
     const ids = []
 
-    for (const currency of this.getCurrencies()) {
+    for (const currency of this.extractCurrencies()) {
       ids.push(currency.id)
     }
     return ids
+  }
+
+  extractCurrencies (currencyType = 'BASE_CUR') {
+    const dimensions = this.#data.structure.dimensions.series
+
+    return this.#cloner.clone(dimensions.find(dimension => dimension.id === currencyType).values)
   }
 }

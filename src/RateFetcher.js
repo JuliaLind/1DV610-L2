@@ -7,6 +7,7 @@ import { DataFormatter } from './lib/DataFormatter.js'
 export class RateFetcher {
   #fetchService
   #formatter
+  #baseDataFetcher
 
   #params = {
     /**
@@ -48,10 +49,12 @@ export class RateFetcher {
    */
   constructor(dependencies = {
     fetchService: new JsonFetchService(),
-    dataFormatter: new DataFormatter()
+    dataFormatter: new DataFormatter(),
+    baseDataFetcher: new BaseDataFetcher()
   }) {
     this.#fetchService = dependencies.fetchService
     this.#formatter = dependencies.dataFormatter
+    this.#baseDataFetcher = dependencies.baseDataFetcher
   }
 
   /**
@@ -106,11 +109,13 @@ export class RateFetcher {
     return this.#formatter.format(raw)
   }
 
-  async getAvailableCurrencies(config = {
-    fetcher: new BaseDataFetcher(),
-  }) {
-    const { fetcher } = config
 
-    return await fetcher.getCurrencies()
+  /**
+   * Fetches available currencies from Norges Bank.
+   *
+   * @returns {Promise<object[]>} - The available currencies.
+   */
+  async getAvailableCurrencies() {
+    return await this.#baseDataFetcher.getCurrencies()
   }
 }
