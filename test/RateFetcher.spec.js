@@ -9,7 +9,6 @@ import sinonChai from 'sinon-chai'
 
 import { currencies } from './lib/mockdata/currencies.js'
 
-
 use(sinonChai)
 
 describe('RateFetcher', () => {
@@ -168,7 +167,7 @@ describe('RateFetcher', () => {
     expect(baseDataFetcher.getCurrencies).to.have.been.calledOnce
   })
 
-  it ('getAvailableCurrencies() integration test', async () => {
+  it('getAvailableCurrencies() integration test', async () => {
     const fetchService = {
       setBaseUrl: sinon.stub(),
       fetch: sinon.stub().resolves(currencyData)
@@ -178,5 +177,4 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(currencies)
   })
-
 })
