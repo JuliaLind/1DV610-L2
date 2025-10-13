@@ -20,7 +20,8 @@ This module provides the classes CurrencyConverter, RateFetcher and QuoteConvert
 To use the RateFetcher pass an array with currencies you wish to fetch rates for to the method setCurrencies().  The RateFetcher provids the following methods:
 - fetchByDate() with optional count parameter that determines the number of observations prior to and including the specified date.  If the date is not a bank date, the rates will be fetched from the nearest bankdate perceeding the specified date.  
 - fetchLatest() with optional parameter count that fetches the latest rates  
-- fetchByPeriod() that fetches the rates between and including the two specified dates  
+- fetchByPeriod() that fetches the rates between and including the two specified dates
+- getAvailableCurrencies() that returns an array with currency objects containing currency codes and currency names, sorted alphabetically by currency code (id):
 
  
 
@@ -32,6 +33,20 @@ Fetch exchange rates on 2023-01-01.
 import { RateFetcher } from "@jl225vf/exr"
 
 const fetcher = new RateFetcher()
+
+const currencies = await fetcher.getAvailableCurrencies()
+console.log(currencies)
+//[
+//  { id: 'AUD', name: 'Australian dollar' },
+//  { id: 'BDT', name: 'Bangladeshi taka' },
+//  { id: 'BGN', name: 'Bulgarian lev' },
+//  { id: 'BRL', name: 'Brazilian real' },
+//  ...
+//  { id: 'ZAR', name: 'South African rand' }
+//]
+
+
+
 fetcher.setCurrencies(["USD", "EUR", "GBP"])
 const rates = await fetcher.fetchByDate("2023-01-01")
 
