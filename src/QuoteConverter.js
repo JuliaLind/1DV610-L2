@@ -127,6 +127,10 @@ export class QuoteConverter {
     }
     for (const currency of this.#targetCurrencies) {
       const rate = this.#rates[currency][quote.date]
+
+      if (!rate) {
+        continue // some rates do not have values for all dates, for example RUB
+      }
       calculated[currency] = round(quote.NOK / rate)
     }
     return calculated

@@ -12,6 +12,7 @@ import { currencies } from './lib/mockdata/currencies.js'
 use(sinonChai)
 
 describe('RateFetcher', () => {
+  const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT&'
   let dataPeriod
   let dataSingleDay
   let currencyData
@@ -54,9 +55,6 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
 
-    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT'
-    expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
-
     const queryString = 'endPeriod=2025-09-19&lastNObservations=1&format=sdmx-json'
     expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
     expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
@@ -93,12 +91,39 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
 
-    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT'
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'lastNObservations=1&format=sdmx-json'
     expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
     expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
+  })
+
+  it('fetchLatest() integration test', async () => {
+    const fetchService = {
+      setBaseUrl: sinon.stub(),
+      fetch: sinon.stub().resolves(dataSingleDay)
+    }
+
+    const sut = new RateFetcher({ fetchService })
+
+    const exp = {
+      DKK: {
+        '2025-09-19': 1.5637
+      },
+      PLN: {
+        '2025-09-19': 2.7376
+      },
+      EUR: {
+        '2025-09-19': 11.6705
+      },
+      SEK: {
+        '2025-09-19': 1.0542
+      }
+    }
+
+    const res = await sut.fetchLatest()
+
+    expect(res).to.deep.equal(exp)
   })
 
   it('fetchByPeriod() OK', async () => {
@@ -148,7 +173,6 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
 
-    const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT'
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'startPeriod=2025-02-20&endPeriod=2025-02-26&format=sdmx-json'

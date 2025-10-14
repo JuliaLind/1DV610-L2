@@ -149,16 +149,7 @@ export class CurrencyConverter {
   async #getRatesFromApi () {
     this.#alertIfNotReady()
     this.#assignCurrencies()
-    this.#fetchAndNormalize()
-  }
-
-  /**
-   * Fetches and normalizes exchange rates
-   * from the external API.
-   */
-  async #fetchAndNormalize () {
-    const rates = await this.#fetcher.fetchLatest()
-    this.#normalizer.normalize(rates)
+    this.#fetchRates()
   }
 
   /**
@@ -168,6 +159,15 @@ export class CurrencyConverter {
     this.#fetcher.setCurrencies([this.#baseCurrency, ...this.#targetCurrencies])
     this.#normalizer.setBaseCurrency(this.#baseCurrency)
     this.#normalizer.setTargetCurrencies(this.#targetCurrencies)
+  }
+
+  /**
+   * Fetches latest exchange rates
+   * from the external API.
+   */
+  async #fetchRates () {
+    const rates = await this.#fetcher.fetchLatest()
+    this.#normalizer.normalize(rates)
   }
 
   /**
