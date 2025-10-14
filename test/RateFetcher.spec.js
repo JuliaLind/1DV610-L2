@@ -27,7 +27,7 @@ describe('RateFetcher', () => {
   it('fetchByDate() OK', async () => {
     const fetchService = {
       setBaseUrl: sinon.stub(),
-      get: sinon.stub().resolves(dataSingleDay)
+      fetch: sinon.stub().resolves(dataSingleDay)
     }
 
     const exp = {
@@ -58,14 +58,14 @@ describe('RateFetcher', () => {
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'endPeriod=2025-09-19&lastNObservations=1&format=sdmx-json'
-    expect(fetchService.get).to.have.been.calledOnceWith(queryString)
+    expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
     expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
   })
 
   it('fetchLatest() OK', async () => {
     const fetchService = {
       setBaseUrl: sinon.stub(),
-      get: sinon.stub().resolves(dataSingleDay)
+      fetch: sinon.stub().resolves(dataSingleDay)
     }
 
     const exp = {
@@ -97,14 +97,14 @@ describe('RateFetcher', () => {
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'lastNObservations=1&format=sdmx-json'
-    expect(fetchService.get).to.have.been.calledOnceWith(queryString)
+    expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
     expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
   })
 
   it('fetchByPeriod() OK', async () => {
     const fetchService = {
       setBaseUrl: sinon.stub(),
-      get: sinon.stub().resolves(dataPeriod)
+      fetch: sinon.stub().resolves(dataPeriod)
     }
 
     const exp = {
@@ -152,7 +152,7 @@ describe('RateFetcher', () => {
     expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
 
     const queryString = 'startPeriod=2025-02-20&endPeriod=2025-02-26&format=sdmx-json'
-    expect(fetchService.get).to.have.been.calledOnceWith(queryString)
+    expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
     expect(dataFormatter.format).to.have.been.calledOnceWith(dataPeriod)
   })
 

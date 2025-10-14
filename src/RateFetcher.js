@@ -74,7 +74,7 @@ export class RateFetcher {
    */
   async fetchByDate (date, observations = 1) {
     const queryString = `${this.#params.to(date)}&${this.#params.items(observations)}&${this.#params.json()}`
-    const raw = await this.#fetchService.get(queryString)
+    const raw = await this.#fetchService.fetch(queryString)
 
     return this.#formatter.format(raw)
   }
@@ -87,7 +87,7 @@ export class RateFetcher {
    */
   async fetchLatest (observations = 1) {
     const queryString = `${this.#params.items(observations)}&${this.#params.json()}`
-    const raw = await this.#fetchService.get(queryString)
+    const raw = await this.#fetchService.fetch(queryString)
 
     return this.#formatter.format(raw)
   }
@@ -101,7 +101,7 @@ export class RateFetcher {
    */
   async fetchByPeriod (startDate, endDate) {
     const queryString = `${this.#params.from(startDate)}&${this.#params.to(endDate)}&${this.#params.json()}`
-    const raw = await this.#fetchService.get(queryString)
+    const raw = await this.#fetchService.fetch(queryString)
 
     return this.#formatter.format(raw)
   }
