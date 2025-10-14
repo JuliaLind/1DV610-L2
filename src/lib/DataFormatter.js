@@ -30,10 +30,11 @@ export class DataFormatter {
    */
   #extract (data) {
     this.#reader.setData(data)
-
     const rates = this.#reader.getRates()
+
     this.#rateCount = rates.length
     this.#helper.setRates(rates)
+
     this.#helper.setMultipliers(this.#reader.getMultipliers())
     this.#helper.setIds(this.#reader.getIds())
     this.#helper.setDates(this.#reader.getDates())

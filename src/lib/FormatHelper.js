@@ -77,8 +77,10 @@ export class FormatHelper {
 
     const normalized = {}
 
-    for (const dateIndex in this.#dates) {
-      normalized[this.#getObservationDate(dateIndex)] = this.#getObservationValue(dateIndex)
+    const dateIndeces = Object.keys(this.#currentCurrency.observations)
+
+    for (const index in dateIndeces) {
+      normalized[this.#getObservationDate(dateIndeces[index])] = this.#getObservationValue(index)
     }
 
     return normalized
@@ -92,7 +94,7 @@ export class FormatHelper {
    * @returns {number} - The normalized observation value.
    */
   #getObservationValue (dateIndex) {
-    const observationValue = Number(this.#currentCurrency.observations[dateIndex][0])
+    const observationValue = Number(Object.values(this.#currentCurrency.observations)[dateIndex])
 
     return Number((observationValue / this.#denominator).toFixed(4))
   }
@@ -104,7 +106,7 @@ export class FormatHelper {
    * @returns {string} - The observation date.
    */
   #getObservationDate (dateIndex) {
-    return this.#dates[dateIndex]
+    return this.#dates[Object.keys(this.#dates)[dateIndex]]
   }
 
   /**
