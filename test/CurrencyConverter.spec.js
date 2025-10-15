@@ -1,7 +1,8 @@
-/* global afterEach */
+/* global afterEach, before */
 
 import { expect, use } from 'chai'
-import { CurrencyConverter } from '../src/index.js'
+import { CurrencyConverter, RateFetcher } from '../src/index.js'
+import { readFile } from 'fs/promises'
 
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
@@ -11,6 +12,13 @@ use(sinonChai)
 use(chaiAsPromised)
 
 describe('CurrencyConverter', () => {
+  let data
+
+  before(async () => {
+    const raw = await readFile(new URL('./json/single-day.json', import.meta.url))
+    data = JSON.parse(raw)
+  })
+
   afterEach(() => {
     sinon.restore()
   })
@@ -44,6 +52,28 @@ describe('CurrencyConverter', () => {
     }
 
     const sut = new CurrencyConverter({ fetcher: rateFetcher, normalizer: rateNormalizer })
+    sut.setBaseCurrency('SEK')
+    sut.setTargetCurrencies(['PLN', 'EUR'])
+    const res = await sut.convert(350)
+
+    const exp = {
+      PLN: 134.78,
+      EUR: 31.62
+
+    }
+
+    expect(res).to.deep.equal(exp)
+  })
+
+  it('convert() integration testOK', async () => {
+    const fetchService = {
+      setBaseUrl: sinon.stub(),
+      fetch: sinon.stub().resolves(data)
+    }
+
+    const rateFetcher = new RateFetcher({ fetchService })
+
+    const sut = new CurrencyConverter({ fetcher: rateFetcher })
     sut.setBaseCurrency('SEK')
     sut.setTargetCurrencies(['PLN', 'EUR'])
     const res = await sut.convert(350)
