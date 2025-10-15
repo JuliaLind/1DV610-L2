@@ -24,6 +24,15 @@ export class CurrencyConverter {
   }
 
   /**
+   * Gets the current base currency.
+   *
+   * @returns {string} - The current base currency.
+   */
+  getBaseCurrency () {
+    return this.#baseCurrency
+  }
+
+  /**
    * Sets the base currency for conversion.
    * If the currency is changed, cached rates are cleared.
    *
@@ -38,12 +47,22 @@ export class CurrencyConverter {
   }
 
   /**
-   * Gets the current base currency.
+   * Checks if the base currency has changed.
    *
-   * @returns {string} - The current base currency.
+   * @param {string} newValue - The new base currency.
+   * @returns {boolean} - True if the base currency has changed, false otherwise.
    */
-  getBaseCurrency () {
-    return this.#baseCurrency
+  #isBaseChanged (newValue) {
+    return this.#baseCurrency && this.#baseCurrency !== newValue
+  }
+
+  /**
+   * Gets the current target currencies.
+   *
+   * @returns {string[]} - The current target currencies.
+   */
+  getTargetCurrencies () {
+    return this.#targetCurrencies
   }
 
   /**
@@ -68,25 +87,6 @@ export class CurrencyConverter {
    */
   #isTargetChanged (newValue) {
     return this.#targetCurrencies.length > 0 && !arraysAreEqual(newValue, this.#targetCurrencies)
-  }
-
-  /**
-   * Checks if the base currency has changed.
-   *
-   * @param {string} newValue - The new base currency.
-   * @returns {boolean} - True if the base currency has changed, false otherwise.
-   */
-  #isBaseChanged (newValue) {
-    return this.#baseCurrency && this.#baseCurrency !== newValue
-  }
-
-  /**
-   * Gets the current target currencies.
-   *
-   * @returns {string[]} - The current target currencies.
-   */
-  getTargetCurrencies () {
-    return this.#targetCurrencies
   }
 
   /**
@@ -139,7 +139,7 @@ export class CurrencyConverter {
    */
   async #prepareRates () {
     if (!this.#normalizer.hasCachedRates()) {
-      this.#getRatesFromApi()
+      await this.#getRatesFromApi()
     }
   }
 
@@ -149,7 +149,7 @@ export class CurrencyConverter {
   async #getRatesFromApi () {
     this.#alertIfNotReady()
     this.#assignCurrencies()
-    this.#fetchRates()
+    await this.#fetchRates()
   }
 
   /**
@@ -167,6 +167,7 @@ export class CurrencyConverter {
    */
   async #fetchRates () {
     const rates = await this.#fetcher.fetchLatest()
+
     this.#normalizer.normalize(rates)
   }
 
