@@ -141,7 +141,8 @@ describe('DataFormatter', () => {
           .onCall(0).returns(exrDkk)
           .onCall(1).returns(exrPln)
           .onCall(2).returns(exrEur)
-          .onCall(3).returns(exrSek)
+          .onCall(3).returns(exrSek),
+        countRateSeries: sinon.stub().returns(4)
       }
 
       const sut = new DataFormatter({

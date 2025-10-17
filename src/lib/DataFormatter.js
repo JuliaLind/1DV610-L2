@@ -8,7 +8,6 @@ export class DataFormatter {
   #reader
   #helper
 
-  #rateCount = 0
   #formatted = {}
 
   /**
@@ -30,10 +29,12 @@ export class DataFormatter {
    */
   #extract (data) {
     this.#reader.setData(data)
-    const rates = this.#reader.getRates()
 
-    this.#rateCount = rates.length
-    this.#helper.setRates(rates)
+    this.#prepareHelper()
+  }
+
+  #prepareHelper() {
+    this.#helper.setRates(this.#reader.getRates())
 
     this.#helper.setMultipliers(this.#reader.getMultipliers())
     this.#helper.setIds(this.#reader.getIds())
@@ -44,7 +45,9 @@ export class DataFormatter {
    * Rearrange the data into a more usable structure.
    */
   #normalizeAll () {
-    for (let currencyIndex = 0; currencyIndex < this.#rateCount; currencyIndex++) {
+    const nrOfRateSeries = this.#helper.countRateSeries()
+
+    for (let currencyIndex = 0; currencyIndex < nrOfRateSeries; currencyIndex++) {
       this.#normalizeOne(currencyIndex)
     }
   }

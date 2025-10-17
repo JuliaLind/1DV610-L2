@@ -95,13 +95,7 @@ export class DeepCloner {
    * @returns {any[]} - The cloned array.
    */
   #cloneArray (arr) {
-    const clone = []
-
-    for (const item of arr) {
-      clone.push(this.clone(item))
-    }
-
-    return clone
+    return arr.map(item => this.clone(item))
   }
 
   /**

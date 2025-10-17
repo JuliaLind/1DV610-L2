@@ -19,6 +19,11 @@ export class FormatHelper {
     this.#rates = rates
   }
 
+  countRateSeries () {
+
+    return this.#rates.length
+  }
+
   /**
    * Sets the multipliers data.
    *
