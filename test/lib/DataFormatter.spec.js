@@ -127,27 +127,9 @@ describe('DataFormatter', () => {
         getDates: sinon.stub().returns(dates)
       }
 
-      const helper = {
-        setRates: sinon.stub(),
-        setMultipliers: sinon.stub(),
-        setIds: sinon.stub(),
-        setDates: sinon.stub(),
-        getCurrencyId: sinon.stub()
-          .onCall(0).returns('DKK')
-          .onCall(1).returns('PLN')
-          .onCall(2).returns('EUR')
-          .onCall(3).returns('SEK'),
-        formatOneCurrency: sinon.stub()
-          .onCall(0).returns(exrDkk)
-          .onCall(1).returns(exrPln)
-          .onCall(2).returns(exrEur)
-          .onCall(3).returns(exrSek),
-        countRateSeries: sinon.stub().returns(4)
-      }
 
       const sut = new DataFormatter({
-        reader,
-        helper
+        reader
       })
       const res = sut.format(dataPeriod)
 
@@ -156,12 +138,6 @@ describe('DataFormatter', () => {
       expect(reader.getMultipliers).to.have.been.calledOnce
       expect(reader.getIds).to.have.been.calledOnce
       expect(reader.getDates).to.have.been.calledOnce
-      expect(helper.setRates).to.have.been.calledOnceWith(rates)
-      expect(helper.setMultipliers).to.have.been.calledOnceWith(multipliers)
-      expect(helper.setIds).to.have.been.calledOnceWith(ids)
-      expect(helper.setDates).to.have.been.calledOnceWith(dates)
-      expect(helper.getCurrencyId.callCount).to.equal(4)
-      expect(helper.formatOneCurrency.callCount).to.equal(4)
       expect(res).to.deep.equal({
         DKK: {
           '2025-02-20': 1.5564,
