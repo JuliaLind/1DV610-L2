@@ -34,7 +34,7 @@ export class BaseDataFetcher {
    */
   async getCurrencies () {
     if (this.#currencies.length === 0) {
-      await this.#fetchCurrencies()
+      await this.#setCurrencies()
     }
 
     return this.#cloner.clone(this.#currencies)
@@ -43,12 +43,12 @@ export class BaseDataFetcher {
   /**
    * Fetches currencies from the API and stores them in the instance.
    */
-  async #fetchCurrencies () {
+  async #setCurrencies () {
     this.#fetchService.setBaseUrl(this.#BASE_URL)
 
     const raw = await this.#fetchService.fetch(this.#CURRENCY_URL)
     this.#reader.setData(raw)
-    this.#currencies = this.#getCurrencies()
+    this.#currencies = this.#getSortedCurrencies()
   }
 
   /**
@@ -56,14 +56,12 @@ export class BaseDataFetcher {
    *
    * @returns {object[]} - An array of available currencies
    */
-  #getCurrencies () {
-    const currencies = this.#reader.getCurrencies('BASE_CUR')
-    const quoteCur = this.#reader.getCurrencies('QUOTE_CUR')[0]
+  #getSortedCurrencies () {
+    const currencies = this.#reader.getCurrencies()
+    const copy = [...currencies]
 
-    currencies.push(quoteCur)
+    copy.sort((currency1, currency2) => currency1.id.localeCompare(currency2.id))
 
-    currencies.sort((currency1, currency2) => currency1.id.localeCompare(currency2.id))
-
-    return currencies
+    return copy
   }
 }

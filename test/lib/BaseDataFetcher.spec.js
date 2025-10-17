@@ -60,8 +60,7 @@ describe('BaseDataFetcher', () => {
       expect(fetchService.fetch).to.have.been.calledOnceWith(currencyUrl)
       expect(cloner.clone).to.have.been.calledOnceWith(currenciesCopy)
       expect(reader.setData).to.have.been.calledOnceWith(data)
-      expect(reader.getCurrencies).to.have.been.calledWith('BASE_CUR')
-      expect(reader.getCurrencies).to.have.been.calledWith('QUOTE_CUR')
+      expect(reader.getCurrencies).to.have.been.calledOnce
     })
   })
 })

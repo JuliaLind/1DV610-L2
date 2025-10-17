@@ -77,7 +77,6 @@ export class RateNormalizer {
     }
 
     this.#normalizedRates = normalized
-    console.log(this.#normalizedRates)
   }
 
   /**
@@ -112,7 +111,6 @@ export class RateNormalizer {
    * @returns {object} - The normalized exchange rates.
    */
   getNormalizedRates () {
-    console.log(this.#normalizedRates)
     return { ...this.#normalizedRates }
   }
 }

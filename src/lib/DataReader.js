@@ -97,12 +97,9 @@ export class DataReader {
    * @returns {Array} ids - Array of currency ids, fo example: ['USD', 'EUR']
    */
   getIds () {
-    const ids = []
+    const currencies = this.getCurrencies()
 
-    for (const currency of this.getCurrencies()) {
-      ids.push(currency.id)
-    }
-    return ids
+    return currencies.map(currency => currency.id)
   }
 
   /**
@@ -115,7 +112,7 @@ export class DataReader {
     const dimensions = this.#getDimensions(this.#data.structure)
     const currencyDimensions = this.#getCurrencyDimensions(dimensions.series)
     const currencies = currencyDimensions.map(dimension => dimension.values).flat()
-  
+
     return this.#cloner.clone(currencies)
   }
 

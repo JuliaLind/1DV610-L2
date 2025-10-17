@@ -15,7 +15,6 @@ export const currencies =
   { id: 'HKD', name: 'Hong Kong dollar' },
   { id: 'HRK', name: 'Croatian kuna' },
   { id: 'HUF', name: 'Hungarian forint' },
-  { id: 'HUF', name: 'Hungarian forint' },
   { id: 'I44', name: 'Import-weighted krone exchange rate' },
   { id: 'IDR', name: 'Indonesian rupiah' },
   { id: 'ILS', name: 'Israeli new shekel' },
