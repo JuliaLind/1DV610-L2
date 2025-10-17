@@ -1,3 +1,5 @@
+# Norges Bank Exchange Rate API Adapter
+
 ## About
 
 This package is a school project.  
@@ -5,7 +7,7 @@ The package provides tools for fetching exchange rates and for recalculating amo
 
 To use the package in your projects install with:  
 
-```
+```bash
 npm install @jl225vf/exr   
 
 ```
