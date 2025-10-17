@@ -29,7 +29,7 @@ Example 1:
 
 Fetch exchange rates on 2023-01-01.
 
-```
+```js
 import { RateFetcher } from "@jl225vf/exr"
 
 const fetcher = new RateFetcher()
@@ -62,7 +62,7 @@ Example 2:
 
 Fetch exchange rates between 2023-01-01 and 2023-01-12.
 
-```
+```js
 import { RateFetcher } from "@jl225vf/exr"
 
 
@@ -106,7 +106,7 @@ Example 3:
 
 Coverting 350 SEK to EUR and PLN.
 
-```
+```js
 import { CurrencyConverter } from "@jl225vf/exr"
 
 const converter = new CurrencyCoverter()
@@ -126,7 +126,7 @@ To use the QuoteConverter set the currencies you wish to convert using setTarget
 
 Example 4:
 
-```
+```js
 import { QuoteConverter } from "@jl225vf/exr"
 
 const converter = new QuoteCoverter()
@@ -158,8 +158,9 @@ console.log(converted) // {
 
 ``` 
 
-Example 5:
-```
+Example 5:  
+
+```js
 import { Cloner } from "@jl225vf/exr"
 
 const cloner = new Cloner()
@@ -174,6 +175,11 @@ const original = {
 }
 
 const copy = cloner.deepClone(original)
+console.log(original === copy) // false
+console.log(original.someObj === copy.someObj) // false
+console.log(original.someObj.anArr === original.someObj.anArr) // false
+console.log(original.someNr === copy.someNr) // true
+console.log(original.someObj.anArr[1] === original.someObj.anArr[1]) // true
 ```
 
 ## Testing
@@ -185,18 +191,18 @@ Current code has 100% coverage, latest test report available under https://githu
 1. **Fork** this repository to your GitHub account.
 2. **Clone your fork** (replace `<your-username>`):
 
-```
+```bash
 git clone git@github.com:<your-username>/1DV610-L2.git
 cd 1DV610-L2
 ```
 3. **Install**
-```
+```bash
 npm install
 ```
 
 4. **Create a branch**
 
-```
+```bash
 git checkout -b feat/short-description
 ```
 
@@ -208,7 +214,7 @@ Make sure to fix any linting errors. Please add/adjust tests for any change you 
 
 Push your branch:
 
-```
+```bash
 git push -u origin <branch-name>
 ```
   

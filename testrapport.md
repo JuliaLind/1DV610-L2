@@ -6,11 +6,15 @@ Koden har 100%-if teckning, beräknat med hjälp av C8.
 
 Efter att du klonat ner repot, installera beroenden (testramverk + eslint):  
 
-```npm install```
+```bash
+npm install
+```
 
 Kör därefter testerna med:
 
-```npm run test```
+```bash
+npm run test
+```
 
 ## Test specifikation och kodtäckningsrapport
 
