@@ -35,11 +35,15 @@ export class DataReader {
   getRates () {
     const clonedRates = []
 
-    for (const rate of Object.values(this.#data.dataSets[0].series)) {
+    for (const rate of this.#getRateSeries(this.#data.dataSets)) {
       clonedRates.push(this.#cloner.clone(rate))
     }
 
     return clonedRates
+  }
+
+  #getRateSeries (dataSets) {
+    return Object.values(dataSets[0].series)
   }
 
   /**
