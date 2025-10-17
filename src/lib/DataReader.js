@@ -33,13 +33,8 @@ export class DataReader {
    * @returns {Array} rates - Array of rate objects
    */
   getRates () {
-    const clonedRates = []
-
-    for (const rate of this.#getRateSeries(this.#data.dataSets)) {
-      clonedRates.push(this.#cloner.clone(rate))
-    }
-
-    return clonedRates
+    const rateSeries = this.#getRateSeries(this.#data.dataSets)
+    return rateSeries.map(rate => this.#cloner.clone(rate))
   }
 
   #getRateSeries (dataSets) {
@@ -52,7 +47,13 @@ export class DataReader {
    * @returns {Array} attributes - Array of attribute objects
    */
   getAttributes () {
-    return this.#cloner.clone(this.#data.structure.attributes.series)
+    const attributeSeries = this.#getAttributeSeries(this.#data.structure)
+
+    return this.#cloner.clone(attributeSeries)
+  }
+
+  #getAttributeSeries (structure) {
+    return structure.attributes.series
   }
 
   /**
@@ -61,8 +62,14 @@ export class DataReader {
    * @returns {Array} multipliers - Array of unit multipliers
    */
   getMultipliers () {
-    const multipliers = this.getAttributes().find(attr => attr.id === 'UNIT_MULT').values
-    return this.#cloner.clone(multipliers)
+    const attributes = this.#getAttributeSeries(this.#data.structure)
+    const unitMultiplier = attributes.find(attr => this.#isUnitMultipler(attr))
+
+    return this.#cloner.clone(unitMultiplier.values)
+  }
+
+  #isUnitMultipler(attr) {
+    return attr.id === 'UNIT_MULT'
   }
 
   /**
@@ -71,13 +78,17 @@ export class DataReader {
    * @returns {Array} dates - Array of date strings
    */
   getDates () {
-    const dates = []
+    const dimensions = this.#getDimensions(this.#data.structure)
 
-    for (const obj of this.#data.structure.dimensions.observation[0].values) {
-      dates.push(obj.id)
-    }
+    return this.#getObservationDates(dimensions.observation[0])
+  }
 
-    return dates
+  #getDimensions(structure) {
+    return structure.dimensions
+  }
+
+  #getObservationDates(observationDimension) {
+    return observationDimension.values.map(dateObject => dateObject.id)
   }
 
   /**
@@ -100,9 +111,20 @@ export class DataReader {
    * @param {string} currencyType - The type of currency to get ('BASE_CUR' or 'QUOTE_CUR')
    * @returns {object[]} - An array of currency objects
    */
-  getCurrencies (currencyType = 'BASE_CUR') {
-    const dimensions = this.#data.structure.dimensions.series
+  getCurrencies () {
+    const dimensions = this.#getDimensions(this.#data.structure)
+    const currencyDimensions = this.#getCurrencyDimensions(dimensions.series)
+    const currencies = currencyDimensions.map(dimension => dimension.values).flat()
+  
+    return this.#cloner.clone(currencies)
+  }
 
-    return this.#cloner.clone(dimensions.find(dimension => dimension.id === currencyType).values)
+
+  #getCurrencyDimensions(dimensionSeries) {
+    return dimensionSeries.filter(dimension => this.#isCurrencyDimension(dimension))
+  }
+
+  #isCurrencyDimension(dimension) {
+    return ['BASE_CUR', 'QUOTE_CUR'].includes(dimension.id)
   }
 }

@@ -1,9 +1,9 @@
 {
     "meta": {
-        "id": "IREF862159",
-        "prepared": "2025-10-13T20:10:10",
+        "id": "IREF101422",
+        "prepared": "2025-10-17T14:09:03",
         "test": false,
-        "datasetId": "70ff91f5-9246-4300-9302-7fb1870892a2",
+        "datasetId": "98b5912e-fe28-4d71-88fa-60730b6700ab",
         "sender": {
             "id": "Unknown"
         },
@@ -13,7 +13,7 @@
         "links": [
             {
                 "rel": "self",
-                "href": "/data/EXR?apisrc=qb&attributes=NULL&detail=nodata&format=sdmx-json&includeMetrics=true&locale=no",
+                "href": "/data/EXR?apisrc=qb&attributes=FALSE&detail=nodata&format=sdmx-json&locale=en",
                 "uri": "https://raw.githubusercontent.com/sdmx-twg/sdmx-json/develop/data-message/tools/schemas/1.0/sdmx-json-data-schema.json"
             }
         ]
@@ -28,7 +28,7 @@
                     }
                 ],
                 "reportingBegin": "1960-01-01T00:00:00",
-                "reportingEnd": "2025-10-13T00:00:00",
+                "reportingEnd": "2025-10-17T00:00:00",
                 "action": "Information",
                 "series": {
                     "0:0:0:0": {
@@ -414,83 +414,83 @@
                     "urn": "urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=NB:DSD_EXR(1.0)"
                 }
             ],
-            "name": "Valutakurser",
+            "name": "Exchange rates",
             "names": {
-                "no": "Valutakurser"
+                "en": "Exchange rates"
             },
-            "description": "Norges Banks valutakurser",
+            "description": "Norges Bank exchange rate statistics",
             "descriptions": {
-                "no": "Norges Banks valutakurser"
+                "en": "Norges Bank exchange rate statistics"
             },
             "dimensions": {
                 "dataset": [],
                 "series": [
                     {
                         "id": "FREQ",
-                        "name": "Frekvens",
-                        "description": "Tidsintervallet for observasjoner over en gitt tidsperiode.",
+                        "name": "Frequency",
+                        "description": "The time interval at which observations occur over a given time period.",
                         "keyPosition": 0,
                         "role": null,
                         "values": [
                             {
                                 "id": "B",
-                                "name": "Virkedag",
-                                "description": "Virkedag"
+                                "name": "Business",
+                                "description": "Business"
                             },
                             {
                                 "id": "A",
-                                "name": "Årlig",
-                                "description": "Årlig"
+                                "name": "Annual",
+                                "description": "Annual"
                             },
                             {
                                 "id": "M",
-                                "name": "Månedlig",
-                                "description": "Månedlig"
+                                "name": "Monthly",
+                                "description": "Monthly"
                             }
                         ]
                     },
                     {
                         "id": "BASE_CUR",
-                        "name": "Basisvaluta",
-                        "description": "Første valuta i et valutakvoteringspar. Også kalt transaksjonsvalutaen.",
+                        "name": "Base Currency",
+                        "description": "The first currency in a currency pair quotation. Also known as the transaction currency.",
                         "keyPosition": 1,
                         "role": null,
                         "values": [
                             {
                                 "id": "HUF",
-                                "name": "Ungarske forinter"
+                                "name": "Hungarian forint"
                             },
                             {
                                 "id": "DKK",
-                                "name": "Danske kroner"
+                                "name": "Danish krone"
                             },
                             {
                                 "id": "CZK",
-                                "name": "Tsjekkiske koruna"
+                                "name": "Czech koruna"
                             },
                             {
                                 "id": "CAD",
-                                "name": "Kanadiske dollar"
+                                "name": "Canadian dollar"
                             },
                             {
                                 "id": "BRL",
-                                "name": "Brasilianske real"
+                                "name": "Brazilian real"
                             },
                             {
                                 "id": "VND",
-                                "name": "Vietnamesiske dong"
+                                "name": "Vietnamese dong"
                             },
                             {
                                 "id": "BYN",
-                                "name": "Belarusiske nye rubler"
+                                "name": "Belarusian new rouble"
                             },
                             {
                                 "id": "TWI",
-                                "name": "Industriens effektive valutakurs"
+                                "name": "Trade-weighted krone exchange rate"
                             },
                             {
                                 "id": "TWD",
-                                "name": "Nye taiwanske dollar"
+                                "name": "New Taiwan dollar"
                             },
                             {
                                 "id": "SGD",
@@ -498,15 +498,15 @@
                             },
                             {
                                 "id": "SEK",
-                                "name": "Svenske kroner"
+                                "name": "Swedish krona"
                             },
                             {
                                 "id": "RUB",
-                                "name": "Russiske rubler"
+                                "name": "Russian rouble"
                             },
                             {
                                 "id": "PHP",
-                                "name": "Filippinske peso"
+                                "name": "Philippine peso"
                             },
                             {
                                 "id": "MMK",
@@ -514,27 +514,27 @@
                             },
                             {
                                 "id": "KRW",
-                                "name": "Sørkoreanske won"
+                                "name": "South Korean won"
                             },
                             {
                                 "id": "XDR",
-                                "name": "IMF Spesielle trekkrettigheter"
+                                "name": "IMF, special drawing rights"
                             },
                             {
                                 "id": "IDR",
-                                "name": "Indonesiske rupiah"
+                                "name": "Indonesian rupiah"
                             },
                             {
                                 "id": "ILS",
-                                "name": "Ny israelsk shekel"
+                                "name": "Israeli new shekel"
                             },
                             {
                                 "id": "TRY",
-                                "name": "Tyrkiske lira"
+                                "name": "Turkish lira"
                             },
                             {
                                 "id": "GBP",
-                                "name": "Britiske pund"
+                                "name": "Pound sterling"
                             },
                             {
                                 "id": "HKD",
@@ -542,15 +542,15 @@
                             },
                             {
                                 "id": "RON",
-                                "name": "Ny rumenske leu"
+                                "name": "New Romanian leu"
                             },
                             {
                                 "id": "CNY",
-                                "name": "Kinesiske yuan"
+                                "name": "Chinese yuan"
                             },
                             {
                                 "id": "PKR",
-                                "name": "Pakistanske rupi"
+                                "name": "Pakistani rupee"
                             },
                             {
                                 "id": "NZD",
@@ -558,11 +558,11 @@
                             },
                             {
                                 "id": "MXN",
-                                "name": "Meksikanske peso"
+                                "name": "Mexican peso"
                             },
                             {
                                 "id": "JPY",
-                                "name": "Japanske yen"
+                                "name": "Japanese yen"
                             },
                             {
                                 "id": "BDT",
@@ -570,27 +570,27 @@
                             },
                             {
                                 "id": "USD",
-                                "name": "Amerikanske dollar"
+                                "name": "US dollar"
                             },
                             {
                                 "id": "THB",
-                                "name": "Thailandske baht"
+                                "name": "Thai baht"
                             },
                             {
                                 "id": "INR",
-                                "name": "Indiske rupi"
+                                "name": "Indian rupee"
                             },
                             {
                                 "id": "PLN",
-                                "name": "Polske zloty"
+                                "name": "Polish zloty"
                             },
                             {
                                 "id": "AUD",
-                                "name": "Australske dollar"
+                                "name": "Australian dollar"
                             },
                             {
                                 "id": "MYR",
-                                "name": "Malaysiske ringgit"
+                                "name": "Malaysian ringgit"
                             },
                             {
                                 "id": "EUR",
@@ -598,47 +598,47 @@
                             },
                             {
                                 "id": "CHF",
-                                "name": "Sveitsiske franc"
+                                "name": "Swiss franc"
                             },
                             {
                                 "id": "BGN",
-                                "name": "Bulgarske lev"
+                                "name": "Bulgarian lev"
                             },
                             {
                                 "id": "HRK",
-                                "name": "Kroatiske kuna"
+                                "name": "Croatian kuna"
                             },
                             {
                                 "id": "I44",
-                                "name": "Importveid kursindeks"
+                                "name": "Import-weighted krone exchange rate"
                             },
                             {
                                 "id": "ISK",
-                                "name": "Islandske kroner"
+                                "name": "Icelandic krona"
                             },
                             {
                                 "id": "ZAR",
-                                "name": "Sørafrikanske rand"
+                                "name": "South African rand"
                             }
                         ]
                     },
                     {
                         "id": "QUOTE_CUR",
-                        "name": "Kvoteringsvaluta",
-                        "description": "Den andre valutaen i et valutakvoteringspar. Også kjent som motvaluta.",
+                        "name": "Quote Currency",
+                        "description": "The second currency in a currency quote pair. Also known as counter currency.",
                         "keyPosition": 2,
                         "role": null,
                         "values": [
                             {
                                 "id": "NOK",
-                                "name": "Norske kroner"
+                                "name": "Norwegian krone"
                             }
                         ]
                     },
                     {
                         "id": "TENOR",
-                        "name": "Løpetid",
-                        "description": "Mengde tid igjen inntil tilbakebetaling av et lån eller en finansiell kontrakt utløper.",
+                        "name": "Tenor",
+                        "description": "The amount of time left for the repayment of a loan or until a financial contract expires.",
                         "keyPosition": 3,
                         "role": null,
                         "values": [
@@ -652,8 +652,8 @@
                 "observation": [
                     {
                         "id": "TIME_PERIOD",
-                        "name": "Tidsperiode",
-                        "description": "Tidsperioden eller tidspunktet for den målte observasjonen.",
+                        "name": "Time Period",
+                        "description": "The period of time or point in time to which the measured observation refers.",
                         "keyPosition": 4,
                         "role": "time",
                         "values": []

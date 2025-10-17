@@ -1,4 +1,5 @@
-export const currencies = [
+export const currencies =
+[
   { id: 'AUD', name: 'Australian dollar' },
   { id: 'BDT', name: 'Bangladeshi taka' },
   { id: 'BGN', name: 'Bulgarian lev' },
@@ -13,6 +14,7 @@ export const currencies = [
   { id: 'GBP', name: 'Pound sterling' },
   { id: 'HKD', name: 'Hong Kong dollar' },
   { id: 'HRK', name: 'Croatian kuna' },
+  { id: 'HUF', name: 'Hungarian forint' },
   { id: 'HUF', name: 'Hungarian forint' },
   { id: 'I44', name: 'Import-weighted krone exchange rate' },
   { id: 'IDR', name: 'Indonesian rupiah' },

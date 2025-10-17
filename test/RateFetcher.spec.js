@@ -12,7 +12,7 @@ import { currencies } from './lib/mockdata/currencies.js'
 use(sinonChai)
 
 describe('RateFetcher', () => {
-  const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT&'
+  const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT&locale=en&'
   let dataPeriod
   let dataSingleDay
   let currencyData
