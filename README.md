@@ -48,9 +48,11 @@ console.log(currencies)
 //]
 
 
-
-fetcher.setCurrencies(["USD", "EUR", "GBP"])
-const rates = await fetcher.fetchByDate("2023-01-01")
+const params = {
+    currencies: ["USD", "EUR", "GBP"],
+    date: '2023-01-01'
+}
+const rates = await fetcher.fetchByDate(params)
 
 console.log(rates) // {
                    //    USD: { '2022-12-30': 9.8573 },
@@ -69,8 +71,12 @@ import { RateFetcher } from "@jl225vf/exr"
 
 
 const fetcher = new RateFetcher()
-fetcher.setCurrencies(["EUR", "SEK"])
-const rates = await fetcher.fetchByPeriod("2023-01-01", "2023-01-12")
+const params = {
+    currencies: ['EUR', 'SEK']
+    from: '2023-01-01',
+    to: '2023-01-12'
+}
+const rates = await fetcher.fetchByPeriod(params)
 
 console.log(rates) // {
                    //   EUR: {

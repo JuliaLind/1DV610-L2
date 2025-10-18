@@ -23,7 +23,7 @@ export class RateFetcher {
   /**
    * Fetch exchange rates by date.
    *
-   * @param {object} reqParams - The request parameter s
+   * @param {object} reqParams - The request parameters
    * @param {string[]} reqParams.currencies - The list of currency codes to fetch rates for.
    * @param {string} reqParams.date - The specific date to fetch rates for.
    * @param {number} observations - The number of observations to fetch prior to and including the specified date (default is 1).
