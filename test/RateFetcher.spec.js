@@ -7,7 +7,7 @@ import { readFile } from 'fs/promises'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 
-import { currencies } from './lib/mockdata/currencies.js'
+import { currencies } from './mockdata/currencies.js'
 
 use(sinonChai)
 
