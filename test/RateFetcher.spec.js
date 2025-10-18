@@ -116,7 +116,7 @@ describe('RateFetcher', () => {
     expect(res).to.deep.equal(exp)
   })
 
-    it('fetchLatest() 5 observations integration OK', async () => {
+  it('fetchLatest() 5 observations integration OK', async () => {
     fetchStub.resolves({
       /**
        * Mocked fetch response.
@@ -164,8 +164,6 @@ describe('RateFetcher', () => {
 
     expect(res).to.deep.equal(exp)
   })
-
-  
 
   it('fetchByPeriod() OK', async () => {
     fetchStub.resolves({

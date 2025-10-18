@@ -1,7 +1,7 @@
 /* global afterEach, before */
 
 import { expect, use } from 'chai'
-import { CurrencyConverter} from '../src/index.js'
+import { CurrencyConverter } from '../src/index.js'
 import { readFile } from 'fs/promises'
 
 import sinon from 'sinon'
