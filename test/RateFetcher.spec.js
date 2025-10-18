@@ -1,4 +1,4 @@
-/* global before */
+/* global before after */
 
 import { expect, use } from 'chai'
 import { RateFetcher } from '../src/index.js'
@@ -59,7 +59,6 @@ describe('RateFetcher', () => {
        */
       json: () => Promise.resolve(dataSingleDay)
     })
-
 
     const exp = {
       DKK: {

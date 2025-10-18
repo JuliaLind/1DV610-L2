@@ -24,7 +24,7 @@ describe('JsonFetchService', () => {
 
   before(async () => {
     fetchStub = sinon.stub(globalThis, 'fetch')
-    let raw = await readFile(new URL('../../json/period.json', import.meta.url))
+    const raw = await readFile(new URL('../../json/period.json', import.meta.url))
     dataPeriod = JSON.parse(raw)
   })
 
@@ -34,7 +34,6 @@ describe('JsonFetchService', () => {
 
   it('fetch() OK', async () => {
     const sut = new JsonFetchService()
-
 
     fetchStub.resolves({
       /**

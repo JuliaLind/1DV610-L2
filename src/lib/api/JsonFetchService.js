@@ -7,7 +7,7 @@ export class JsonFetchService {
   /**
    * Makes a GET request to the API endpoint.
    *
-   * @param {string} queryString - The query string to include in the request.
+   * @param {string} url - The API endpoint URL.
    * @returns {Promise<object>} - The JSON response from the API.
    */
   async fetch (url) {
@@ -38,8 +38,6 @@ export class JsonFetchService {
     const jsonResponse = await response.json()
 
     this.#checkStatus(jsonResponse)
-
-
 
     return jsonResponse
   }

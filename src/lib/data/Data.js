@@ -14,9 +14,9 @@ export class Data {
   /**
    * Creates a new data instance.
    *
-   * @param {object} data - the data from the API response 
+   * @param {object} data - the data from the API response
    */
-  constructor(data) {
+  constructor (data) {
     this.#structure = new Structure(data.structure)
     this.#dataSet = new DataSet(data.dataSets[0])
   }
@@ -24,9 +24,9 @@ export class Data {
   /**
    * Gets all currencies.
    *
-   * @returns {array} - a list with all currencies
+   * @returns {Array} - a list with all currencies
    */
-  getCurrencies() {
+  getCurrencies () {
     const currencies = this.#structure.getAllCurrencies()
 
     currencies.sort((currency1, currency2) => this.#sortById(currency1, currency2))
@@ -42,7 +42,7 @@ export class Data {
    * @param {object} currency2 - another currency
    * @returns {number} - the comparison result
    */
-  #sortById(currency1, currency2) {
+  #sortById (currency1, currency2) {
     return currency1.id.localeCompare(currency2.id)
   }
 
@@ -51,7 +51,7 @@ export class Data {
    *
    * @returns {object} - exchange rates
    */
-  getRates() {
+  getRates () {
     if (Object.keys(this.#rates).length === 0) {
       this.#formatAll()
     }
@@ -62,7 +62,7 @@ export class Data {
   /**
    * Rearrange the data into a more usable structure.
    */
-  #formatAll() {
+  #formatAll () {
     const rateSeriesCount = this.#dataSet.countSeries()
 
     for (let currencyIndex = 0; currencyIndex < rateSeriesCount; currencyIndex++) {
@@ -75,7 +75,7 @@ export class Data {
    *
    * @param {number} currencyIndex - The index of the currency to format.
    */
-  #formatOne(currencyIndex) {
+  #formatOne (currencyIndex) {
     const currencyRates = this.#dataSet.getOneRateSeries(currencyIndex)
 
     const currency = new Currency({

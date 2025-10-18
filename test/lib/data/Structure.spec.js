@@ -3,7 +3,6 @@
 import { expect } from 'chai'
 import { Structure } from '../../../src/lib/data/Structure.js'
 import { readFile } from 'fs/promises'
-import { attributes } from '../../mockdata/attributes.js'
 import { multipliers } from '../../mockdata/multipliers.js'
 import { dates } from '../../mockdata/dates.js'
 import { ids } from '../../mockdata/ids.js'
@@ -21,8 +20,8 @@ describe('Structure', () => {
     const res = sut.getBaseCurrency()
 
     expect(res).to.deep.equal({
-      "id": "NOK",
-      "name": "Norwegian krone"
+      id: 'NOK',
+      name: 'Norwegian krone'
     })
   })
 
@@ -31,20 +30,20 @@ describe('Structure', () => {
     const res = sut.getTargetCurrencies()
     expect(res).to.deep.equal([
       {
-        "id": "DKK",
-        "name": "Danish krone"
+        id: 'DKK',
+        name: 'Danish krone'
       },
       {
-        "id": "PLN",
-        "name": "Polish zloty"
+        id: 'PLN',
+        name: 'Polish zloty'
       },
       {
-        "id": "EUR",
-        "name": "Euro"
+        id: 'EUR',
+        name: 'Euro'
       },
       {
-        "id": "SEK",
-        "name": "Swedish krona"
+        id: 'SEK',
+        name: 'Swedish krona'
       }
     ])
   })
@@ -56,24 +55,24 @@ describe('Structure', () => {
     expect(res).to.deep.equal(
       [
         {
-          "id": "DKK",
-          "name": "Danish krone"
+          id: 'DKK',
+          name: 'Danish krone'
         },
         {
-          "id": "PLN",
-          "name": "Polish zloty"
+          id: 'PLN',
+          name: 'Polish zloty'
         },
         {
-          "id": "EUR",
-          "name": "Euro"
+          id: 'EUR',
+          name: 'Euro'
         },
         {
-          "id": "SEK",
-          "name": "Swedish krona"
+          id: 'SEK',
+          name: 'Swedish krona'
         },
         {
-          "id": "NOK",
-          "name": "Norwegian krone"
+          id: 'NOK',
+          name: 'Norwegian krone'
         }
       ]
     )

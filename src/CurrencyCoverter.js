@@ -204,11 +204,11 @@ export class CurrencyConverter {
   /**
    * Checks if the new target currencies are the same as the current ones.
    *
-   * @param {array} initialCurrencies - array of the initial target currencies
-   * @param {array} newCurrencies - array of the new target currencies
+   * @param {Array} initialCurrencies - array of the initial target currencies
+   * @param {Array} newCurrencies - array of the new target currencies
    * @returns {boolean} - whether the two arrays contain the same currencies
    */
-  #hasSameCurrencies(initialCurrencies, newCurrencies) {
-     return JSON.stringify([...initialCurrencies].sort()) === JSON.stringify([...newCurrencies].sort())
+  #hasSameCurrencies (initialCurrencies, newCurrencies) {
+    return JSON.stringify([...initialCurrencies].sort()) === JSON.stringify([...newCurrencies].sort())
   }
 }

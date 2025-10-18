@@ -58,8 +58,6 @@ export class Currency {
   /**
    * Formats the observations for the currency,
    * by merging dates with multiplier adjusted observations.
-   *
-   * @returns {object} - The formatted observations.
    */
   #format () {
     this.#setDenominator()

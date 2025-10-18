@@ -10,4 +10,3 @@ export const round = (value, decimals = 2) => {
 
   return Number(adjValue.toFixed(decimals))
 }
-

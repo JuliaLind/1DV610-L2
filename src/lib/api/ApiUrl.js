@@ -1,3 +1,6 @@
+/**
+ * Class that builds API URLs for fetching exchange rate data.
+ */
 export class ApiUrl {
   #baseUrl = 'https://data.norges-bank.no/api/data/EXR/'
 
@@ -29,6 +32,13 @@ export class ApiUrl {
 
   #alwaysParams = 'attributes=UNIT_MULT&locale=en&format=sdmx-json'
 
+  /**
+   * Gets the URL for fetching exchange rates.
+   *
+   * @param {Array<string>} currencies - list of currency codes to fetch rates for
+   * @param {object} options - additional query parameters for the request
+   * @returns {string} - The exchange rate request URL
+   */
   getRateRequestUrl (currencies, options = {}) {
     const currencyPart = `B.${currencies.join('+')}.NOK.SP?`
     const variablePart = Object.entries(options)
@@ -38,8 +48,12 @@ export class ApiUrl {
     return `${this.#baseUrl}${currencyPart}${variablePart}&${this.#alwaysParams}`
   }
 
+  /**
+   * Gets the URL for fetching currency information.
+   *
+   * @returns {string} - The currency information request URL
+   */
   getCurrencyRequestUrl () {
     return `${this.#baseUrl}?apisrc=qb&detail=nodata&${this.#alwaysParams}`
   }
-
 }
