@@ -18,7 +18,7 @@ export class Structure {
     /**
      * Creates an instance of Structure.
      *
-     * @param {object} data - the data returned by API, to extract structure from 
+     * @param {object} data - the structure part of data returned by API, to extract structure from 
      * @param {object} dependencies - the dependencies to be used by the class
      */
     constructor(data, dependencies) {
@@ -33,7 +33,7 @@ export class Structure {
     /**
      * Sets the base currency from the API data.
      *
-     * @param {object} data - the data returned by API, to extract base currency from
+     * @param {object} data - the structure part of data returned by API, to extract base currency from
      */
     #setBaseCurrency(data) {
         this.#baseCurrency = data.dimensions.series.find(dimension => this.#isBaseCurrency(dimension)).values
@@ -52,7 +52,7 @@ export class Structure {
     /**
      * Sets the target currencies from the API data.
      *
-     * @param {object} data - the data returned by API, to extract target currencies from
+     * @param {object} data - the structure part of data returned by API, to extract target currencies from
      */
     #setTargetCurrencies(data) {
         this.#targetCurrencies = data.dimensions.series.find(dimension => this.#isTargetCurrency(dimension)).values
@@ -92,7 +92,7 @@ export class Structure {
      * Unitmultipliers are used to scale the rates to their correct values,
      * for example one currency rate might be given per 100 units of base currency.
      *
-     * @param {object} data - the data returned by API, to extract unit multipliers from
+     * @param {object} data - the structure part of data returned by API, to extract unit multipliers from
      */
     #setUnitMultipliers(data) {
         this.#unitMultipliers = data.attributes.series.find(dimension => this.#isUnitMultipler(dimension)).values
@@ -111,7 +111,7 @@ export class Structure {
     /**
      * Sets the dates from the API data.
      *
-     * @param {object} data - the data returned by API, to extract dates from
+     * @param {object} data - the structure part of data returned by API, to extract dates from
      */
     #setDates(data) {
         this.#dates = data.dimensions.observation[0].values.map(dateObject => dateObject.id)
