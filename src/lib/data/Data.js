@@ -24,6 +24,18 @@ export class Data {
     return this.#rates
   }
 
+  getCurrencies () {
+    const currencies = this.#dataSet.getAllCurrencies()
+
+    currencies.sort((currency1, currency2) => this.#sortById(currency1, currency2))
+
+    return currencies
+  }
+
+  #sortById (currency1, currency2) {
+    return currency1.id.localeCompare(currency2.id)
+  }
+
   /**
    * Rearrange the data into a more usable structure.
    */

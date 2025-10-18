@@ -1,6 +1,5 @@
 import { RateFetcher } from './RateFetcher.js'
 import { RateNormalizer } from './lib/RateNormalizer.js'
-import { round, arraysAreEqual } from './lib/functions.js'
 
 /**
  * Manages conversion between currencies
@@ -86,7 +85,7 @@ export class CurrencyConverter {
    * @returns {boolean} - True if the target currencies have changed, false otherwise.
    */
   #isTargetChanged (newValue) {
-    return this.#targetCurrencies.length > 0 && !arraysAreEqual(newValue, this.#targetCurrencies)
+    return this.#targetCurrencies.length > 0 && !this.#hasSameCurrencies(newValue, this.#targetCurrencies)
   }
 
   /**
@@ -198,5 +197,9 @@ export class CurrencyConverter {
     }
 
     return converted
+  }
+
+  #hasSameCurrencies(initialCurrencies, newCurrencies) {
+     return JSON.stringify([...initialCurrencies].sort()) === JSON.stringify([...newCurrencies].sort())
   }
 }

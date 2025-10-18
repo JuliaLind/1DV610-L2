@@ -14,7 +14,7 @@ export class RateNormalizer {
    *
    * @param {string} value - The currency code to set as the base currency.
    */
-  setBaseCurrency (value) {
+  setBaseCurrency(value) {
     this.#baseCurrency = value
   }
 
@@ -23,14 +23,14 @@ export class RateNormalizer {
    *
    * @returns {string} - The current base currency.
    */
-  getBaseCurrency () {
+  getBaseCurrency() {
     return this.#baseCurrency
   }
 
   /**
    * Resets the cached normalized rates.
    */
-  reset () {
+  reset() {
     this.#normalizedRates = {}
   }
 
@@ -39,7 +39,7 @@ export class RateNormalizer {
    *
    * @returns {boolean} - True if normalized rates are cached, false otherwise.
    */
-  hasCachedRates () {
+  hasCachedRates() {
     return Object.keys(this.#normalizedRates).length > 0
   }
 
@@ -48,7 +48,7 @@ export class RateNormalizer {
    *
    * @param {string[]} values - The currency codes to set as target currencies.
    */
-  setTargetCurrencies (values) {
+  setTargetCurrencies(values) {
     this.#targetCurrencies = values
   }
 
@@ -57,7 +57,7 @@ export class RateNormalizer {
    *
    * @returns {string[]} - The current target currencies.
    */
-  getTargetCurrencies () {
+  getTargetCurrencies() {
     return [...this.#targetCurrencies]
   }
 
@@ -66,7 +66,7 @@ export class RateNormalizer {
    *
    * @param {object} rates - The fetched exchange rates.
    */
-  normalize (rates) {
+  normalize(rates) {
     const baseRate = Object.values(rates[this.#baseCurrency])[0]
     const normalized = {}
 
@@ -79,6 +79,16 @@ export class RateNormalizer {
     this.#normalizedRates = normalized
   }
 
+
+  /**
+   * Returns the normalized exchange rates.
+   *
+   * @returns {object} - The normalized exchange rates.
+   */
+  getNormalizedRates() {
+    return { ...this.#normalizedRates }
+  }
+
   /**
    * Normalizes a single exchange rate based on the base rate.
    *
@@ -86,7 +96,7 @@ export class RateNormalizer {
    * @param  {number} baseRate - The base currency rate.
    * @returns {number} - The normalized target exchange rate.
    */
-  #normalizeOne (targetRate, baseRate) {
+  #normalizeOne(targetRate, baseRate) {
     return round(targetRate / baseRate, 4)
   }
 
@@ -97,20 +107,11 @@ export class RateNormalizer {
    * @param  {object} rates - The fetched exchange rates.
    * @returns {number} - The target exchange rate.
    */
-  #getTargetRate (currency, rates) {
+  #getTargetRate(currency, rates) {
     if (currency === this.#ORIGINAL_BASE) {
       return 1
     }
 
     return Object.values(rates[currency])[0]
-  }
-
-  /**
-   * Returns the normalized exchange rates.
-   *
-   * @returns {object} - The normalized exchange rates.
-   */
-  getNormalizedRates () {
-    return { ...this.#normalizedRates }
   }
 }

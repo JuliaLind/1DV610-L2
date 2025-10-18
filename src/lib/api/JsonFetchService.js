@@ -1,27 +1,18 @@
+import Data from '../data/Data.js'
+
 /**
  * Fetches JSON data from a specified API endpoint.
  */
 export class JsonFetchService {
-  #baseUrl
-
-  /**
-   * Sets the base URL for the API requests.
-   *
-   * @param {string} baseUrl - The base URL to use for API requests.
-   */
-  setBaseUrl (baseUrl='https://data.norges-bank.no/api/data/EXR/') {
-    this.#baseUrl = baseUrl
-  }
-
   /**
    * Makes a GET request to the API endpoint.
    *
    * @param {string} queryString - The query string to include in the request.
    * @returns {Promise<object>} - The JSON response from the API.
    */
-  async fetch (queryString) {
+  async fetch (url) {
     try {
-      return await this.#fetchJson(`${this.#baseUrl}${queryString}`)
+      return new Data(await this.#fetchJson(url))
     } catch (error) {
       throw new Error('Error fetching data:', error)
     }
@@ -46,7 +37,7 @@ export class JsonFetchService {
 
     this.#checkStatus(jsonResponse)
 
-    return jsonResponse
+    return jsonResponse.data
   }
 
   /**

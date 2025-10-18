@@ -39,7 +39,7 @@ export class QuoteConverter {
    */
   async convert (quotes) {
     this.#setQuotes(quotes)
-    await this.#prep()
+    await this.#prepare()
 
     return this.#convertAll()
   }
@@ -70,7 +70,7 @@ export class QuoteConverter {
    *
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
-  async #prep () {
+  async #prepare () {
     this.#alertIfNotReady()
     await this.#fetchRates()
   }

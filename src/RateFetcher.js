@@ -1,69 +1,23 @@
-import { JsonFetchService } from './lib/JsonFetchService.js'
-import { Data } from './lib/Data.js'
-// import { BaseDataFetcher } from './lib/CurrencyFetcher.js'
+import { JsonFetchService } from './lib/api/JsonFetchService.js'
+import { ApiUrl } from './lib/api/ApiUrl.js'
 
 /**
  * Fetches exchange rates from Norges Bank.
  */
 export class RateFetcher {
   #fetchService
-  #formatter
-  #currencyFetcher
-  #data
-
-  #params = {
-    /**
-     * Gets the query parameter for number of items to fetch.
-     *
-     * @param {number} count - The number of observations to fetch from the end
-     * @returns {string} - The nr of items query parameter
-     */
-    items: (count) => 'lastNObservations=' + count,
-
-    /**
-     * Gets the query parameter for JSON format.
-     *
-     * @returns {string} - The JSON format query parameter
-     */
-    json: () => 'format=sdmx-json',
-    /**
-     * Gets the query parameter for the from date.
-     *
-     * @param {string} date - The start date
-     * @returns {string} - The start date query parameter
-     */
-    from: (date) => 'startPeriod=' + date,
-    /**
-     * Gets the query parameter for the to date.
-     *
-     * @param {string} date - The end date
-     * @returns {string} - The end date query parameter
-     */
-    to: (date) => 'endPeriod=' + date
-  }
+  #apiUrl
 
   /**
    * Creates an instance of RateService.
    *
    * @param {object} dependencies - Configuration object for dependencies
-   * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
-  //  * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
+   * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService - handles JSON fetching
+   * @param {ApiUrl} dependencies.apiUrl - Instance of ApiUrl - constructs API request URLs
    */
-  constructor (dependencies) {
+  constructor(dependencies) {
     this.#fetchService = dependencies?.fetchService || new JsonFetchService()
-    // this.#formatter = dependencies?.dataFormatter || new DataFormatter()
-    this.#currencyFetcher = dependencies?.currencyFetcher || new CurrencyFetcher()
-  }
-
-  /**
-   * Sets the currencies to fetch rates for.
-   *
-   * @param {string[]} currencies - The currencies to fetch rates for
-   */
-  setCurrencies (currencies) {
-    const baseUrl = `https://data.norges-bank.no/api/data/EXR/B.${currencies.join('+')}.NOK.SP?attributes=UNIT_MULT&locale=en&`
-
-    this.#fetchService.setBaseUrl(baseUrl)
+    this.#apiUrl = dependencies?.apiUrl || new ApiUrl()
   }
 
   /**
@@ -73,11 +27,16 @@ export class RateFetcher {
    * @param {number} observations - The number of observations to fetch prior to and including the specified date (default is 1).
    * @returns {Promise<object>} - The fetched exchange rates.
    */
-  async fetchByDate (date, observations = 1) {
-    const queryString = `${this.#params.to(date)}&${this.#params.items(observations)}&${this.#params.json()}`
-    const raw = await this.#fetchService.fetch(queryString)
+  async fetchByDate(reqParams, observations = 1) {
+    const url = this.#apiUrl.getRateRequestUrl(
+      reqParams.currencies,
+      {
+        to: reqParams.date,
+        observations
+      })
+    const data = await this.#fetchService.fetch(url)
 
-    return this.#formatter.format(raw)
+    return data.getRates()
   }
 
   /**
@@ -86,11 +45,15 @@ export class RateFetcher {
    * @param {number} observations - The number of latest observations to fetch (default is 1).
    * @returns {Promise<object>} - The exchange rates from the latest available date.
    */
-  async fetchLatest (observations = 1) {
-    const queryString = `${this.#params.items(observations)}&${this.#params.json()}`
-    const raw = await this.#fetchService.fetch(queryString)
+  async fetchLatest(reqParams, observations = 1) {
+    const url = this.#apiUrl.getRateRequestUrl(
+      reqParams.currencies,
+      {
+        observations
+      })
+    const data = await this.#fetchService.fetch(url)
 
-    return this.#formatter.format(raw)
+    return data.getRates()
   }
 
   /**
@@ -100,11 +63,16 @@ export class RateFetcher {
    * @param {string} endDate - The end date of the period.
    * @returns {Promise<object>} - The fetched exchange rates for the period.
    */
-  async fetchByPeriod (startDate, endDate) {
-    const queryString = `${this.#params.from(startDate)}&${this.#params.to(endDate)}&${this.#params.json()}`
-    const raw = await this.#fetchService.fetch(queryString)
+  async fetchByPeriod(reqParams) {
+    const url = this.#apiUrl.getRateRequestUrl(
+      reqParams.currencies,
+      {
+        from: reqParams.startDate,
+        to: reqParams.endDate
+      })
+    const data = await this.#fetchService.fetch(url)
 
-    return this.#formatter.format(raw)
+    return data.getRates()
   }
 
   /**
@@ -112,9 +80,10 @@ export class RateFetcher {
    *
    * @returns {Promise<object[]>} - The available currencies.
    */
-  async getAvailableCurrencies () {
-    const currencies = await this.#currencyFetcher.getCurrencies()
+  async getAvailableCurrencies() {
+    const url = this.#apiUrl.getCurrencyRequestUrl()
+    const data = await this.#fetchService.fetch(url)
 
-    return currencies
+    return data.getCurrencies()
   }
 }
