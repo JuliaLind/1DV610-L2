@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { round, arraysAreEqual } from '../../src/lib/functions.js'
+import { round } from '../../src/lib/functions.js'
 
 describe('functions', () => {
   describe('round()', () => {

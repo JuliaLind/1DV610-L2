@@ -36,7 +36,7 @@ export class Structure {
      * @param {object} data - the structure part of data returned by API, to extract base currency from
      */
     #setBaseCurrency(data) {
-        this.#baseCurrency = data.dimensions.series.find(dimension => this.#isBaseCurrency(dimension)).values
+        this.#baseCurrency = data.dimensions.series.find(dimension => this.#isBaseCurrency(dimension)).values[0]
     }
 
     /**
@@ -121,7 +121,7 @@ export class Structure {
      * Sets all currencies by combining base and target currencies into one array.
      */
     #setAllCurrencies() {
-        this.#allCurrencies = this.#cloner.clone([...this.getBaseCurrency(), ...this.getTargetCurrencies()])
+        this.#allCurrencies = this.#cloner.clone([...this.getTargetCurrencies(), this.getBaseCurrency()])
     }
 
 

@@ -1,10 +1,10 @@
 /**
- *
+ * Class representing a currency and its exchange rate observations.
  */
 export class Currency {
   #id
-  #observations
-  #normalizedObservations = {}
+  #observations = {}
+  #datedRates = {}
   #attributes
   #denominator
   #dates
@@ -24,16 +24,16 @@ export class Currency {
   }
 
   /**
-   * Gets the normalized rates for the currency.
+   * Gets the multiplier adjusted rates for the currency.
    *
-   * @returns {object} - normalized rates for the currency
+   * @returns {object} - multiplier adjusted rates for the currency
    */
-  getNormalizedRates () {
-    if (!this.#isNormalized()) {
-      this.#normalize()
+  getRates () {
+    if (!this.#isFormatted()) {
+      this.#format()
     }
 
-    return this.#normalizedObservations
+    return this.#datedRates
   }
 
   /**
@@ -46,28 +46,28 @@ export class Currency {
   }
 
   /**
-   * Checks if the currency has already been normalized.
+   * Checks if the currency has already been formatted.
    *
-   * @returns {boolean} - Whether the currency has been normalized.
+   * @returns {boolean} - Whether the currency has been formatted.
    */
-  #isNormalized () {
-    return this.#observations.length === Object.keys(this.#normalizedObservations).length
+  #isFormatted () {
+    return false
+    // return Object.keys(this.#observations).length === Object.keys(this.#datedRates).length
   }
 
   /**
-   * Normalizes the observations for the currency.
+   * Formats the observations for the currency,
+   * by merging dates with multiplier adjusted observations.
    *
-   * @returns {object} - The normalized observations.
+   * @returns {object} - The formatted observations.
    */
-  #normalize () {
+  #format () {
     this.#setDenominator()
     const dateIndices = this.#getDateIndices()
 
     for (const index in dateIndices) {
-      this.#normalizedObservations[this.#getObservationDate(dateIndices[index])] = this.#getObservedValue(index)
+      this.#datedRates[this.#getObservationDate(dateIndices[index])] = this.#getObservedValue(index)
     }
-
-    return this.#normalizedObservations
   }
 
   /**

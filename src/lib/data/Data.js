@@ -1,4 +1,3 @@
-// import { DataReader } from './DataReader.js'
 import { Currency } from './Currency.js'
 import { Structure } from './Structure.js'
 import { DataSet } from './DataSet.js'
@@ -28,7 +27,7 @@ export class Data {
    * @returns {array} - a list with all currencies
    */
   getCurrencies() {
-    const currencies = this.#dataSet.getAllCurrencies()
+    const currencies = this.#structure.getAllCurrencies()
 
     currencies.sort((currency1, currency2) => this.#sortById(currency1, currency2))
 
@@ -56,6 +55,7 @@ export class Data {
     if (Object.keys(this.#rates).length === 0) {
       this.#formatAll()
     }
+
     return this.#rates
   }
 
@@ -76,13 +76,16 @@ export class Data {
    * @param {number} currencyIndex - The index of the currency to format.
    */
   #formatOne(currencyIndex) {
+    const currencyRates = this.#dataSet.getOneRateSeries(currencyIndex)
+
     const currency = new Currency({
-      ...(this.#rates[currencyIndex]),
+      attributes: currencyRates.attributes,
+      observations: currencyRates.observations,
       dates: this.#structure.getDates(),
-      multipliers: this.#dataSet.getMultipliers(),
+      multipliers: this.#structure.getUnitMultipliers(),
       id: this.#structure.getOneCurrencyId(currencyIndex)
     })
 
-    this.#rates[currency.getId()] = currency.getFormattedRates()
+    this.#rates[currency.getId()] = currency.getRates()
   }
 }

@@ -1,4 +1,4 @@
-import { DeepCloner } from './DeepCloner.js'
+import { DeepCloner } from '../cloning/DeepCloner.js'
 
 /**
  * Class representing the dataSet part 
@@ -22,10 +22,14 @@ export class DataSet {
     /**
      * Gets the series of exchange rates.
      *
-     * @returns {array} - a list containing the series of exchanga rates
+     * @returns {array} - a list containing the series of exchange rates
      */
-    getRateSeries() {
+    getAllRateSeries() {
         return this.#rateSeries.map(rate => this.#cloner.clone(rate))
+    }
+
+    getOneRateSeries(index) {
+        return this.#cloner.clone(this.#rateSeries[index])
     }
 
     /**

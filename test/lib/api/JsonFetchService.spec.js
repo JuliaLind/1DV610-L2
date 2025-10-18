@@ -1,17 +1,31 @@
 /* global before, after */
 
 import { expect, use } from 'chai'
-import { JsonFetchService } from '../../src/lib/JsonFetchService.js'
+import { JsonFetchService } from '../../../src/lib/api/JsonFetchService.js'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
+import { formattedRates } from '../../mockdata/formatted-rates.js'
+import { readFile } from 'fs/promises'
 
 use(sinonChai)
 
 describe('JsonFetchService', () => {
   let fetchStub
+  let dataPeriod
 
-  before(() => {
+  const url = 'fullurl.com/api/somequerystring'
+  const fetchConfig = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    }
+  }
+
+  before(async () => {
     fetchStub = sinon.stub(globalThis, 'fetch')
+    let raw = await readFile(new URL('../../json/period.json', import.meta.url))
+    dataPeriod = JSON.parse(raw)
   })
 
   after(() => {
@@ -21,11 +35,6 @@ describe('JsonFetchService', () => {
   it('fetch() OK', async () => {
     const sut = new JsonFetchService()
 
-    const fakeUrl = 'myfakeurl'
-    const queryString = 'param1=value1&param2=value2'
-    const fakeData = {
-      id: 'someid'
-    }
 
     fetchStub.resolves({
       /**
@@ -33,39 +42,29 @@ describe('JsonFetchService', () => {
        *
        * @returns {Promise<object>} - promise containing the fake data object
        */
-      json: () => Promise.resolve(fakeData)
+      json: () => Promise.resolve(dataPeriod)
     })
 
-    sut.setBaseUrl(fakeUrl)
-    const res = await sut.fetch(queryString)
-    expect(res).to.deep.equal(fakeData)
+    const res = await sut.fetch(url)
+    expect(res).to.be.an.instanceOf(Object)
+    expect(res.getRates()).to.deep.equal(formattedRates)
 
-    expect(fetchStub).to.have.been.calledOnceWith(`${fakeUrl}${queryString}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
-    })
+    expect(fetchStub).to.have.been.calledOnceWith(url, fetchConfig)
   })
 
   it('fetch() with fetch error, Not OK', async () => {
     const sut = new JsonFetchService()
 
-    const fakeUrl = 'myfakeurl'
-    const queryString = 'param1=value1&param2=value2'
     const exception = new Error('some error')
     fetchStub.rejects(exception)
 
-    sut.setBaseUrl(fakeUrl)
-    expect(sut.fetch(queryString)).to.be.rejectedWith(exception.message)
+    expect(sut.fetch(url)).to.be.rejectedWith(exception.message)
   })
 
   it('fetch() with 404 response, Not OK', async () => {
     const sut = new JsonFetchService()
 
-    const fakeUrl = 'myfakeurl'
-    const queryString = 'param1=value1&param2=value2'
+    const errorMsg = 'No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)'
 
     fetchStub.resolves({
       /**
@@ -77,13 +76,12 @@ describe('JsonFetchService', () => {
         errors: [
           {
             code: 404,
-            message: 'No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)'
+            message: errorMsg
           }
         ]
       })
     })
 
-    sut.setBaseUrl(fakeUrl)
-    expect(sut.fetch(queryString)).to.be.rejectedWith('No data for data query against the dataflow: urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=NB:EXR(1.0)')
+    expect(sut.fetch(url)).to.be.rejectedWith(errorMsg)
   })
 })

@@ -39,7 +39,7 @@ export class ApiUrl {
   }
 
   getCurrencyRequestUrl () {
-    return `${this.#baseUrl}apisrc=qb&detail=nodata${this.#alwaysParams}`
+    return `${this.#baseUrl}?apisrc=qb&detail=nodata&${this.#alwaysParams}`
   }
 
 }

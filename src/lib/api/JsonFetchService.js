@@ -1,4 +1,4 @@
-import Data from '../data/Data.js'
+import { Data } from '../data/Data.js'
 
 /**
  * Fetches JSON data from a specified API endpoint.
@@ -12,7 +12,9 @@ export class JsonFetchService {
    */
   async fetch (url) {
     try {
-      return new Data(await this.#fetchJson(url))
+      const res = await this.#fetchJson(url)
+
+      return new Data(res.data)
     } catch (error) {
       throw new Error('Error fetching data:', error)
     }
@@ -37,7 +39,9 @@ export class JsonFetchService {
 
     this.#checkStatus(jsonResponse)
 
-    return jsonResponse.data
+
+
+    return jsonResponse
   }
 
   /**

@@ -1,5 +1,6 @@
 import { RateFetcher } from './RateFetcher.js'
 import { RateNormalizer } from './lib/RateNormalizer.js'
+import { round } from './lib/functions.js'
 
 /**
  * Manages conversion between currencies
@@ -155,7 +156,6 @@ export class CurrencyConverter {
    * Assigns the base and target currencies to the fetcher and normalizer.
    */
   #assignCurrencies () {
-    this.#fetcher.setCurrencies([this.#baseCurrency, ...this.#targetCurrencies])
     this.#normalizer.setBaseCurrency(this.#baseCurrency)
     this.#normalizer.setTargetCurrencies(this.#targetCurrencies)
   }
@@ -165,7 +165,9 @@ export class CurrencyConverter {
    * from the external API.
    */
   async #fetchRates () {
-    const rates = await this.#fetcher.fetchLatest()
+    const rates = await this.#fetcher.fetchLatest({
+      currencies: [this.#targetCurrencies]
+    })
 
     this.#normalizer.normalize(rates)
   }
@@ -199,6 +201,13 @@ export class CurrencyConverter {
     return converted
   }
 
+  /**
+   * Checks if the new target currencies are the same as the current ones.
+   *
+   * @param {array} initialCurrencies - array of the initial target currencies
+   * @param {array} newCurrencies - array of the new target currencies
+   * @returns {boolean} - whether the two arrays contain the same currencies
+   */
   #hasSameCurrencies(initialCurrencies, newCurrencies) {
      return JSON.stringify([...initialCurrencies].sort()) === JSON.stringify([...newCurrencies].sort())
   }

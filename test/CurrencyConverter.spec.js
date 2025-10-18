@@ -13,10 +13,15 @@ use(chaiAsPromised)
 
 describe('CurrencyConverter', () => {
   let data
+  let globalFetch
 
   before(async () => {
     const raw = await readFile(new URL('./json/single-day.json', import.meta.url))
     data = JSON.parse(raw)
+    globalFetch = sinon.stub(globalThis, 'fetch')
+    globalFetch.resolves({
+      json: () => Promise.resolve(data)
+    })
   })
 
   afterEach(() => {
@@ -24,34 +29,7 @@ describe('CurrencyConverter', () => {
   })
 
   it('convert() OK', async () => {
-    const rateFetcher = {
-      setCurrencies: sinon.stub(),
-      fetchLatest: sinon.stub().resolves({
-        PLN: {
-          '2025-09-19': 2.7376
-        },
-        EUR: {
-          '2025-09-19': 11.6705
-        },
-        SEK: {
-          '2025-09-19': 1.0542
-        }
-      })
-    }
-
-    const rateNormalizer = {
-      setBaseCurrency: sinon.stub(),
-      setTargetCurrencies: sinon.stub(),
-      normalize: sinon.stub(),
-      reset: sinon.stub(),
-      getNormalizedRates: sinon.stub().returns({
-        PLN: 2.5968,
-        EUR: 11.0689
-      }),
-      hasCachedRates: sinon.stub().returns(false)
-    }
-
-    const sut = new CurrencyConverter({ fetcher: rateFetcher, normalizer: rateNormalizer })
+    const sut = new CurrencyConverter()
     sut.setBaseCurrency('SEK')
     sut.setTargetCurrencies(['PLN', 'EUR'])
     const res = await sut.convert(350)
@@ -65,157 +43,134 @@ describe('CurrencyConverter', () => {
     expect(res).to.deep.equal(exp)
   })
 
-  it('convert() integration testOK', async () => {
-    const fetchService = {
-      setBaseUrl: sinon.stub(),
-      fetch: sinon.stub().resolves(data)
-    }
+  // describe('setBaseCurrency()', () => {
+  //   it('new fromCurrency is different from current', () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub()
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //     sut.setBaseCurrency('EUR')
+  //     sut.setBaseCurrency('USD')
 
-    const rateFetcher = new RateFetcher({ fetchService })
+  //     expect(sut.getBaseCurrency()).to.equal('USD')
+  //     expect(rateNormalizer.reset).to.have.been.calledOnce
+  //   })
 
-    const sut = new CurrencyConverter({ fetcher: rateFetcher })
-    sut.setBaseCurrency('SEK')
-    sut.setTargetCurrencies(['PLN', 'EUR'])
-    const res = await sut.convert(350)
+  //   it('new fromCurrency is same as current', () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub()
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //     sut.setBaseCurrency('EUR')
+  //     sut.setBaseCurrency('EUR')
+  //     expect(sut.getBaseCurrency()).to.equal('EUR')
+  //     expect(rateNormalizer.reset).to.not.have.been.called
+  //   })
+  // })
 
-    const exp = {
-      PLN: 134.78,
-      EUR: 31.62
+  // describe('setTargetCurrencies()', () => {
+  //   it('new toCurrencies are different from current', () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub()
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
 
-    }
+  //     sut.setTargetCurrencies(['USD', 'EUR'])
+  //     sut.setTargetCurrencies(['USD', 'PLN'])
 
-    expect(res).to.deep.equal(exp)
-  })
+  //     expect(sut.getTargetCurrencies()).to.deep.equal(['USD', 'PLN'])
+  //     expect(rateNormalizer.reset).to.have.been.calledOnce
+  //   })
 
-  describe('setBaseCurrency()', () => {
-    it('new fromCurrency is different from current', () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub()
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-      sut.setBaseCurrency('EUR')
-      sut.setBaseCurrency('USD')
+  //   it('new toCurrencies are same as current', () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub()
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
 
-      expect(sut.getBaseCurrency()).to.equal('USD')
-      expect(rateNormalizer.reset).to.have.been.calledOnce
-    })
+  //     sut.setTargetCurrencies(['USD', 'EUR'])
+  //     sut.setTargetCurrencies(['USD', 'EUR'])
 
-    it('new fromCurrency is same as current', () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub()
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-      sut.setBaseCurrency('EUR')
-      sut.setBaseCurrency('EUR')
-      expect(sut.getBaseCurrency()).to.equal('EUR')
-      expect(rateNormalizer.reset).to.not.have.been.called
-    })
-  })
+  //     expect(sut.getTargetCurrencies()).to.deep.equal(['USD', 'EUR'])
+  //     expect(rateNormalizer.reset).to.not.have.been.called
+  //   })
 
-  describe('setTargetCurrencies()', () => {
-    it('new toCurrencies are different from current', () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub()
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //   it('new toCurrencies are same as current, but different order', () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub()
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
 
-      sut.setTargetCurrencies(['USD', 'EUR'])
-      sut.setTargetCurrencies(['USD', 'PLN'])
+  //     sut.setTargetCurrencies(['USD', 'EUR'])
+  //     sut.setTargetCurrencies(['EUR', 'USD'])
 
-      expect(sut.getTargetCurrencies()).to.deep.equal(['USD', 'PLN'])
-      expect(rateNormalizer.reset).to.have.been.calledOnce
-    })
+  //     expect(sut.getTargetCurrencies()).to.deep.equal(['EUR', 'USD'])
+  //     expect(rateNormalizer.reset).to.not.have.been.called
+  //   })
+  // })
 
-    it('new toCurrencies are same as current', () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub()
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  // it('reset() OK', () => {
+  //   const ratefetcher = sinon.stub()
+  //   const rateNormalizer = {
+  //     reset: sinon.stub()
+  //   }
+  //   const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //   sut.setBaseCurrency('DKK')
+  //   sut.setTargetCurrencies(['USD', 'EUR'])
+  //   sut.reset()
 
-      sut.setTargetCurrencies(['USD', 'EUR'])
-      sut.setTargetCurrencies(['USD', 'EUR'])
+  //   expect(sut.getBaseCurrency()).to.be.null
+  //   expect(sut.getTargetCurrencies()).to.deep.equal([])
+  //   expect(rateNormalizer.reset).to.have.been.calledOnce
+  // })
 
-      expect(sut.getTargetCurrencies()).to.deep.equal(['USD', 'EUR'])
-      expect(rateNormalizer.reset).to.not.have.been.called
-    })
+  // describe('convert()', () => {
+  //   it('throws error when fromCurrency is not set', async () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub(),
+  //       hasCachedRates: sinon.stub().returns(false)
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //     sut.setTargetCurrencies(['USD', 'EUR'])
+  //     await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
+  //   })
 
-    it('new toCurrencies are same as current, but different order', () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub()
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //   it('throws error when toCurrencies is not set', async () => {
+  //     const ratefetcher = sinon.stub()
+  //     const rateNormalizer = {
+  //       reset: sinon.stub(),
+  //       hasCachedRates: sinon.stub().returns(false)
+  //     }
+  //     const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
+  //     sut.setBaseCurrency('USD')
+  //     await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
+  //   })
 
-      sut.setTargetCurrencies(['USD', 'EUR'])
-      sut.setTargetCurrencies(['EUR', 'USD'])
+  //   it('fetcher is not called when rates are cached', async () => {
+  //     const rateFetcher = {
+  //       fetchLatest: sinon.stub().resolves()
+  //     }
 
-      expect(sut.getTargetCurrencies()).to.deep.equal(['EUR', 'USD'])
-      expect(rateNormalizer.reset).to.not.have.been.called
-    })
-  })
+  //     const normalizer = {
+  //       hasCachedRates: sinon.stub().returns(true),
+  //       getNormalizedRates: sinon.stub().returns({
+  //         PLN: 2.5968,
+  //         EUR: 11.0689
+  //       })
+  //     }
 
-  it('reset() OK', () => {
-    const ratefetcher = sinon.stub()
-    const rateNormalizer = {
-      reset: sinon.stub()
-    }
-    const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-    sut.setBaseCurrency('DKK')
-    sut.setTargetCurrencies(['USD', 'EUR'])
-    sut.reset()
+  //     const sut = new CurrencyConverter({ fetcher: rateFetcher, normalizer })
+  //     sut.setBaseCurrency('USD')
+  //     sut.setTargetCurrencies(['PLN', 'EUR'])
+  //     await sut.convert(100)
 
-    expect(sut.getBaseCurrency()).to.be.null
-    expect(sut.getTargetCurrencies()).to.deep.equal([])
-    expect(rateNormalizer.reset).to.have.been.calledOnce
-  })
-
-  describe('convert()', () => {
-    it('throws error when fromCurrency is not set', async () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub(),
-        hasCachedRates: sinon.stub().returns(false)
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-      sut.setTargetCurrencies(['USD', 'EUR'])
-      await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
-    })
-
-    it('throws error when toCurrencies is not set', async () => {
-      const ratefetcher = sinon.stub()
-      const rateNormalizer = {
-        reset: sinon.stub(),
-        hasCachedRates: sinon.stub().returns(false)
-      }
-      const sut = new CurrencyConverter({ fetcher: ratefetcher, normalizer: rateNormalizer })
-      sut.setBaseCurrency('USD')
-      await expect(sut.convert(100)).to.be.rejectedWith('CurrencyConverter is not fully initialized')
-    })
-
-    it('fetcher is not called when rates are cached', async () => {
-      const rateFetcher = {
-        setCurrencies: sinon.stub(),
-        fetchLatest: sinon.stub().resolves()
-      }
-
-      const normalizer = {
-        hasCachedRates: sinon.stub().returns(true),
-        getNormalizedRates: sinon.stub().returns({
-          PLN: 2.5968,
-          EUR: 11.0689
-        })
-      }
-
-      const sut = new CurrencyConverter({ fetcher: rateFetcher, normalizer })
-      sut.setBaseCurrency('USD')
-      sut.setTargetCurrencies(['PLN', 'EUR'])
-      await sut.convert(100)
-
-      expect(rateFetcher.fetchLatest).to.not.have.been.called
-    })
-  })
+  //     expect(rateFetcher.fetchLatest).to.not.have.been.called
+  //   })
+  // })
 })

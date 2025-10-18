@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { DeepCloner } from '../../src/lib/DeepCloner.js'
+import { DeepCloner } from '../../../src/lib/cloning/DeepCloner.js'
 
 describe('DeepCloner', () => {
   it('clone() OK, primitive types', () => {

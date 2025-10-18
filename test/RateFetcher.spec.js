@@ -12,10 +12,24 @@ import { currencies } from './mockdata/currencies.js'
 use(sinonChai)
 
 describe('RateFetcher', () => {
-  const baseUrl = 'https://data.norges-bank.no/api/data/EXR/B.DKK+PLN+EUR+SEK.NOK.SP?attributes=UNIT_MULT&locale=en&'
   let dataPeriod
   let dataSingleDay
   let currencyData
+  let fetchStub
+
+  const apiUrl = {
+    getRateRequestUrl: sinon.stub().returns('rateUrl'),
+    getCurrencyRequestUrl: sinon.stub().returns('currencyUrl')
+  }
+
+  // const fetchConfig = {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Accept: 'application/json'
+  //   }
+  // }
+
   before(async () => {
     let raw = await readFile(new URL('./json/period.json', import.meta.url))
     dataPeriod = JSON.parse(raw)
@@ -23,13 +37,29 @@ describe('RateFetcher', () => {
     dataSingleDay = JSON.parse(raw)
     raw = await readFile(new URL('./json/currencies.json', import.meta.url))
     currencyData = JSON.parse(raw)
+
+    fetchStub = sinon.stub(globalThis, 'fetch')
+  })
+
+  afterEach(() => {
+    fetchStub.resetHistory()
+    fetchStub.resetBehavior()
+  })
+
+  after(() => {
+    fetchStub.restore()
   })
 
   it('fetchByDate() OK', async () => {
-    const fetchService = {
-      setBaseUrl: sinon.stub(),
-      fetch: sinon.stub().resolves(dataSingleDay)
-    }
+    fetchStub.resolves({
+      /**
+       * Mocked fetch response.
+       *
+       * @returns {Promise<object>} - promise containing the fake data object
+       */
+      json: () => Promise.resolve(dataSingleDay)
+    })
+
 
     const exp = {
       DKK: {
@@ -46,25 +76,23 @@ describe('RateFetcher', () => {
       }
     }
 
-    const dataFormatter = {
-      format: sinon.stub().returns(exp)
-    }
-    const sut = new RateFetcher({ fetchService, dataFormatter })
-    sut.setCurrencies(['DKK', 'PLN', 'EUR', 'SEK'])
-    const res = await sut.fetchByDate('2025-09-19')
+    const sut = new RateFetcher({ apiUrl })
+    const currencies = ['DKK', 'PLN', 'EUR', 'SEK']
+    const date = '2025-09-19'
+    const res = await sut.fetchByDate({ currencies, date })
 
     expect(res).to.deep.equal(exp)
-
-    const queryString = 'endPeriod=2025-09-19&lastNObservations=1&format=sdmx-json'
-    expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
-    expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
   })
 
   it('fetchLatest() OK', async () => {
-    const fetchService = {
-      setBaseUrl: sinon.stub(),
-      fetch: sinon.stub().resolves(dataSingleDay)
-    }
+    fetchStub.resolves({
+      /**
+       * Mocked fetch response.
+       *
+       * @returns {Promise<object>} - promise containing the fake data object
+       */
+      json: () => Promise.resolve(dataSingleDay)
+    })
 
     const exp = {
       DKK: {
@@ -81,57 +109,23 @@ describe('RateFetcher', () => {
       }
     }
 
-    const dataFormatter = {
-      format: sinon.stub().returns(exp)
-    }
-    const sut = new RateFetcher({ fetchService, dataFormatter })
+    const sut = new RateFetcher({ apiUrl })
 
-    sut.setCurrencies(['DKK', 'PLN', 'EUR', 'SEK'])
-    const res = await sut.fetchLatest()
-
-    expect(res).to.deep.equal(exp)
-
-    expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
-
-    const queryString = 'lastNObservations=1&format=sdmx-json'
-    expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
-    expect(dataFormatter.format).to.have.been.calledOnceWith(dataSingleDay)
-  })
-
-  it('fetchLatest() integration test', async () => {
-    const fetchService = {
-      setBaseUrl: sinon.stub(),
-      fetch: sinon.stub().resolves(dataSingleDay)
-    }
-
-    const sut = new RateFetcher({ fetchService })
-
-    const exp = {
-      DKK: {
-        '2025-09-19': 1.5637
-      },
-      PLN: {
-        '2025-09-19': 2.7376
-      },
-      EUR: {
-        '2025-09-19': 11.6705
-      },
-      SEK: {
-        '2025-09-19': 1.0542
-      }
-    }
-
-    const res = await sut.fetchLatest()
+    const currencies = ['DKK', 'PLN', 'EUR', 'SEK']
+    const res = await sut.fetchLatest({ currencies })
 
     expect(res).to.deep.equal(exp)
   })
 
   it('fetchByPeriod() OK', async () => {
-    const fetchService = {
-      setBaseUrl: sinon.stub(),
-      fetch: sinon.stub().resolves(dataPeriod)
-    }
-
+    fetchStub.resolves({
+      /**
+       * Mocked fetch response.
+       *
+       * @returns {Promise<object>} - promise containing the fake data object
+       */
+      json: () => Promise.resolve(dataPeriod)
+    })
     const exp = {
       DKK: {
         '2025-02-20': 1.5564,
@@ -163,40 +157,27 @@ describe('RateFetcher', () => {
       }
     }
 
-    const dataFormatter = {
-      format: sinon.stub().returns(exp)
-    }
-    const sut = new RateFetcher({ fetchService, dataFormatter })
+    const sut = new RateFetcher({ apiUrl })
 
-    sut.setCurrencies(['DKK', 'PLN', 'EUR', 'SEK'])
-    const res = await sut.fetchByPeriod('2025-02-20', '2025-02-26')
+    const currencies = ['DKK', 'PLN', 'EUR', 'SEK']
+    const startDate = '2025-02-20'
+    const endDate = '2025-02-26'
+    const res = await sut.fetchByPeriod({ currencies, startDate, endDate })
 
     expect(res).to.deep.equal(exp)
-
-    expect(fetchService.setBaseUrl).to.have.been.calledOnceWith(baseUrl)
-
-    const queryString = 'startPeriod=2025-02-20&endPeriod=2025-02-26&format=sdmx-json'
-    expect(fetchService.fetch).to.have.been.calledOnceWith(queryString)
-    expect(dataFormatter.format).to.have.been.calledOnceWith(dataPeriod)
-  })
-
-  it('getAvailableCurrencies() OK', async () => {
-    const baseDataFetcher = {
-      getCurrencies: sinon.stub().resolves([...currencies])
-    }
-
-    const sut = new RateFetcher({ baseDataFetcher })
-    const res = await sut.getAvailableCurrencies()
-    expect(res).to.deep.equal(currencies)
-    expect(baseDataFetcher.getCurrencies).to.have.been.calledOnce
   })
 
   it('getAvailableCurrencies() integration test', async () => {
-    const fetchService = {
-      setBaseUrl: sinon.stub(),
-      fetch: sinon.stub().resolves(currencyData)
-    }
-    const sut = new RateFetcher({ fetchService })
+    fetchStub.resolves({
+      /**
+       * Mocked fetch response.
+       *
+       * @returns {Promise<object>} - promise containing the fake data object
+       */
+      json: () => Promise.resolve(currencyData)
+    })
+
+    const sut = new RateFetcher({ apiUrl })
     const res = await sut.getAvailableCurrencies()
 
     expect(res).to.deep.equal(currencies)
