@@ -16,7 +16,7 @@ export class JsonFetchService {
 
       return new Data(res.data)
     } catch (error) {
-      throw new Error('Error fetching data:', error)
+      this.#handleError(error)
     }
   }
 
@@ -57,5 +57,20 @@ export class JsonFetchService {
     error.code = response.errors[0].code
 
     throw error
+  }
+
+  /**
+   * Handles errors that occur during the fetch process.
+   *
+   * @param {Error} error - The error that occurred.
+   * @throws {Error} - The processed error.
+   */
+  #handleError (error) {
+    if (error.code) {
+      throw error
+    }
+    const newError = new Error('Error fetching data:')
+    newError.code = 500
+    throw newError
   }
 }
