@@ -53,6 +53,9 @@ export class JsonFetchService {
       return
     }
 
-    throw new Error(response.errors.map(e => e.message).join(', '))
+    const error = new Error(response.errors.map(e => e.message).join(', '))
+    error.code = response.errors[0].code
+
+    throw error
   }
 }
