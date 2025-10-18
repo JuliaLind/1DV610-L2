@@ -9,7 +9,7 @@ export class JsonFetchService {
    *
    * @param {string} baseUrl - The base URL to use for API requests.
    */
-  setBaseUrl (baseUrl) {
+  setBaseUrl (baseUrl='https://data.norges-bank.no/api/data/EXR/') {
     this.#baseUrl = baseUrl
   }
 

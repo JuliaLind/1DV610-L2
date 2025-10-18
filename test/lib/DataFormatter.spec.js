@@ -87,38 +87,6 @@ describe('DataFormatter', () => {
     })
 
     it('with mocked DataReader and FormatHelper, OK', () => {
-      const exrDkk = {
-        '2025-02-20': 1.5564,
-        '2025-02-21': 1.5591,
-        '2025-02-24': 1.5597,
-        '2025-02-25': 1.5636,
-        '2025-02-26': 1.5673
-      }
-
-      const exrPln = {
-        '2025-02-20': 2.7903,
-        '2025-02-21': 2.7899,
-        '2025-02-24': 2.8075,
-        '2025-02-25': 2.8178,
-        '2025-02-26': 2.8208
-      }
-
-      const exrEur = {
-        '2025-02-20': 11.609,
-        '2025-02-21': 11.629,
-        '2025-02-24': 11.6355,
-        '2025-02-25': 11.6638,
-        '2025-02-26': 11.6895
-      }
-
-      const exrSek = {
-        '2025-02-20': 1.0397,
-        '2025-02-21': 1.0437,
-        '2025-02-24': 1.0433,
-        '2025-02-25': 1.0465,
-        '2025-02-26': 1.049
-      }
-
       const reader = {
         setData: sinon.stub(),
         getRates: sinon.stub().returns(rates),
@@ -126,7 +94,6 @@ describe('DataFormatter', () => {
         getIds: sinon.stub().returns(ids),
         getDates: sinon.stub().returns(dates)
       }
-
 
       const sut = new DataFormatter({
         reader

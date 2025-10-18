@@ -1,8 +1,5 @@
-/* global before */
-
-import { expect, use } from 'chai'
+import { expect } from 'chai'
 import { Currency } from '../../src/lib/Currency.js'
-
 
 describe('Currency', () => {
   describe('getId', () => {
@@ -17,23 +14,23 @@ describe('Currency', () => {
       const data = {
         id: 'DKK',
         observations: {
-          "0": [
-            "155.64"
+          0: [
+            '155.64'
           ],
-          "1": [
-            "155.91"
+          1: [
+            '155.91'
           ],
-          "2": [
-            "155.97"
+          2: [
+            '155.97'
           ],
-          "3": [
-            "156.36"
+          3: [
+            '156.36'
           ],
-          "4": [
-            "156.73"
+          4: [
+            '156.73'
           ]
         },
-        attributes: [0],    
+        attributes: [0],
         dates: [
           '2025-02-20',
           '2025-02-21',
@@ -43,12 +40,12 @@ describe('Currency', () => {
         ],
         multipliers: [
           {
-            "id": "2",
-            "name": "Hundreds"
+            id: '2',
+            name: 'Hundreds'
           },
           {
-            "id": "0",
-            "name": "Units"
+            id: '0',
+            name: 'Units'
           }
         ]
       }

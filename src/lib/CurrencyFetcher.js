@@ -5,7 +5,7 @@ import { DataReader } from './DataReader.js'
 /**
  * Fetches available currencies.
  */
-export class BaseDataFetcher {
+export class CurrencyFetcher {
   #BASE_URL = 'https://data.norges-bank.no/api/data/EXR/?'
   #CURRENCY_URL = 'apisrc=qb&format=sdmx-json&detail=nodata&attributes=FALSE'
   #currencies = []

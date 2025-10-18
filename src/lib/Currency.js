@@ -1,3 +1,6 @@
+/**
+ *
+ */
 export class Currency {
   #id
   #observations
@@ -7,7 +10,12 @@ export class Currency {
   #dates
   #multipliers
 
-  constructor(data) {
+  /**
+   * Create a new currency.
+   *
+   * @param {object} data - The data neccessary to initialize the currency.
+   */
+  constructor (data) {
     this.#id = data.id
     this.#observations = data.observations
     this.#attributes = data.attributes
@@ -20,7 +28,7 @@ export class Currency {
    *
    * @returns {object} - normalized rates for the currency
    */
-  getNormalizedRates() {
+  getNormalizedRates () {
     if (!this.#isNormalized()) {
       this.#normalize()
     }
@@ -28,36 +36,58 @@ export class Currency {
     return this.#normalizedObservations
   }
 
-  getId() {
+  /**
+   * Gets the currency id.
+   *
+   * @returns {string} - The currency id, for example 'USD'.
+   */
+  getId () {
     return this.#id
   }
 
-  #isNormalized() {
-    return this.#observations.length === Object.keys(this.#normalizedObservations).length 
+  /**
+   * Checks if the currency has already been normalized.
+   *
+   * @returns {boolean} - Whether the currency has been normalized.
+   */
+  #isNormalized () {
+    return this.#observations.length === Object.keys(this.#normalizedObservations).length
   }
 
-  #normalize() {
+  /**
+   * Normalizes the observations for the currency.
+   *
+   * @returns {object} - The normalized observations.
+   */
+  #normalize () {
     this.#setDenominator()
-    const dateIndeces = this.#getDateIndeces()
+    const dateIndices = this.#getDateIndices()
 
-    for (const index in dateIndeces) {
-      this.#normalizedObservations[this.#getObservationDate(dateIndeces[index])] = this.#getObservedValue(index)
+    for (const index in dateIndices) {
+      this.#normalizedObservations[this.#getObservationDate(dateIndices[index])] = this.#getObservedValue(index)
     }
 
     return this.#normalizedObservations
   }
 
-  #setDenominator() {
+  /**
+   * Sets the denominator for normalization based on the unit multiplier.
+   */
+  #setDenominator () {
     const multiplierIndex = this.#attributes[0]
     const powerOf = Number(this.#multipliers[multiplierIndex].id)
 
     this.#denominator = 10 ** powerOf
   }
 
-  #getDateIndeces() {
+  /**
+   * Gets the date indices for the observations.
+   *
+   * @returns {Array<number>} - The date indices.
+   */
+  #getDateIndices () {
     return Object.keys(this.#observations)
   }
-
 
   /**
    * Gets the observation date for a specific index.
@@ -65,10 +95,9 @@ export class Currency {
    * @param {number} dateIndex - The index of the date to get.
    * @returns {string} - The observation date.
    */
-  #getObservationDate(dateIndex) {
+  #getObservationDate (dateIndex) {
     return this.#dates[Object.keys(this.#dates)[dateIndex]]
   }
-
 
   /**
    * Gets the normalized observation value of the current currency
@@ -77,10 +106,9 @@ export class Currency {
    * @param {number} dateIndex - The index of the date to get the observation value for.
    * @returns {number} - The normalized observation value.
    */
-  #getObservedValue(dateIndex) {
+  #getObservedValue (dateIndex) {
     const observationValue = Number(Object.values(this.#observations)[dateIndex])
 
     return Number((observationValue / this.#denominator).toFixed(4))
   }
-
 }

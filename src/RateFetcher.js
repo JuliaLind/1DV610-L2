@@ -1,6 +1,6 @@
 import { JsonFetchService } from './lib/JsonFetchService.js'
-import { DataFormatter } from './lib/DataFormatter.js'
-import { BaseDataFetcher } from './lib/BaseDataFetcher.js'
+import { Data } from './lib/Data.js'
+// import { BaseDataFetcher } from './lib/CurrencyFetcher.js'
 
 /**
  * Fetches exchange rates from Norges Bank.
@@ -8,7 +8,8 @@ import { BaseDataFetcher } from './lib/BaseDataFetcher.js'
 export class RateFetcher {
   #fetchService
   #formatter
-  #baseDataFetcher
+  #currencyFetcher
+  #data
 
   #params = {
     /**
@@ -46,12 +47,12 @@ export class RateFetcher {
    *
    * @param {object} dependencies - Configuration object for dependencies
    * @param {JsonFetchService} dependencies.fetchService - Instance of JsonFetchService
-   * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
+  //  * @param {DataFormatter} dependencies.dataFormatter - Instance of DataFormatter
    */
   constructor (dependencies) {
     this.#fetchService = dependencies?.fetchService || new JsonFetchService()
-    this.#formatter = dependencies?.dataFormatter || new DataFormatter()
-    this.#baseDataFetcher = dependencies?.baseDataFetcher || new BaseDataFetcher()
+    // this.#formatter = dependencies?.dataFormatter || new DataFormatter()
+    this.#currencyFetcher = dependencies?.currencyFetcher || new CurrencyFetcher()
   }
 
   /**
@@ -112,7 +113,7 @@ export class RateFetcher {
    * @returns {Promise<object[]>} - The available currencies.
    */
   async getAvailableCurrencies () {
-    const currencies = await this.#baseDataFetcher.getCurrencies()
+    const currencies = await this.#currencyFetcher.getCurrencies()
 
     return currencies
   }
