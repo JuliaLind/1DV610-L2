@@ -51,8 +51,7 @@ export class Currency {
    * @returns {boolean} - Whether the currency has been formatted.
    */
   #isFormatted () {
-    return false
-    // return Object.keys(this.#observations).length === Object.keys(this.#datedRates).length
+    return Object.keys(this.#observations).length === Object.keys(this.#datedRates).length
   }
 
   /**
