@@ -69,24 +69,6 @@ export class Structure {
   }
 
   /**
-   * Gets the base currency.
-   *
-   * @returns {object} - the base currency
-   */
-  getBaseCurrency () {
-    return this.#cloner.clone(this.#baseCurrency)
-  }
-
-  /**
-   * Gets the target currencies.
-   *
-   * @returns {Array} - a list with the target currencies
-   */
-  getTargetCurrencies () {
-    return this.#targetCurrencies.map(currency => this.#cloner.clone(currency))
-  }
-
-  /**
    * Sets the unit multipliers for the rates from the API data.
    * Unitmultipliers are used to scale the rates to their correct values,
    * for example one currency rate might be given per 100 units of base currency.
@@ -121,6 +103,24 @@ export class Structure {
    */
   #setAllCurrencies () {
     this.#allCurrencies = this.#cloner.clone([...this.getTargetCurrencies(), this.getBaseCurrency()])
+  }
+
+  /**
+   * Gets the base currency.
+   *
+   * @returns {object} - the base currency
+   */
+  getBaseCurrency () {
+    return this.#cloner.clone(this.#baseCurrency)
+  }
+
+  /**
+   * Gets the target currencies.
+   *
+   * @returns {Array} - a list with the target currencies
+   */
+  getTargetCurrencies () {
+    return this.#targetCurrencies.map(currency => this.#cloner.clone(currency))
   }
 
   /**
