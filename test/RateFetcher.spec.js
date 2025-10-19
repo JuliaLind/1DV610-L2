@@ -22,14 +22,6 @@ describe('RateFetcher', () => {
     getCurrencyRequestUrl: sinon.stub().returns('currencyUrl')
   }
 
-  // const fetchConfig = {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     Accept: 'application/json'
-  //   }
-  // }
-
   before(async () => {
     let raw = await readFile(new URL('./json/period.json', import.meta.url))
     dataPeriod = JSON.parse(raw)

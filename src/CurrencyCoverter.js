@@ -165,11 +165,33 @@ export class CurrencyConverter {
    * from the external API.
    */
   async #fetchRates () {
-    const rates = await this.#fetcher.fetchLatest({
-      currencies: [this.#targetCurrencies]
-    })
+    const rates = await this.#fetcher.fetchLatest(this.#getRequestParams())
 
     this.#normalizer.normalize(rates)
+  }
+
+  /**
+   * Gets the request parameters for fetching rates.
+   *
+   * @returns { object} - the request parameters object
+   */
+  #getRequestParams () {
+    return {
+      currencies: this.#getCurrenciesToFetch()
+    }
+  }
+
+  /**
+   * Gets the currencies to fetch from the API.
+   *
+   * @returns {Array} - array with the currency ids to fetch the rates for
+   */
+  #getCurrenciesToFetch () {
+    const currencies = [...this.#targetCurrencies]
+    if (this.#baseCurrency !== 'NOK') {
+      currencies.push(this.#baseCurrency)
+    }
+    return currencies
   }
 
   /**

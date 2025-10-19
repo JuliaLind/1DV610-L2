@@ -1,4 +1,4 @@
-/* global afterEach, before */
+/* global afterEach, after, before */
 
 import { expect, use } from 'chai'
 import { CurrencyConverter } from '../src/index.js'
@@ -19,6 +19,9 @@ describe('CurrencyConverter', () => {
     const raw = await readFile(new URL('./json/single-day.json', import.meta.url))
     data = JSON.parse(raw)
     globalFetch = sinon.stub(globalThis, 'fetch')
+  })
+
+  beforeEach(() => {
     globalFetch.resolves({
       /**
        * Mocked fetch response.
@@ -30,7 +33,22 @@ describe('CurrencyConverter', () => {
   })
 
   afterEach(() => {
+    globalFetch.resetHistory()
+    globalFetch.resetBehavior()
+  })
+
+  after(() => {
     sinon.restore()
+  })
+
+  it('global fetch is called with correct url', async () => {
+    const sut = new CurrencyConverter()
+    sut.setBaseCurrency('SEK')
+    sut.setTargetCurrencies(['PLN', 'EUR'])
+    await sut.convert(100)
+
+    const expectedUrl = 'https://data.norges-bank.no/api/data/EXR/B.PLN+EUR+SEK.NOK.SP?lastNObservations=1&attributes=UNIT_MULT&locale=en&format=sdmx-json'
+    expect(globalFetch).to.have.been.calledOnceWith(expectedUrl)
   })
 
   it('convert() OK', async () => {

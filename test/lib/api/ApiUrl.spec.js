@@ -8,5 +8,6 @@ describe('ApiUrl', () => {
     const url = sut.getRateRequestUrl(['USD', 'EUR'], { observations: 5 })
 
     expect(url).to.include('lastNObservations=5')
+    expect(url).to.include('USD+EUR')
   })
 })
