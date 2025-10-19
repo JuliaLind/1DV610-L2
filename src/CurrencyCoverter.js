@@ -86,7 +86,52 @@ export class CurrencyConverter {
    * @returns {boolean} - True if the target currencies have changed, false otherwise.
    */
   #isTargetChanged (newValue) {
-    return this.#targetCurrencies.length > 0 && !this.#hasSameCurrencies(newValue, this.#targetCurrencies)
+    return this.#hasTargetCurrencies() && !this.#hasSameCurrencies(newValue)
+  }
+
+  /**
+   * Checks if the target currencies are set.
+   *
+   * @returns {boolean} - true if the target currencies are set
+   */
+  #hasTargetCurrencies () {
+    return this.#targetCurrencies?.length > 0
+  }
+
+  /**
+   * Checks if the new target currencies are the same as the current ones.
+   *
+   * @param {Array} newCurrencies - array of the new target currencies
+   * @returns {boolean} - whether the two arrays contain the same currencies
+   */
+  #hasSameCurrencies (newCurrencies) {
+    return this.#hasSameLength(newCurrencies) && this.#hasSameElements(newCurrencies)
+  }
+
+  /**
+   * Checks if the new target currencies have the same number of elements
+   * as the current one.
+   *
+   * @param {Array} newCurrencies - array of new currencies
+   * @returns {boolean} - whether the two arrays have the same length
+   */
+  #hasSameLength (newCurrencies) {
+    return this.#targetCurrencies.length === newCurrencies?.length
+  }
+
+  /**
+   * Checks if each element in the current array exists in the new array.
+   *
+   * @param {Array} newCurrencies - a list of new currencies
+   * @returns {boolean} - whether all elements in the current target currencies
+   */
+  #hasSameElements (newCurrencies) {
+    for (const currency of this.#targetCurrencies) {
+      if (!newCurrencies.includes(currency)) {
+        return false
+      }
+    }
+    return true
   }
 
   /**
@@ -221,16 +266,5 @@ export class CurrencyConverter {
     }
 
     return converted
-  }
-
-  /**
-   * Checks if the new target currencies are the same as the current ones.
-   *
-   * @param {Array} initialCurrencies - array of the initial target currencies
-   * @param {Array} newCurrencies - array of the new target currencies
-   * @returns {boolean} - whether the two arrays contain the same currencies
-   */
-  #hasSameCurrencies (initialCurrencies, newCurrencies) {
-    return JSON.stringify([...initialCurrencies].sort()) === JSON.stringify([...newCurrencies].sort())
   }
 }

@@ -1,3 +1,5 @@
+import { round } from '../functions.js'
+
 /**
  * Class representing a currency and its exchange rate observations.
  */
@@ -24,6 +26,15 @@ export class Currency {
   }
 
   /**
+   * Gets the currency id.
+   *
+   * @returns {string} - The currency id, for example 'USD'.
+   */
+  getId () {
+    return this.#id
+  }
+
+  /**
    * Gets the multiplier adjusted rates for the currency.
    *
    * @returns {object} - multiplier adjusted rates for the currency
@@ -34,15 +45,6 @@ export class Currency {
     }
 
     return this.#datedRates
-  }
-
-  /**
-   * Gets the currency id.
-   *
-   * @returns {string} - The currency id, for example 'USD'.
-   */
-  getId () {
-    return this.#id
   }
 
   /**
@@ -106,6 +108,6 @@ export class Currency {
   #getObservedValue (dateIndex) {
     const observationValue = Number(Object.values(this.#observations)[dateIndex])
 
-    return Number((observationValue / this.#denominator).toFixed(4))
+    return round(observationValue / this.#denominator, 4)
   }
 }

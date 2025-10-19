@@ -40,12 +40,32 @@ export class ApiUrl {
    * @returns {string} - The exchange rate request URL
    */
   getRateRequestUrl (currencies, options = {}) {
-    const currencyPart = `B.${currencies.join('+')}.NOK.SP?`
-    const variablePart = Object.entries(options)
-      .map(([key, value]) => this.#variableParams[key](value))
-      .join('&')
+    const currencyPart = this.#getCurrencyPart(currencies)
+    const variablePart = this.#getVariableParamsPart(options)
 
     return `${this.#baseUrl}${currencyPart}${variablePart}&${this.#alwaysParams}`
+  }
+
+  /**
+   * Gets the currency part of the URL.
+   *
+   * @param {Array} currencies - the currencies to fetch data for
+   * @returns {string} - the currency part of the URL
+   */
+  #getCurrencyPart (currencies) {
+    return `B.${currencies.join('+')}.NOK.SP?`
+  }
+
+  /**
+   * Gets the variable parameters part of the URL.
+   *
+   * @param {object} options - the options for the variable part of the url query string
+   * @returns {string} - the variable parameters part of the URL
+   */
+  #getVariableParamsPart (options) {
+    return Object.entries(options)
+      .map(([key, value]) => this.#variableParams[key](value))
+      .join('&')
   }
 
   /**

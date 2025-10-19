@@ -52,11 +52,20 @@ export class Data {
    * @returns {object} - exchange rates
    */
   getRates () {
-    if (Object.keys(this.#rates).length === 0) {
+    if (!this.#hasRates()) {
       this.#formatAll()
     }
 
     return this.#rates
+  }
+
+  /**
+   * Checks if the rates have been formatted.
+   *
+   * @returns {boolean} - if the rates attribute has been set
+   */
+  #hasRates () {
+    return Object.keys(this.#rates).length > 0
   }
 
   /**

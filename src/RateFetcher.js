@@ -82,7 +82,7 @@ export class RateFetcher {
   }
 
   /**
-   * Fetches available currencies from Norges Bank.
+   * Gets the available currencies from Norges Bank.
    *
    * @returns {Promise<object[]>} - The available currencies.
    */
