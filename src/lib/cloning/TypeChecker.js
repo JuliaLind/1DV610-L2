@@ -3,44 +3,25 @@
  */
 export class TypeChecker {
   /**
-   * Checks if the value is null or undefined.
-   *
-   * @param {any} value - The value to check.
-   * @returns { boolean } - True if the value is null or undefined, false otherwise.
-   */
-  isNullOrUndefined (value) {
-    return value === null || value === undefined
-  }
-
-  /**
-   * Checks if the value is a Date object.
-   *
-   * @param {any} value - The value to check.
-   * @returns {boolean} - True if the value is a Date, false otherwise.
-   */
-  isDate (value) {
-    return value instanceof Date
-  }
-
-  /**
    * Checks if the value is a primitive type.
    *
    * @param {any} value - The value to check.
    * @returns {boolean} - True if the value is a primitive, false otherwise.
    */
-  isPrimitive (value) {
-    return (typeof value !== 'object' && typeof value !== 'function') || this.isNullOrUndefined(value)
+  isPrimitive(value) {
+    return (!(this.isObject(value) || this.isFunction(value))) || this.isNullOrUndefined(value)
   }
 
   /**
-   * Checks if the value is an array.
+   * Checks if the value is an object.
    *
    * @param {any} value - The value to check.
-   * @returns {boolean} - True if the value is an array, false otherwise.
+   * @returns {boolean} - True if the value is an object, false otherwise.
    */
-  isArray (value) {
-    return Array.isArray(value)
+  isObject(value) {
+    return typeof value === 'object'
   }
+
 
   /**
    * Checks if the value is a function.
@@ -48,9 +29,31 @@ export class TypeChecker {
    * @param {any} value - The value to check.
    * @returns {boolean} - True if the value is a function, false otherwise.
    */
-  isFunction (value) {
+  isFunction(value) {
     return typeof value === 'function'
   }
+
+  /**
+   * Checks if the value is null or undefined.
+   *
+   * @param {any} value - The value to check.
+   * @returns { boolean } - True if the value is null or undefined, false otherwise.
+   */
+  isNullOrUndefined(value) {
+    return [null, undefined].includes(value)
+  }
+
+
+  /**
+   * Checks if the value is an array.
+   *
+   * @param {any} value - The value to check.
+   * @returns {boolean} - True if the value is an array, false otherwise.
+   */
+  isArray(value) {
+    return Array.isArray(value)
+  }
+
 
   /**
    * Checks if the value is a Set.
@@ -58,7 +61,7 @@ export class TypeChecker {
    * @param {any} value - The value to check.
    * @returns {boolean} - True if the value is a Set, false otherwise.
    */
-  isSet (value) {
+  isSet(value) {
     return value instanceof Set
   }
 
@@ -68,7 +71,18 @@ export class TypeChecker {
    * @param {any} value - The value to check.
    * @returns {boolean} - True if the value is a Map, false otherwise.
    */
-  isMap (value) {
+  isMap(value) {
     return value instanceof Map
+  }
+
+
+  /**
+   * Checks if the value is a Date object.
+   *
+   * @param {any} value - The value to check.
+   * @returns {boolean} - True if the value is a Date, false otherwise.
+   */
+  isDate(value) {
+    return value instanceof Date
   }
 }

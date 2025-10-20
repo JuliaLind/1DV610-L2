@@ -88,8 +88,7 @@ export class Data {
     const currencyRates = this.#dataSet.getOneRateSeries(currencyIndex)
 
     const currency = new Currency({
-      attributes: currencyRates.attributes,
-      observations: currencyRates.observations,
+      ...currencyRates,
       dates: this.#structure.getDates(),
       multipliers: this.#structure.getUnitMultipliers(),
       id: this.#structure.getOneCurrencyId(currencyIndex)
