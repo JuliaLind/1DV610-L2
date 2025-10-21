@@ -147,7 +147,7 @@ describe('CurrencyConverter', () => {
     sut.setTargetCurrencies(['USD', 'EUR'])
     sut.reset()
 
-    expect(sut.getBaseCurrency()).to.be.null
+    expect(sut.getBaseCurrency()).to.be.empty
     expect(sut.getTargetCurrencies()).to.deep.equal([])
     expect(rateNormalizer.reset).to.have.been.calledOnce
   })

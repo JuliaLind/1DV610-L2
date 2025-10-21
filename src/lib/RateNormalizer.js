@@ -8,7 +8,10 @@ export class RateNormalizer {
   #targetCurrencies = []
   #originalRates = {}
   #normalizedRates = {}
-  #ORIGINAL_BASE = 'NOK'
+  #ORIGINAL_BASE = {
+    id: 'NOK',
+    value: 1
+  }
 
   /**
    * Sets the base currency for normalization.
@@ -80,6 +83,10 @@ export class RateNormalizer {
    * @returns {number} - the base rate
    */
   #getBaseRate () {
+    if (this.#baseCurrency === this.#ORIGINAL_BASE.id) {
+      return this.#ORIGINAL_BASE.value
+    }
+
     return Object.values(this.#originalRates[this.#baseCurrency])[0]
   }
 
@@ -103,8 +110,8 @@ export class RateNormalizer {
    * @returns {number} - The target exchange rate.
    */
   #getTargetRate (currency) {
-    if (currency === this.#ORIGINAL_BASE) {
-      return 1
+    if (currency === this.#ORIGINAL_BASE.id) {
+      return this.#ORIGINAL_BASE.value
     }
 
     return Object.values(this.#originalRates[currency])[0]

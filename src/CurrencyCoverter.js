@@ -8,7 +8,7 @@ import { round } from './lib/functions.js'
 export class CurrencyConverter {
   #fetcher
   #normalizer
-  #baseCurrency = null
+  #baseCurrency = ''
   #targetCurrencies = []
 
   /**
@@ -138,7 +138,7 @@ export class CurrencyConverter {
    * Resets the base and target currencies and the cached rates.
    */
   reset () {
-    this.#baseCurrency = null
+    this.#baseCurrency = ''
     this.#targetCurrencies = []
     this.#normalizer.reset()
   }
