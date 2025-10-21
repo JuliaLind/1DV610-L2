@@ -4,8 +4,8 @@ import { round } from './functions.js'
  * Class to normalize exchange rates based on a selected base currency.
  */
 export class RateNormalizer {
-  #baseCurrency
-  #targetCurrencies
+  #baseCurrency = ''
+  #targetCurrencies = []
   #originalRates = {}
   #normalizedRates = {}
   #ORIGINAL_BASE = 'NOK'
