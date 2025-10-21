@@ -147,7 +147,7 @@ export class Structure {
    * @returns {Array} - a list of all currencies
    */
   getAllCurrencies () {
-    return this.#allCurrencies
+    return this.#cloner.clone(this.#allCurrencies)
   }
 
   /**
