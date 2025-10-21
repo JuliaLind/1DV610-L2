@@ -1,6 +1,6 @@
 import { RateFetcher } from './RateFetcher.js'
 import { RateNormalizer } from './lib/RateNormalizer.js'
-import { round, arraysAreEqual } from './lib/functions.js'
+import { round } from './lib/functions.js'
 
 /**
  * Manages conversion between currencies
@@ -8,8 +8,8 @@ import { round, arraysAreEqual } from './lib/functions.js'
 export class CurrencyConverter {
   #fetcher
   #normalizer
-  #fromCurrency = null
-  #toCurrencies = []
+  #baseCurrency = ''
+  #targetCurrencies = []
 
   /**
    * Creates an instance of CurrencyConverter.
@@ -18,12 +18,18 @@ export class CurrencyConverter {
    * @param {RateFetcher} dependencies.fetcher - Instance of RateFetcher
    * @param {RateNormalizer} dependencies.normalizer - Instance of RateNormalizer
    */
-  constructor (dependencies = {
-    fetcher: new RateFetcher(),
-    normalizer: new RateNormalizer()
-  }) {
-    this.#fetcher = dependencies.fetcher
-    this.#normalizer = dependencies.normalizer
+  constructor (dependencies) {
+    this.#fetcher = dependencies?.fetcher || new RateFetcher()
+    this.#normalizer = dependencies?.normalizer || new RateNormalizer()
+  }
+
+  /**
+   * Gets the current base currency.
+   *
+   * @returns {string} - The current base currency.
+   */
+  getBaseCurrency () {
+    return this.#baseCurrency
   }
 
   /**
@@ -32,23 +38,31 @@ export class CurrencyConverter {
    *
    * @param {string} value - The currency code to set as the base currency.
    */
-  setFromCurrency (value) {
-    const current = this.#fromCurrency
-
-    this.#fromCurrency = value
-
-    if (current && current !== value) {
+  setBaseCurrency (value) {
+    if (this.#isBaseChanged(value)) {
       this.#normalizer.reset()
     }
+
+    this.#baseCurrency = value
   }
 
   /**
-   * Gets the current base currency.
+   * Checks if the base currency has changed.
    *
-   * @returns {string} - The current base currency.
+   * @param {string} newValue - The new base currency.
+   * @returns {boolean} - True if the base currency has changed, false otherwise.
    */
-  getFromCurrency () {
-    return this.#fromCurrency
+  #isBaseChanged (newValue) {
+    return this.#baseCurrency && this.#baseCurrency !== newValue
+  }
+
+  /**
+   * Gets the current target currencies.
+   *
+   * @returns {string[]} - The current target currencies.
+   */
+  getTargetCurrencies () {
+    return this.#targetCurrencies
   }
 
   /**
@@ -57,31 +71,75 @@ export class CurrencyConverter {
    *
    * @param {string[]} values - The currency codes to set as target currencies.
    */
-  setToCurrencies (values) {
-    const current = this.#toCurrencies
-
-    this.#toCurrencies = values
-
-    if (current.length > 0 && !arraysAreEqual(values, current)) {
+  setTargetCurrencies (values) {
+    if (this.#isTargetChanged(values)) {
       this.#normalizer.reset()
     }
+
+    this.#targetCurrencies = values
   }
 
   /**
-   * Gets the current target currencies.
+   * Checks if the target currencies have changed.
    *
-   * @returns {string[]} - The current target currencies.
+   * @param {string[]} newValue - The new target currencies.
+   * @returns {boolean} - True if the target currencies have changed, false otherwise.
    */
-  getToCurrencies () {
-    return this.#toCurrencies
+  #isTargetChanged (newValue) {
+    return this.#hasTargetCurrencies() && !this.#hasSameCurrencies(newValue)
   }
 
   /**
-   * Clears the base and target currencies and resets cached rates.
+   * Checks if the target currencies are set.
+   *
+   * @returns {boolean} - true if the target currencies are set
    */
-  clear () {
-    this.#fromCurrency = null
-    this.#toCurrencies = []
+  #hasTargetCurrencies () {
+    return this.#targetCurrencies?.length > 0
+  }
+
+  /**
+   * Checks if the new target currencies are the same as the current ones.
+   *
+   * @param {Array} newCurrencies - array of the new target currencies
+   * @returns {boolean} - whether the two arrays contain the same currencies
+   */
+  #hasSameCurrencies (newCurrencies) {
+    return this.#hasSameLength(newCurrencies) && this.#hasSameElements(newCurrencies)
+  }
+
+  /**
+   * Checks if the new target currencies have the same number of elements
+   * as the current one.
+   *
+   * @param {Array} newCurrencies - array of new currencies
+   * @returns {boolean} - whether the two arrays have the same length
+   */
+  #hasSameLength (newCurrencies) {
+    return this.#targetCurrencies.length === newCurrencies?.length
+  }
+
+  /**
+   * Checks if each element in the current array exists in the new array.
+   *
+   * @param {Array} newCurrencies - a list of new currencies
+   * @returns {boolean} - whether all elements in the current target currencies
+   */
+  #hasSameElements (newCurrencies) {
+    for (const currency of this.#targetCurrencies) {
+      if (!newCurrencies.includes(currency)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * Resets the base and target currencies and the cached rates.
+   */
+  reset () {
+    this.#baseCurrency = ''
+    this.#targetCurrencies = []
     this.#normalizer.reset()
   }
 
@@ -92,9 +150,10 @@ export class CurrencyConverter {
    * @returns {Promise<object>} - The conversion results.
    */
   async convert (amount) {
-    this.#isReady()
-    await this.#prep()
-    return this.#recalc(amount)
+    this.#alertIfNotReady()
+    await this.#prepareRates()
+
+    return this.#convert(amount)
   }
 
   /**
@@ -103,10 +162,19 @@ export class CurrencyConverter {
    *
    * @throws {Error} - If the converter is not fully initialized.
    */
-  #isReady () {
-    if (!this.#fromCurrency || this.#toCurrencies?.length === 0) {
+  #alertIfNotReady () {
+    if (!this.#hasCurrencies()) {
       throw new Error('CurrencyConverter is not fully initialized')
     }
+  }
+
+  /**
+   * Checks if both base and target currencies are set.
+   *
+   * @returns {boolean} - True if both base and target currencies are set, false otherwise.
+   */
+  #hasCurrencies () {
+    return this.#baseCurrency && this.#targetCurrencies?.length > 0
   }
 
   /**
@@ -114,34 +182,89 @@ export class CurrencyConverter {
    *
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
-  async #prep () {
-    if (this.#normalizer.hasCachedRates()) {
-      return
+  async #prepareRates () {
+    if (!this.#normalizer.hasCachedRates()) {
+      await this.#getRatesFromApi()
     }
+  }
 
-    this.#isReady()
-    this.#fetcher.setCurrencies([this.#fromCurrency, ...this.#toCurrencies])
-    const rates = await this.#fetcher.fetchLatest()
+  /**
+   * Fetches rates from the API.
+   */
+  async #getRatesFromApi () {
+    this.#alertIfNotReady()
+    this.#assignCurrencies()
+    await this.#fetchRates()
+  }
 
-    this.#normalizer.setFromCurrency(this.#fromCurrency)
-    this.#normalizer.setToCurrencies(this.#toCurrencies)
+  /**
+   * Assigns the base and target currencies to the fetcher and normalizer.
+   */
+  #assignCurrencies () {
+    this.#normalizer.setBaseCurrency(this.#baseCurrency)
+    this.#normalizer.setTargetCurrencies(this.#targetCurrencies)
+  }
+
+  /**
+   * Fetches latest exchange rates
+   * from the external API.
+   */
+  async #fetchRates () {
+    const rates = await this.#fetcher.fetchLatest(this.#getRequestParams())
+
     this.#normalizer.normalize(rates)
   }
 
   /**
-   * Recalculates the conversion results for the specified amount.
+   * Gets the request parameters for fetching rates.
+   *
+   * @returns { object} - the request parameters object
+   */
+  #getRequestParams () {
+    return {
+      currencies: this.#getCurrenciesToFetch()
+    }
+  }
+
+  /**
+   * Gets the currencies to fetch from the API.
+   *
+   * @returns {Array} - array with the currency ids to fetch the rates for
+   */
+  #getCurrenciesToFetch () {
+    const currencies = [...this.#targetCurrencies]
+    if (this.#baseCurrency !== 'NOK') {
+      currencies.push(this.#baseCurrency)
+    }
+    return currencies
+  }
+
+  /**
+   * Converts the specified amount from the base currency to the target currencies.
    *
    * @param {number} amount - The amount to convert.
    * @returns {object} - The conversion results.
    */
-  #recalc (amount) {
-    const results = {}
+  #convert (amount) {
     const rates = this.#normalizer.getNormalizedRates()
 
-    for (const currency of this.#toCurrencies) {
-      results[currency] = round(amount / rates[currency])
+    return this.#convertToEachTarget(amount, rates)
+  }
+
+  /**
+   * Converts the specified amount from the base currency to the target currencies.
+   *
+   * @param {number} amount - The amount to convert.
+   * @param {object} rates - The exchange rates.
+   * @returns {object} - The conversion results.
+   */
+  #convertToEachTarget (amount, rates) {
+    const converted = {}
+
+    for (const currency of this.#targetCurrencies) {
+      converted[currency] = round(amount / rates[currency])
     }
 
-    return results
+    return converted
   }
 }

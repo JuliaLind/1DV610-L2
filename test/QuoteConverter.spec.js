@@ -42,7 +42,7 @@ describe('QuoteConverter', () => {
       fetchByPeriod: sinon.stub().resolves(rates)
     }
     const sut = new QuoteConverter({ fetcher: rateFetcher })
-    sut.setCurrencies(['EUR', 'PLN'])
+    sut.setTargetCurrencies(['EUR', 'PLN'])
 
     const quotes = {
       '2025-01-10': 332.4,

@@ -1,29 +1,22 @@
+import { Data } from '../data/Data.js'
+
 /**
  * Fetches JSON data from a specified API endpoint.
  */
 export class JsonFetchService {
-  #baseUrl
-
-  /**
-   * Sets the base URL for the API requests.
-   *
-   * @param {string} baseUrl - The base URL to use for API requests.
-   */
-  setBaseUrl (baseUrl) {
-    this.#baseUrl = baseUrl
-  }
-
   /**
    * Makes a GET request to the API endpoint.
    *
-   * @param {string} queryString - The query string to include in the request.
+   * @param {string} url - The API endpoint URL.
    * @returns {Promise<object>} - The JSON response from the API.
    */
-  async fetch (queryString) {
+  async fetch (url) {
     try {
-      return await this.#fetch(`${this.#baseUrl}?${queryString}`)
+      const res = await this.#fetchJson(url)
+
+      return new Data(res.data)
     } catch (error) {
-      throw new Error('Error fetching data:', error)
+      this.#handleError(error)
     }
   }
 
@@ -33,7 +26,7 @@ export class JsonFetchService {
    * @param {string} url - The API endpoint URL.
    * @returns {Promise<object>} - The JSON response from the API.
    */
-  async #fetch (url) {
+  async #fetchJson (url) {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -60,6 +53,24 @@ export class JsonFetchService {
       return
     }
 
-    throw new Error(response.errors.map(e => e.message).join(', '))
+    const error = new Error(response.errors.map(e => e.message).join(', '))
+    error.code = response.errors[0].code
+
+    throw error
+  }
+
+  /**
+   * Handles errors that occur during the fetch process.
+   *
+   * @param {Error} error - The error that occurred.
+   * @throws {Error} - The processed error.
+   */
+  #handleError (error) {
+    if (error.code) {
+      throw error
+    }
+    const newError = new Error('Error fetching data:')
+    newError.code = 500
+    throw newError
   }
 }

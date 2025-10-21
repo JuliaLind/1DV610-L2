@@ -3,11 +3,11 @@ import { round } from './lib/functions.js'
 
 /**
  * Converts stock quotes from NOK to
- * other currencies using exchange rates from Norges Bank.
+ * other targetCurrencies using exchange rates from Norges Bank.
  */
 export class QuoteConverter {
   #fetcher
-  #currencies = []
+  #targetCurrencies = []
   #rates = {}
   #quotes = {}
 
@@ -17,33 +17,31 @@ export class QuoteConverter {
    * @param {object} dependencies - Configuration object for dependencies
    * @param {RateFetcher} dependencies.fetcher - Instance of RateFetcher
    */
-  constructor (dependencies = {
-    fetcher: new RateFetcher()
-  }) {
-    this.#fetcher = dependencies.fetcher
+  constructor (dependencies) {
+    this.#fetcher = dependencies?.fetcher || new RateFetcher()
   }
 
   /**
-   * Sets the target currencies for conversion.
-   * If the currencies are changed, cached rates are cleared.
+   * Sets the target targetCurrencies for conversion.
+   * If the targetCurrencies are changed, cached rates are cleared.
    *
-   * @param {string[]} values - The currency codes to set as target currencies.
+   * @param {string[]} values - The currency codes to set as target targetCurrencies.
    */
-  setCurrencies (values) {
-    this.#currencies = values
+  setTargetCurrencies (values) {
+    this.#targetCurrencies = values
   }
 
   /**
-   * Converts stock quotes from NOK to the target currencies.
+   * Converts stock quotes from NOK to the target targetCurrencies.
    *
    * @param {object} quotes - The quotes to convert.
    * @returns {Promise<object>} - The conversion results.
    */
   async convert (quotes) {
-    this.#isReady()
     this.#setQuotes(quotes)
-    await this.#prep()
-    return this.#calcMany()
+    await this.#prepare()
+
+    return this.#convertAll()
   }
 
   /**
@@ -61,8 +59,8 @@ export class QuoteConverter {
    *
    * @throws {Error} - If the converter is not fully initialized.
    */
-  #isReady () {
-    if (this.#currencies?.length === 0) {
+  #alertIfNotReady () {
+    if (this.#targetCurrencies?.length === 0) {
       throw new Error('QuoteConverter is not fully initialized')
     }
   }
@@ -72,10 +70,18 @@ export class QuoteConverter {
    *
    * @returns {Promise<void>} - A promise that resolves when preparation is complete.
    */
-  async #prep () {
-    this.#isReady()
-    this.#fetcher.setCurrencies(this.#currencies)
+  async #prepare () {
+    this.#alertIfNotReady()
+    await this.#fetchRates()
+  }
+
+  /**
+   * Fetches exchange rates for the target currencies.
+   */
+  async #fetchRates () {
+    this.#fetcher.setCurrencies(this.#targetCurrencies)
     const { from, to } = this.#getPeriod()
+
     this.#rates = await this.#fetcher.fetchByPeriod(from, to)
   }
 
@@ -94,35 +100,40 @@ export class QuoteConverter {
   }
 
   /**
-   * Recalculates the conversion results for the specified amount.
+   * Converts all quotes to the target currencies.
    *
    * @returns {object} - The conversion results.
    */
-  #calcMany () {
+  #convertAll () {
     const final = {}
 
     Object.entries(this.#quotes).forEach(([date, nokValue]) => {
       const quote = { date, NOK: nokValue }
-      final[date] = this.#calcOne(quote)
+      final[date] = this.#convertOne(quote)
     })
 
     return final
   }
 
   /**
-   * Recalculates the conversion results for a single quote.
+   * Converts a single quote to the target currencies.
    *
    * @param {object} quote - The quote to convert.
    * @returns {object} - The conversion results for the quote.
    */
-  #calcOne (quote) {
+  #convertOne (quote) {
     const calculated = {
       NOK: quote.NOK
     }
-    for (const currency of this.#currencies) {
+
+    for (const currency of this.#targetCurrencies) {
       const rate = this.#rates[currency][quote.date]
-      calculated[currency] = round(quote.NOK / rate)
+
+      if (rate) { // some rates do not have values for all dates, for example RUB
+        calculated[currency] = round(quote.NOK / rate)
+      }
     }
+
     return calculated
   }
 }

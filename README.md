@@ -1,3 +1,5 @@
+# Norges Bank Exchange Rate API Adapter
+
 ## About
 
 This package is a school project.  
@@ -5,14 +7,14 @@ The package provides tools for fetching exchange rates and for recalculating amo
 
 To use the package in your projects install with:  
 
-```
+```bash
 npm install @jl225vf/exr   
 
 ```
 
 
 This module provides the classes CurrencyConverter, RateFetcher and QuoteConverter.  Additionally the package also procides the two utility classes: 
-- DeepCloner class that makes a deep clone of any object including deep cloning of any nested elements. Note that custom classes are converted to plain objects.
+- DeepCloner class that makes a deep clone of any object including deep cloning of any nested elements. Note that custom classes are converted to plain objects, and that their private attributes and private methods will not be copied and thus not exist on the new object.
 - TypeChecker that checks if a value is of certain type
 
 ---------------------
@@ -20,7 +22,8 @@ This module provides the classes CurrencyConverter, RateFetcher and QuoteConvert
 To use the RateFetcher pass an array with currencies you wish to fetch rates for to the method setCurrencies().  The RateFetcher provids the following methods:
 - fetchByDate() with optional count parameter that determines the number of observations prior to and including the specified date.  If the date is not a bank date, the rates will be fetched from the nearest bankdate perceeding the specified date.  
 - fetchLatest() with optional parameter count that fetches the latest rates  
-- fetchByPeriod() that fetches the rates between and including the two specified dates  
+- fetchByPeriod() that fetches the rates between and including the two specified dates
+- getAvailableCurrencies() that returns an array with currency objects containing currency codes and currency names, sorted alphabetically by currency code (id):
 
  
 
@@ -28,12 +31,28 @@ Example 1:
 
 Fetch exchange rates on 2023-01-01.
 
-```
+```js
 import { RateFetcher } from "@jl225vf/exr"
 
 const fetcher = new RateFetcher()
-fetcher.setCurrencies(["USD", "EUR", "GBP"])
-const rates = await fetcher.fetchByDate("2023-01-01")
+
+const currencies = await fetcher.getAvailableCurrencies()
+console.log(currencies)
+//[
+//  { id: 'AUD', name: 'Australian dollar' },
+//  { id: 'BDT', name: 'Bangladeshi taka' },
+//  { id: 'BGN', name: 'Bulgarian lev' },
+//  { id: 'BRL', name: 'Brazilian real' },
+//  ...
+//  { id: 'ZAR', name: 'South African rand' }
+//]
+
+
+const params = {
+    currencies: ["USD", "EUR", "GBP"],
+    date: '2023-01-01'
+}
+const rates = await fetcher.fetchByDate(params)
 
 console.log(rates) // {
                    //    USD: { '2022-12-30': 9.8573 },
@@ -47,13 +66,17 @@ Example 2:
 
 Fetch exchange rates between 2023-01-01 and 2023-01-12.
 
-```
+```js
 import { RateFetcher } from "@jl225vf/exr"
 
 
 const fetcher = new RateFetcher()
-fetcher.setCurrencies(["EUR", "SEK"])
-const rates = await fetcher.fetchByPeriod("2023-01-01", "2023-01-12")
+const params = {
+    currencies: ['EUR', 'SEK']
+    from: '2023-01-01',
+    to: '2023-01-12'
+}
+const rates = await fetcher.fetchByPeriod(params)
 
 console.log(rates) // {
                    //   EUR: {
@@ -84,20 +107,20 @@ console.log(rates) // {
 
 
   
-The CurrencyConverter can be used to covert an amount from any currency to one or more other currencies using the latest available exchange rate.  To use the CurrencyConverter you must first set the fromCurrency using setFromCurrency() method and the target currencies by passing an array with target currencies to the setToCurrencies() method. Then pass the amount you wish to convert to the convert() method. To reset the CurrencyConverter use the clear() method.
+The CurrencyConverter can be used to covert an amount from any currency to one or more other currencies using the latest available exchange rate.  To use the CurrencyConverter you must first set the fromCurrency using setBaseCurrency() method and the target currencies by passing an array with target currencies to the setTargetCurrencies() method. Then pass the amount you wish to convert to the convert() method. To reset the CurrencyConverter use the clear() method.
   
 
 Example 3:  
 
 Coverting 350 SEK to EUR and PLN.
 
-```
+```js
 import { CurrencyConverter } from "@jl225vf/exr"
 
 const converter = new CurrencyCoverter()
 
-converter.setFromCurrency('SEK')
-converter.setToCurrencies(['EUR', 'PLN'])
+converter.setBaseCurrency('SEK')
+converter.setTargetCurrencies(['EUR', 'PLN'])
 
 const coverted = await converter.convert(350)
 
@@ -107,16 +130,16 @@ console.log(converted['PLN']) // 134.7786382
 ``` 
 
 The QuoteConverter converts a period of stock quotes from NOK to selected currencies.  
-To use the QuoteConverter set the currencies you wish to convert using setCurrencies() method and then pass the quotes object to the convert() method. Quotes must be an object where keys are dates in the format "YYYY-MM-DD" and values are the quotes in NOK.  
+To use the QuoteConverter set the currencies you wish to convert using setTargetCurrencies() method and then pass the quotes object to the convert() method. Quotes must be an object where keys are dates in the format "YYYY-MM-DD" and values are the quotes in NOK.  
 
 Example 4:
 
-```
+```js
 import { QuoteConverter } from "@jl225vf/exr"
 
 const converter = new QuoteCoverter()
 
-converter.setCurrencies(['EUR', 'PLN'])
+converter.setTargetCurrencies(['EUR', 'PLN'])
 
 const quotes = {
     "2025-01-10": 332.4,
@@ -143,8 +166,9 @@ console.log(converted) // {
 
 ``` 
 
-Example 5:
-```
+Example 5:  
+
+```js
 import { Cloner } from "@jl225vf/exr"
 
 const cloner = new Cloner()
@@ -159,6 +183,11 @@ const original = {
 }
 
 const copy = cloner.deepClone(original)
+console.log(original === copy) // false
+console.log(original.someObj === copy.someObj) // false
+console.log(original.someObj.anArr === original.someObj.anArr) // false
+console.log(original.someNr === copy.someNr) // true
+console.log(original.someObj.anArr[1] === original.someObj.anArr[1]) // true
 ```
 
 ## Testing
@@ -170,18 +199,18 @@ Current code has 100% coverage, latest test report available under https://githu
 1. **Fork** this repository to your GitHub account.
 2. **Clone your fork** (replace `<your-username>`):
 
-```
+```bash
 git clone git@github.com:<your-username>/1DV610-L2.git
 cd 1DV610-L2
 ```
 3. **Install**
-```
+```bash
 npm install
 ```
 
 4. **Create a branch**
 
-```
+```bash
 git checkout -b feat/short-description
 ```
 
@@ -193,7 +222,7 @@ Make sure to fix any linting errors. Please add/adjust tests for any change you 
 
 Push your branch:
 
-```
+```bash
 git push -u origin <branch-name>
 ```
   

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { TypeChecker } from '../../src/lib/TypeChecker.js'
+import { TypeChecker } from '../../../src/lib/cloning/TypeChecker.js'
 
 describe('TypeChecker', () => {
   const sut = new TypeChecker()

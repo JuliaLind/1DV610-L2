@@ -11,17 +11,14 @@ export class DeepCloner {
    *
    * @param {object} dependencies - Configuration object for dependencies
    */
-  constructor (
-    dependencies = {
-      typeChecker: new TypeChecker()
-    }
-  ) {
-    this.#typeChecker = dependencies.typeChecker
+  constructor (dependencies) {
+    this.#typeChecker = dependencies?.typeChecker || new TypeChecker()
   }
 
   /**
    * Deep clones any object or array and its nested elements.
-   * Custom classes are converted to plain objects.
+   * Custom classes are converted to plain objects,
+   * private attributes and methods are not copied to the new object.
    *
    * @param {any} any - The value to clone.
    * @returns {any} - The cloned value.
@@ -43,7 +40,11 @@ export class DeepCloner {
       return this.#cloneMap(any)
     }
 
-    return this.#typeChecker.isArray(any) ? this.#cloneArr(any) : this.#cloneObj(any)
+    if (this.#typeChecker.isArray(any)) {
+      return this.#cloneArray(any)
+    }
+
+    return this.#cloneObj(any)
   }
 
   /**
@@ -64,9 +65,11 @@ export class DeepCloner {
    */
   #cloneSet (set) {
     const clone = new Set()
+
     for (const item of set) {
       clone.add(this.clone(item))
     }
+
     return clone
   }
 
@@ -78,9 +81,11 @@ export class DeepCloner {
    */
   #cloneMap (map) {
     const clone = new Map()
+
     for (const [key, value] of map) {
       clone.set(key, this.clone(value))
     }
+
     return clone
   }
 
@@ -90,14 +95,8 @@ export class DeepCloner {
    * @param {any[]} arr - The array to clone.
    * @returns {any[]} - The cloned array.
    */
-  #cloneArr (arr) {
-    const clone = []
-
-    for (const item of arr) {
-      clone.push(this.clone(item))
-    }
-
-    return clone
+  #cloneArray (arr) {
+    return arr.map(item => this.clone(item))
   }
 
   /**
@@ -112,6 +111,7 @@ export class DeepCloner {
     for (const key in obj) {
       clone[key] = this.clone(obj[key])
     }
+
     return clone
   }
 }

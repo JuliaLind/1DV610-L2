@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { round, arraysAreEqual } from '../../src/lib/functions.js'
+import { round } from '../../src/lib/functions.js'
 
 describe('functions', () => {
   describe('round()', () => {
@@ -14,20 +14,6 @@ describe('functions', () => {
       it(`round(${input.join(', ')}) should return ${expected}`, () => {
         expect(round(...input)).to.equal(expected)
       })
-    })
-  })
-
-  describe('arraysAreEqual()', () => {
-    it('["PLN", "USD"], ["PLN", "USD"] should be true', () => {
-      expect(arraysAreEqual(['PLN', 'USD'], ['PLN', 'USD'])).to.be.true
-    })
-
-    it('["PLN", "EUR"], ["EUR", "PLN"] should be true', () => {
-      expect(arraysAreEqual(['PLN', 'EUR'], ['EUR', 'PLN'])).to.be.true
-    })
-
-    it('["PLN", "EUR"], ["EUR", "USD"] should be false', () => {
-      expect(arraysAreEqual(['PLN', 'EUR'], ['EUR', 'USD'])).to.be.false
     })
   })
 })
