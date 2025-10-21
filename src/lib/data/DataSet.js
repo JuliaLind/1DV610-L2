@@ -5,7 +5,7 @@ import { DeepCloner } from '../cloning/DeepCloner.js'
  * of the Norway BankAPI response.
  */
 export class DataSet {
-  #rateSeries
+  #rateSeries = []
   #cloner
 
   /**
@@ -15,7 +15,7 @@ export class DataSet {
    * @param {object} dependencies - the dependencies to be used by the class
    */
   constructor (data, dependencies) {
-    this.#rateSeries = Object.values(data.series)
+    this.#rateSeries = Object.values(data?.series)
     this.#cloner = dependencies?.cloner || new DeepCloner()
   }
 

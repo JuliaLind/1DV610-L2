@@ -7,13 +7,13 @@ import { DeepCloner } from '../cloning/DeepCloner.js'
 export class Structure {
   #cloner
 
-  #baseCurrency
-  #targetCurrencies
-  #allCurrencies
+  #baseCurrency = ''
+  #targetCurrencies = []
+  #allCurrencies = []
 
-  #unitMultipliers
+  #unitMultipliers = []
 
-  #dates
+  #dates = []
 
   /**
    * Creates an instance of Structure.
