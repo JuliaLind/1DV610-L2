@@ -16,18 +16,4 @@ describe('functions', () => {
       })
     })
   })
-
-  // describe('arraysAreEqual()', () => {
-  //   it('["PLN", "USD"], ["PLN", "USD"] should be true', () => {
-  //     expect(arraysAreEqual(['PLN', 'USD'], ['PLN', 'USD'])).to.be.true
-  //   })
-
-  //   it('["PLN", "EUR"], ["EUR", "PLN"] should be true', () => {
-  //     expect(arraysAreEqual(['PLN', 'EUR'], ['EUR', 'PLN'])).to.be.true
-  //   })
-
-  //   it('["PLN", "EUR"], ["EUR", "USD"] should be false', () => {
-  //     expect(arraysAreEqual(['PLN', 'EUR'], ['EUR', 'USD'])).to.be.false
-  //   })
-  // })
 })

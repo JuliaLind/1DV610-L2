@@ -2,13 +2,14 @@ import { expect } from 'chai'
 import { DeepCloner } from '../../../src/lib/cloning/DeepCloner.js'
 
 describe('DeepCloner', () => {
-  it('clone() OK, primitive types', () => {
-    const sut = new DeepCloner()
-    expect(sut.clone(42)).to.equal(42)
-    expect(sut.clone('hello')).to.equal('hello')
-    expect(sut.clone(true)).to.equal(true)
-    expect(sut.clone(null)).to.equal(null)
-    expect(sut.clone(undefined)).to.equal(undefined)
+  const primitiveTypes = [42, 'hello', true, null, undefined]
+
+  primitiveTypes.forEach(value => {
+    it(`Clone primitive type: ${String(value)} OK`, () => {
+      const sut = new DeepCloner()
+
+      expect(sut.clone(value)).to.equal(value)
+    })
   })
 
   it('clone() OK, Date object', () => {
