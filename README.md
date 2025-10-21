@@ -14,7 +14,7 @@ npm install @jl225vf/exr
 
 
 This module provides the classes CurrencyConverter, RateFetcher and QuoteConverter.  Additionally the package also procides the two utility classes: 
-- DeepCloner class that makes a deep clone of any object including deep cloning of any nested elements. Note that custom classes are converted to plain objects.
+- DeepCloner class that makes a deep clone of any object including deep cloning of any nested elements. Note that custom classes are converted to plain objects, and that their private attributes and private methods will not be copied and thus not exist on the new object.
 - TypeChecker that checks if a value is of certain type
 
 ---------------------

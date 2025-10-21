@@ -17,7 +17,8 @@ export class DeepCloner {
 
   /**
    * Deep clones any object or array and its nested elements.
-   * Custom classes are converted to plain objects.
+   * Custom classes are converted to plain objects,
+   * private attributes and methods are not copied to the new object.
    *
    * @param {any} any - The value to clone.
    * @returns {any} - The cloned value.
